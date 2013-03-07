@@ -1,0 +1,39 @@
+<?php
+    $id = 'bis';
+    if(!$this->ajax)
+        $id = 'first';
+?>
+
+<table id="<?php echo $id; ?>">
+    <tr>
+        <td>n°</td>
+        <td>n° site</td>
+        <td>Adresse</td>
+        <td>Commune</td>
+        <td>Tonnage</td>
+        <td>Nb relevés</td>
+    </tr>
+    <?php
+    try{
+        $i = 1;
+        foreach($this->infosSite as $unSite)
+        {
+            echo '<tr>
+                    <td>'.$i.'</td>
+                    <td>'.$unSite['ID_SITE'].'</td>
+                    <td>'.$unSite['NOM_SITE'].', '.$unSite['LOC_SITE'].'</td>
+                    <td>'.$unSite['NOM_COMMUNE'].'</td>
+                    <td>'.$this->tonnage[$unSite['ID_SITE']].'</td>
+                    <td>'.$this->releves[$unSite['ID_SITE']].'</td>
+                </tr>';
+            $i++;
+        }
+    }
+    catch(Exception $e)
+    {
+        echo $e->getMessage();exit;
+    }
+    ?>
+</table>
+</div>  <!-- ferme le div dans index.phtml  -->
+<?php if($this->ajax) exit; ?>

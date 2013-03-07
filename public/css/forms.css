@@ -1,0 +1,10 @@
+.zend_form {
+    /*background-color: red;*/
+    border : 2px solid #a8ddeb;
+    display : inline-block;
+    padding : 10px;
+}
+
+#radioMatiere-element label {
+    margin-left : 20px;
+}
