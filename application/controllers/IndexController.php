@@ -21,12 +21,35 @@ class IndexController extends Zend_Controller_Action
     }
     public function tonnageAction()
     {
-        // appelle le header, qui appellera le footer
         $this->_helper->actionStack('header', 'index', 'default', array());
+        $this->_helper->actionStack('tonnageajax', 'index');
+    }
+    public function tonnageajaxAction()
+    {
+        $matiere = $this->getRequest()->getParam('sel_matiere', 'Verre Couleur');
+        $ajax = $this->getRequest()->getParam('ajax', false);
         
+        if($ajax)
+        {
+            // change le layout, pour ne pas recuperer les balises body, html...
+            // seulement si on vient en ajax, car sinon on a besoin des balises
+            $layout = Zend_Layout::getMvcInstance();
+            $layout->setLayout('vide'); 
+        }
         try{
-            // instancie un formulaire pour la saisie du site et une date
-            $form = new FSite();
+            // on instancie les tables que l'on aura  besoin
+            $tcollecte = new TCollecte;
+            
+            // recupere les conteneurs et les matieres
+            $matieres = $tcollecte->getMatieres();
+            $tabConteneur = $tcollecte->getConteneurs($matiere);
+            
+            // copie les valeurs dans les clés (pour les select)            
+            $matieres = array_combine($matieres, $matieres);
+            $tabConteneur = array_combine($tabConteneur, $tabConteneur);
+            //Zend_Debug::dump($tabConteneur);exit;
+            
+            $form = new FSite($tabConteneur, $matieres, $matiere);
 
             // recupere la requete
             $request = $this->getRequest();
@@ -38,31 +61,19 @@ class IndexController extends Zend_Controller_Action
                 if($form->isValid($_POST))
                 {
                     // on recupere le contenu des champs, un par un, avec l'id du champ
-                    $idsite = $request->getParam('idsite');
+                    $nConteneur= $request->getParam('nConteneur');
                     $dateDebut = $request->getParam('dateDebut', null);
                     $dateFin = $request->getParam('dateFin', null);
-
-                    // on instancie les tables que l'on aura  besoin
-                    $tcollecte = new TCollecte;
-                    $tsite = new TSite;
-                    //$tc = $tcollecte->getCollecte();
-
+                    
                     // recupere les informations d'un site
-                    $infosSite = $tsite->getInfosSite($idsite);
-                    // recupere le tonnage d'un site
-                    // on peut ajouter 3 parametres
-                    //  - $matiere = pour selectionner la matiere que l'on veut
-                    //  - $dateDebut et $dateFin = pour faire la requete sur une periode limitée
-                    $tonnage = $tcollecte->getTonnage($idsite);
-
-                    //Zend_Debug::dump($tc);
-                    //Zend_Debug::dump($infosSite);
-
+                    $infosConteneur = $tcollecte->getInfos($nConteneur, $matiere, $dateDebut, $dateFin);
+                    
+                    //Zend_Debug::dump($infosConteneur);exit;
+                    
                     // envoi toutes les variables a la vue
                     $this->view->dateDebut = $dateDebut;
                     $this->view->dateFin = $dateFin;
-                    $this->view->infosSite = $infosSite;
-                    $this->view->tonnage = $tonnage;
+                    $this->view->infosConteneur = $infosConteneur;
                     $this->view->send = true;
                 }
             } 
@@ -72,12 +83,7 @@ class IndexController extends Zend_Controller_Action
         }
         // envoi le formulaire a la vue
         $this->view->form = $form;
-    }
-    public function trucAction()
-    {
-        $tco = new TCollecte;
-        Zend_Debug::dump($tco->test());
-        exit;
+        $this->view->ajax = $ajax;
     }
 }
 

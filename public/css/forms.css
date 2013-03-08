@@ -8,3 +8,9 @@
 #radioMatiere-element label {
     margin-left : 20px;
 }
+#formConteneur {
+    float : left;
+}
+.divdate {
+    display : none;
+}

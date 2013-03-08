@@ -1,23 +1,2 @@
+<div id="formConteneur" class="zend_form">
 
-<?php 
-    // affiche le formulaire (avec les erreurs si il y en a)
-    echo $this->form;
-    
-    // send : mise a true une fois le formulaire envoyé, inexistante avant
-    if($this->send)
-    {
-        // si on a une date de debut et une date de fin, on affiche des infos en plus
-        if($this->dateDebut != "" && $this->dateFin != "")
-        {
-            $newDebut = new Zend_Date($this->dateDebut);
-            $newFin = new Zend_Date($this->dateFin);
-            echo '<p>Periode : <br>
-                '.$newDebut->toString('dd MMM YYYY').' => '.$newFin->toString('dd MMM YYYY').
-                '</p>';
-        }
-        // affiche le tonnage, l'adresse du conteneur
-        echo 'Tonnage = '.$this->tonnage;
-        echo ' sur le site : "'.strtolower($this->infosSite['NOM_SITE']).'" ('.$this->infosSite['LOC_SITE'].')';
-        echo '<br>'.ucwords(strtolower($this->infosSite['NOM_COMMUNE']));
-    }
-?>

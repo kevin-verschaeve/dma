@@ -2,7 +2,6 @@ html, body {
     margin : 0;
     padding : 0;
     font-size : 18px;
-    color : white;  
 }
 a {
     color : white;  
@@ -11,8 +10,7 @@ header, footer {
     height : 100px;
 }
 #body {
-    background-color: #a8ddeb;
-    color : white;   
+    background-color: #a8ddeb; 
     margin : 0 10px;
 }
 #menuGauche {
@@ -24,7 +22,7 @@ header, footer {
 }
 #content {
     min-height: 500px;
-    background-color:  #09223B;
+    background-color:  #09223B; 
 }
 table {
     border-collapse: collapse;
@@ -32,4 +30,7 @@ table {
 table td {
     border : 1px solid white;
     padding : 5px;
+}
+.white {
+    color : white;  
 }

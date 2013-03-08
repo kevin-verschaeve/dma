@@ -1,10 +1,10 @@
-<?php
-    $id = 'bis';
-    if(!$this->ajax)
-        $id = 'first';
+<?php 
+    echo $this->formMatiere; 
+    
+    if($this->send) :
 ?>
 
-<table id="<?php echo $id; ?>" class="white">
+<table class="white">
     <tr>
         <td>n°</td>
         <td>n° conteneur</td>
@@ -14,7 +14,6 @@
         <!--<td>Nb relevés</td>-->
     </tr>
     <?php
-    try{
         $i = 1;
         foreach($this->infosConteneur as $unSite)
         {
@@ -28,12 +27,7 @@
                 </tr>';
             $i++;
         }
-    }
-    catch(Exception $e)
-    {
-        echo $e->getMessage();exit;
-    }
+        
+        endif;
     ?>
-</table>
-</div>  <!-- ferme le div dans index.phtml  -->
-<?php if($this->ajax) exit; ?>
+</table>    
