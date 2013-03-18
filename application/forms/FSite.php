@@ -22,7 +22,7 @@ class FSite extends Zend_Form
         // configure les decorateurs (a revoir)
         $this->setDecorators(array(
             'FormElements',
-            array('HtmlTag', array('tag' => 'div')),
+            //array('HtmlTag', array('tag' => 'div')),
             'Form',
         ));
         // creation des elements du formulaire
@@ -62,7 +62,7 @@ class FSite extends Zend_Form
         $this->setElementDecorators(array(
             array('ViewHelper'),
             array('Errors', array('tag' => 'div', 'class' => 'error')),
-            array('Label', array('tag' => 'span')),
+            array('Label', array('tag' => 'p', 'class' => 'spanform')),
             array('HtmlTag', array('tag' => 'div', 'class' => 'divform'))
          ));
         

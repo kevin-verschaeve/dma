@@ -19,15 +19,21 @@ class FMatiere extends Zend_Form
               ->setMethod('post')
               ->setName('Fmatiere');
         
+        $this->setDecorators(array(
+            'FormElements',
+            //array('HtmlTag', array('tag' => 'div')),
+            'Form',
+        ));
+        
         $radio = new Zend_Form_Element_Radio('radioMatiere');
-        $radio->setLabel('Type de matière')
+        $radio->setLabel('Type de matière : ')
               ->setMultiOptions(array(
                     'Verre Couleur' => 'Verre',
                     'Papier/Carton' => 'Papier/Carton',
                     'Corps Creux' => 'Corps Creux'
              ))
             ->setValue('Verre Couleur')
-            ->setSeparator('');
+            ->setSeparator('&nbsp;&nbsp;');
         $radio->setAttrib('class', $this->classeRadio);
         $this->addElement($radio);
         
@@ -37,12 +43,14 @@ class FMatiere extends Zend_Form
             $dateDebut->setLabel('Date de debut : ');
             $dateDebut->setAttrib('class', 'datepicker');
             $dateDebut->setRequired(true);
+            $dateDebut->setAttrib('autocomplete', 'off');
             $this->addElement($dateDebut);
 
             $dateFin = new Zend_Form_Element_Text('dateFin');
             $dateFin->setLabel('Date de fin : ');
             $dateFin->setAttrib('class', 'datepicker');
             $dateFin->setRequired(true);
+            $dateFin->setAttrib('autocomplete', 'off');
             $this->addElement($dateFin);
             
             // bouton submit
@@ -50,5 +58,12 @@ class FMatiere extends Zend_Form
             $submit->setLabel('Envoyer');
             $this->addElement($submit);
         }
+        
+        $this->setElementDecorators(array(
+            array('ViewHelper'),
+            array('Errors', array('tag' => 'div', 'class' => 'error')),
+            array('Label', array('tag' => 'p', 'class' => 'spanform')),
+            array('HtmlTag', array('tag' => 'div', 'class' => 'divform'))
+         ));
     }
 }

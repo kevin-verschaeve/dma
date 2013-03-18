@@ -1,39 +1,64 @@
 <?php
-    $id = 'bis';
+    $class = 'bis';
     if(!$this->ajax)
-        $id = 'first';
+        $class = 'prems';
 ?>
 
-<table id="<?php echo $id; ?>" class="white">
-    <tr>
-        <td>n°</td>
-        <td>n° conteneur</td>
-        <td>Adresse</td>
-        <td>Commune</td>
-        <td>Tonnage</td>
-        <!--<td>Nb relevés</td>-->
-    </tr>
-    <?php
-    try{
-        $i = 1;
-        foreach($this->infosConteneur as $unSite)
-        {
-            echo '<tr>
-                    <td>'.$i.'</td>
-                    <td>'.$unSite['NO_CONTENEUR'].'</td>
-                    <td>'.$unSite['NOM_SITE'].', '.$unSite['LOC_SITE'].'</td>
-                    <td>'.$unSite['NOM_COMMUNE'].'</td>
-                    <td>'.$unSite['qte'].'</td>
-                    <!--<td>'.$unSite['ID_SITE'].'</td>-->
-                </tr>';
-            $i++;
+<table id="datatable" class="<?php echo $class; ?> display">
+      <thead>
+        <tr>
+            <th>n°</th>
+            <th>n° conteneur</th>
+            <th class="thadresse">Adresse</th>
+            <th>Commune</th>
+            <th>Tonnage</th>
+            <!--<td>Nb relevés</td>-->
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>n°</th>
+            <th>n° conteneur</th>
+            <th>Adresse</th>
+            <th>Commune</th>
+            <th>Tonnage</th>
+            <!--<td>Nb relevés</td>-->
+        </tr>
+    </tfoot>
+    <tbody>        
+        <?php
+        try{
+            $i = 1;
+            foreach($this->infosConteneur as $unSite)
+            {
+                echo '<tr class="gradeA">
+                        <td>'.$i.'</td>
+                        <td>'.$unSite['NO_CONTENEUR'].'</td>
+                        <td>'.$unSite['NOM_SITE'].', '.$unSite['LOC_SITE'].'</td>
+                        <td>'.$unSite['NOM_COMMUNE'].'</td>
+                        <td>'.$unSite['QTE'].'</td>
+                        <!--<td>'.$unSite['ID_SITE'].'</td>-->
+                    </tr>';
+                $i++;
+            }
         }
-    }
-    catch(Exception $e)
-    {
-        echo $e->getMessage();exit;
-    }
-    ?>
+        catch(Exception $e)
+        {
+            echo $e->getMessage();exit;
+        }
+        ?>
+    </tbody>
 </table>
 </div>  <!-- ferme le div dans index.phtml  -->
+<script type="text/javascript">
+// applique le datatable 
+// on le met ici car il faut le réexcuter a chaque changement de tableau
+// verre couleur -> papier/carton, etc...
+$(document).ready(function() {
+   $('#datatable').dataTable({
+    "bJQueryUI": true,
+    "sPaginationType": "full_numbers"
+    });
+});
+</script>
 <?php if($this->ajax) exit; ?>

@@ -17,7 +17,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initDB()
     {
         // regle la bdd et la connexion avec le .ini
-        $db = Zend_Db::factory($this->_config->database);   
+        $db = Zend_Db::factory($this->_config->db); 
         Zend_Db_Table_Abstract::setDefaultAdapter($db);
         Zend_Registry::set('db', $db);
         

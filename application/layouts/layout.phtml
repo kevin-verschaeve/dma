@@ -2,18 +2,21 @@
 <html>
     <head>
         <title>DMA</title>
-        <meta charset="utf-8" />
+        <!--<meta charset="utf-8" />-->
         
         <?php
             // CSS
             $this->headLink()->appendStylesheet($this->baseUrl('/css/base.css'));
             $this->headLink()->appendStylesheet($this->baseUrl('/css/forms.css'));
+            $this->headLink()->appendStylesheet($this->baseUrl('/css/datatables/demo_page.css'));
+            $this->headLink()->appendStylesheet($this->baseUrl('/css/datatables/demo_table.css'));          
             $this->headLink()->appendStylesheet($this->baseUrl('/css/smoothness/jquery-ui-1.10.1.custom.css'));
             echo $this->headLink();
           
             // JAVASCRIPT
             $this->headScript()->appendFile($this->baseUrl('/js/jquery-1.9.1.js'));
-            $this->headScript()->appendFile($this->baseUrl('/js/jquery-ui-1.10.1.custom.js'));
+            $this->headScript()->appendFile($this->baseUrl('/js/jquery-ui-1.10.1.custom.min.js'));
+            $this->headScript()->appendFile($this->baseUrl('/js/jquery.dataTables.js'));
             $this->headScript()->appendFile($this->baseUrl('/js/base.js'));
             $this->headScript()->appendFile($this->baseUrl('/js/jquery.ui.datepicker-fr.js'));
             echo $this->headScript();
@@ -25,7 +28,7 @@
             <?php echo $this->layout()->header; ?>
             
             <div id="content">                
-                <div id="menuGauche">
+                <div id="menuGauche" class="left" >
                     <ul>
                         <li><a href="<?php echo $this->baseUrl('/');?>">Accueil</a></li>
                         <li><a href="<?php echo $this->baseUrl('/index/tonnage');?>">Tonnage</a></li>

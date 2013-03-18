@@ -5,6 +5,8 @@
     <div id="showHideDates">
         <a href="#" onclick='showDates();'>Entrer une periode</a>
     </div>
+</div>
+<div>
 <?php
     
     // send : mise a true une fois le formulaire envoyé, inexistant avant
@@ -22,12 +24,11 @@
                 '.$newDebut->toString('dd MMM YYYY').' => '.$newFin->toString('dd MMM YYYY').
                 '</p>';
         }
-        // affiche le tonnage, l'adresse du conteneur
-        echo 'Tonnage = '.$this->infosConteneur['qte'];
+        // affiche le tonnage et l'adresse du conteneur
+        echo 'Tonnage = '.$this->infosConteneur['QTE'];
         echo ' sur le site : "'.strtolower($this->infosConteneur['NOM_SITE']).'" ('.$this->infosConteneur['LOC_SITE'].')';
         echo '<br>'.ucwords(strtolower($this->infosConteneur['NOM_COMMUNE']));
     }
 ?>
-</div>
-
+    </div>
 <?php if($this->ajax) exit; ?>
