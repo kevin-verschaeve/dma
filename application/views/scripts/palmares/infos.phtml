@@ -10,9 +10,9 @@
             <th>n°</th>
             <th>n° conteneur</th>
             <th class="thadresse">Adresse</th>
-            <th>Commune</th>
+            <th class="thcommune">Commune</th>
             <th>Tonnage</th>
-            <!--<td>Nb relevés</td>-->
+            <th>Nb relevés</th>
         </tr>
     </thead>
     <tfoot>
@@ -22,7 +22,7 @@
             <th>Adresse</th>
             <th>Commune</th>
             <th>Tonnage</th>
-            <!--<td>Nb relevés</td>-->
+            <th>Nb relevés</th>
         </tr>
     </tfoot>
     <tbody>        
@@ -35,9 +35,9 @@
                         <td>'.$i.'</td>
                         <td>'.$unSite['NO_CONTENEUR'].'</td>
                         <td>'.$unSite['NOM_SITE'].', '.$unSite['LOC_SITE'].'</td>
-                        <td>'.$unSite['NOM_COMMUNE'].'</td>
+                        <td>'.$unSite['NOM_LOCALITE'].'</td>
                         <td>'.$unSite['QTE'].'</td>
-                        <!--<td>'.$unSite['ID_SITE'].'</td>-->
+                        <td>'.$unSite['LEVEES'].'</td>
                     </tr>';
                 $i++;
             }

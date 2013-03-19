@@ -1,0 +1,1 @@
+sqlldr userid=DMA/DMA@PROD10 control=C:\wamp\www\dma\application\configs\Collecte.ctl data=C:\wamp\www\dma\temp\Juillet.csv errors=0

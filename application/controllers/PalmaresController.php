@@ -33,7 +33,6 @@ class PalmaresController  extends Zend_Controller_Action
         $tcollecte = new TCollecte;
 
         $infosConteneur = $tcollecte->getInfos(null ,$matiere);
-
         //Zend_Debug::dump($infosConteneur);exit;
         // on envoi les variables a la vue
         $this->view->infosConteneur = $infosConteneur;

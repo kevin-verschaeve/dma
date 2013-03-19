@@ -5,8 +5,8 @@ class TestController extends Zend_Controller_Action
     public function indexAction()
     {
         try {
-        $tco = new TCollecte;
-        Zend_Debug::dump($tco->testDate());
+            exec(APPLICATION_PATH.'/configs/Loader.bat');
+            
         }catch(Exception $e)
         {
             echo $e->getMessage();

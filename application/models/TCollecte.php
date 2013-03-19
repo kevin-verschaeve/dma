@@ -3,14 +3,7 @@ class TCollecte extends Zend_Db_Table_Abstract
 {
     protected $_name = 'T_COLLECTE';
     protected $_primary = array('DATE_COLLECTE','NO_CONTENEUR');
-    
-    public function getCollecte()
-    {
-        $req = $this->select()
-                    ->from($this->_name,array('*'))
-                ;
-        return $this->fetchAll($req)->toArray();
-    }
+   
     public function getConteneurs($matiere)
     {
         $req = $this->select()
@@ -26,34 +19,13 @@ class TCollecte extends Zend_Db_Table_Abstract
                 ;
         return $this->_db->fetchCol($req);
     }
-    /**
-     * Compte le nombre de ligne pour un conteneur, equivaut au nombre de relevé
-     * @param int $idsite : id du site
-     * @param type $dateDebut
-     * @param type $dateFin
-     * @return type
-     */
-    public function getNbReleves($idsite, $dateDebut =null, $dateFin =null)
-    {
-        $req = $this->select()
-                    ->from($this->_name,'count(*)')
-                    ->where('ID_SITE = ?', $idsite)
-                ;
-        if(!is_null($dateDebut) && !is_null($dateFin))
-        {
-            $req->where('DATE_COLLECTE >= ? ', $dateDebut)
-                ->where('DATE_COLLECTE <= ? ', $dateFin);
-        }
-        
-        return $this->_db->fetchOne($req);
-    }
-    
     
     /**
      * recupere les informations d'un conteneur (si spécifié, pour tous sinon),
      * pour une matiere (Verre couleur par defaut)
      * pendant une periode (si pas spécifiée, ou un champs sur deux remplis => 
      * depuis le premier relevé a aujourdhui)
+     * et le nombre de relevés effectués pour avoir le tonnage sur un conteneur
      * 
      * @param string $nConteneur : le numero du conteneur
      * @param string $matiere : la matiere du conteneur que l'on cherche
@@ -72,9 +44,8 @@ class TCollecte extends Zend_Db_Table_Abstract
         //echo $imbriquee->assemble();exit;
 
         $req = $this->select()->setIntegrityCheck(false)
-                    ->from(array('c'=>$this->_name),array('SUM(QTE_COLLECTE) qte','NO_CONTENEUR', 'NOM_GROUPEMENT', 'NOM_LOCALITE', 'MATIERE', 'VOLUME'))
+                    ->from(array('c'=>$this->_name),array('count(*) levees','SUM(QTE_COLLECTE) qte','NO_CONTENEUR', 'NOM_GROUPEMENT', 'NOM_LOCALITE', 'MATIERE', 'VOLUME'))
                     ->join(array('s'=>'t_site'),'c.ID_SITE=s.ID_SITE', '*')
-                    ->join(array('co'=>'t_commune'),'co.ID_COMMUNE=s.ID_COMMUNE', 'NOM_COMMUNE')
                     ->where('c.ID_SITE IN (?)', new Zend_Db_Expr($imbriquee))
                     ->where('MATIERE = ?', $matiere)
                 ;
@@ -95,8 +66,7 @@ class TCollecte extends Zend_Db_Table_Abstract
         $req->group('c.NO_CONTENEUR, 
                 c.NOM_GROUPEMENT, c.NOM_LOCALITE,
                 c.MATIERE, c.VOLUME, s.ID_SITE, s.ID_COMMUNE, s.LOC_SITE, 
-                s.NOM_SITE, s.USED_SITE,
-                co.NOM_COMMUNE');
+                s.NOM_SITE, s.USED_SITE');
         
         if(!is_null($nConteneur))
         {
@@ -104,19 +74,10 @@ class TCollecte extends Zend_Db_Table_Abstract
             return $this->fetchRow($req)->toArray();
         }
         else
-        {   // on trie du plus grand au plus petit
+        {   // on trie du plus grand tonnage au plus petit
             $req->order('qte DESC');
             //echo $req->assemble();exit;
             return $this->fetchAll($req)->toArray();
         }
-    }
-    public function testDate()
-    {
-        $req = $this->select()
-                    ->from($this->_name,'DATE_COLLECTE')
-                    ->where('DATE_COLLECTE >= ?', '22-07-2012')
-                    ->where('DATE_COLLECTE <= ?', '24-07-2012')
-                ;
-        Return $this->fetchAll($req)->toArray();
     }
 }

@@ -214,7 +214,8 @@ input.ui-button {
 }
 .ui-buttonset .ui-button {
 	margin-left: 0;
-	margin-right: -.3em;
+	/*margin-right: -0.3em;*/
+        padding: 0 5px;
 }
 
 /* workarounds */
@@ -810,6 +811,7 @@ body .ui-tooltip {
 	background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
 	color: #222222;
 	font-weight: bold;
+        padding: 8px;
 }
 .ui-widget-header a {
 	color: #222222;

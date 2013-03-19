@@ -8,9 +8,19 @@
 #radioMatiere-element label {
     margin-left : 20px;
 }
-#formConteneur {
-    float : left;
-}
 .divdate {
     display : none;
+}
+/*.formConteneur*/ .divform p {
+    display: inline-block;
+    margin: 5px 0;
+    width: 150px;
+    text-align: right;
+}
+#sub-label {
+    display : none;
+}
+/* le dernier .divform  => celui qui contient le bouton submit*/
+/*.formConteneur */.divform:last-child {
+    text-align: center;
 }
