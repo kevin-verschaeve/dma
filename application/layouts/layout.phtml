@@ -6,8 +6,10 @@
         
         <?php
             // CSS
+            $this->headLink()->appendStylesheet($this->baseUrl('/css/reset.css'));
             $this->headLink()->appendStylesheet($this->baseUrl('/css/base.css'));
             $this->headLink()->appendStylesheet($this->baseUrl('/css/forms.css'));
+            $this->headLink()->appendStylesheet($this->baseUrl('/css/import.css'));
             $this->headLink()->appendStylesheet($this->baseUrl('/css/datatables/demo_page.css'));
             $this->headLink()->appendStylesheet($this->baseUrl('/css/datatables/demo_table.css'));          
             $this->headLink()->appendStylesheet($this->baseUrl('/css/smoothness/jquery-ui-1.10.1.custom.css'));
@@ -39,7 +41,6 @@
                 </div>
                 <?php echo $this->layout()->content; ?>
             </div>
-            
             <?php echo $this->layout()->footer; ?>
         </div>
     </body>

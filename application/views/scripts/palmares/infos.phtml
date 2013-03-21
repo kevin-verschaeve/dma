@@ -27,7 +27,6 @@
     </tfoot>
     <tbody>        
         <?php
-        try{
             $i = 1;
             foreach($this->infosConteneur as $unSite)
             {
@@ -41,11 +40,6 @@
                     </tr>';
                 $i++;
             }
-        }
-        catch(Exception $e)
-        {
-            echo $e->getMessage();exit;
-        }
         ?>
     </tbody>
 </table>

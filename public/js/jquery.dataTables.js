@@ -971,7 +971,7 @@
 				"sEmptyTable": "Aucune données disponibles",
 				"sLoadingRecords": "Loading...",
 				"sInfo": "Affichage des lignes _START_ à _END_ sur _TOTAL_",
-				"sInfoEmpty": "Affiche des lignes 0 à 0 sur 0",
+				"sInfoEmpty": "Affichage des lignes 0 à 0 sur 0",
 				"sInfoFiltered": "(à partir de  _MAX_ lignes)",
 				"sInfoPostFix": "",
 				"sSearch": "Chercher :",
@@ -1385,7 +1385,7 @@
 			 *   from the first array, and the displayed value to the end user comes from the second
 			 *   array. 2D example: [ [ 10, 25, 50, 100, -1 ], [ 10, 25, 50, 100, 'All' ] ];
 			 */
-			this.aLengthMenu = [ 10, 25, 50, 100 ];
+			this.aLengthMenu = [ [ 10, 25, 50, 100, -1 ], [ 10, 25, 50, 100, 'Tous' ] ];
 			
 			/*
 			 * Variable: iDraw

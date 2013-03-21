@@ -1,0 +1,1 @@
+Invoke-Command -Computer R0202054 -ScriptBlock {start cmd.exe}

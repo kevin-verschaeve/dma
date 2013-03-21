@@ -1,8 +1,13 @@
+input[type="text"], select {
+    width : 120px;
+}
 .zend_form {
     /*background-color: red;*/
     border : 2px solid #a8ddeb;
     display : inline-block;
     padding : 10px;
+    margin-top: 20px;
+    position : relative;
 }
 
 #radioMatiere-element label {
@@ -11,16 +16,74 @@
 .divdate {
     display : none;
 }
-/*.formConteneur*/ .divform p {
+.formConteneur .divform p {
+    width : 110px !important;
+}
+.divform p {
     display: inline-block;
     margin: 5px 0;
-    width: 150px;
+    width: 130px;
     text-align: right;
 }
 #sub-label {
     display : none;
 }
-/* le dernier .divform  => celui qui contient le bouton submit*/
-/*.formConteneur */.divform:last-child {
-    text-align: center;
+#FmatiereSeul .divform {
+    margin : 0;
+}
+#FmatiereSeul {
+    margin-bottom : -20px
+}
+/* le dernier .divform */
+#Fmatiere .divform:last-child {
+    margin-left: 120px;
+    margin-top : 10px;
+}
+.formConteneur .divform:last-child {
+    margin-left : 60px; 
+    margin-top : 10px;
+}
+.divdate .divform:last-child {
+    margin-left : 0; 
+    margin-top : 0;    
+}
+.errors {
+    background: none repeat scroll 0 0 red;
+    border: 2px solid red;
+    border-radius: 5px 5px 5px 5px;
+    color: black;
+    list-style: none outside none;
+    padding: 0;
+    margin : 5px 5px 10px 5px ;
+    text-align : center;
+    margin: 3px 0 1px 10px;
+    float: right;
+}
+.errors li {
+    padding-left : 20px;
+    background: url('/img/error.png') no-repeat;
+}
+.bt_submit {
+    background: white;
+    border-radius : 15px;
+    border: 1px outset #a8ddeb;
+}
+.bt_submit:hover {
+    cursor : pointer;
+    box-shadow: 2px -2px 5px #a8ddeb;
+}
+
+/********************    form import fichier csv    ************************/
+#Fimport dd, #Fimport dt {
+    display : inline-block;
+}
+#input_fichier-label + dd {
+    width : 230px;
+}
+#Fimport .errors {
+    position: absolute;
+    left: 0;
+    top: 50px;
+    margin: 0;
+    width: 100%;
 }

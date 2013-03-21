@@ -5,10 +5,13 @@ class FMatiere extends Zend_Form
     private $periode;
     private $classeRadio;
     private $action;
-    
-    public function __construct($periode =false) {
+    private $id;
+
+
+    public function __construct($periode =false, $id =false) {
         $this->periode = $periode;
 
+        $this->id = $id ? 'FmatiereSeul' : 'Fmatiere';
         $this->classeRadio = $periode ? 'plustard' : 'rad';
         $this->action = $periode ? '/palmares/infosperiode' : '/palmares/index';
         parent::__construct();
@@ -17,13 +20,14 @@ class FMatiere extends Zend_Form
     {
         $this->setAction($this->action)
               ->setMethod('post')
-              ->setName('Fmatiere');
+              ->setName($this->id);
         
         $this->setDecorators(array(
             'FormElements',
             //array('HtmlTag', array('tag' => 'div')),
             'Form',
         ));
+        $this->setAttrib('class', 'zend_form');
         
         $radio = new Zend_Form_Element_Radio('radioMatiere');
         $radio->setLabel('Type de matière : ')
@@ -56,12 +60,13 @@ class FMatiere extends Zend_Form
             // bouton submit
             $submit = new Zend_Form_Element_Submit('sub');
             $submit->setLabel('Envoyer');
+            $submit->setAttrib('class', 'bt_submit');
             $this->addElement($submit);
         }
         
         $this->setElementDecorators(array(
             array('ViewHelper'),
-            array('Errors', array('tag' => 'div', 'class' => 'error')),
+            array('Errors', array('tag' => 'div', 'class' => 'errors')),
             array('Label', array('tag' => 'p', 'class' => 'spanform')),
             array('HtmlTag', array('tag' => 'div', 'class' => 'divform'))
          ));

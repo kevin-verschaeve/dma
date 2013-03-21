@@ -7,13 +7,16 @@ class PalmaresController  extends Zend_Controller_Action
         $this->_helper->actionStack('header', 'index', 'default', array());
         
         // instancie un nouveau formulaire de choix de matiere et l'envoi a la vue
-        $fmatiere = new FMatiere;
+        $fmatiere = new FMatiere(false, true);
         $this->view->formMatiere = $fmatiere;
         //Zend_Debug::dump($infosSite);
         
-        $this->_helper->actionStack('infos', 'palmares');        
-        
+        // appelle l'action en dessous
+        $this->_helper->actionStack('infos', 'palmares'); 
     }
+    /**
+     * A pour but de 
+     */
     public function infosAction()
     {
         try {

@@ -4,8 +4,10 @@ class TestController extends Zend_Controller_Action
 {
     public function indexAction()
     {
-        try {
-            exec(APPLICATION_PATH.'/configs/Loader.bat');
+        try {          
+            $date = new Zend_Date(Zend_Date::now());
+            $annee = $date->get('yyyy');
+            exit;
             
         }catch(Exception $e)
         {

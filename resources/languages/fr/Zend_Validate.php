@@ -102,7 +102,7 @@ return array (
     "File '%value%' is not readable or does not exist" => "Le fichier '%value%' n'est pas lisible ou n'existe pas",
     "File '%value%' was illegally uploaded. This could be a possible attack" => "Fichier '%value%' mal envoyé. Ceci peut être possiblement une attaque",
     "File '%value%' was not found" => "Fichier '%value%' introuvable",
-    "File '%value%' was not uploaded" => "Le fichier '%value%' n'a pas été envoyé",
+    "File '%value%' was not uploaded" => "Le fichier n'a pas été envoyé",
     "File '%value%' was only partially uploaded" => "Le fichier '%value%' n'a été que partiellement envoyé",
     "Invalid type given. Numeric string, integer or float expected" => "Type invalide. Chaîne numérique, entier ou flottant attendu",
     "Invalid type given. String expected" => "Type invalide. Chaîne attendue",
@@ -131,5 +131,5 @@ return array (
     "Too much words, maximum '%max%' are allowed but '%count%' were counted" => "Trop de mots, un maximum de '%max%' est requis, '%count%' ont été fournis",
     "Unknown country within the IBAN '%value%'" => "Pays inconnu pour l'IBAN '%value%'",
     "Unknown error while uploading file '%value%'" => "Erreur inconnue lors de l'envoi du fichier '%value%'",
-    "Value is required and can't be empty" => "Cette valeur est obligatoire et ne peut être vide",
+    "Value is required and can't be empty" => "Ce champ est obligatoire et ne peut être vide",
 );

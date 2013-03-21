@@ -8,9 +8,9 @@ defined('APPLICATION_PATH')
 defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
-// define dossier temporaire d'upload
-defined('TEMP_PATH')
-    || define('TEMP_PATH', realpath(dirname(__FILE__) . '/../temp'));
+// define dossier de ressources
+defined('RESOURCE_PATH')
+    || define('RESOURCE_PATH', realpath(dirname(__FILE__) . '/../resources'));
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(

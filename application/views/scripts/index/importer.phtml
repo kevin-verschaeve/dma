@@ -1,3 +1,18 @@
+<h2>Importer un fichier csv</h2>
 <?php 
     echo $this->formFichier;
+    
+    if($this->erreur) :
 ?>
+<div id="erreurFichier">
+    <?php echo $this->erreur; ?>
+</div>
+    
+    <?php else : ?>
+
+<div id="infosImport">
+    <p><?php echo $this->nbLignesSupp;?> supprimées</p>
+    <p><?php echo $this->nbNouvellesLignes;?> lignes ajoutées</p>
+</div>
+
+    <?php endif; ?>

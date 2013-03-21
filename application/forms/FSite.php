@@ -28,8 +28,8 @@ class FSite extends Zend_Form
         // creation des elements du formulaire
         $matiere = new Zend_Form_Element_Select('sel_matiere');
         $matiere->setLabel('Matiere : ');
-        $matiere->setMultiOptions($this->tabMatieres);
-        $matiere->setValue($this->matChecked);
+        $matiere->setMultiOptions($this->tabMatieres);  // remplis le select avec un tableau
+        $matiere->setValue($this->matChecked);  // selectionne une valeur par defaut
         $matiere->setAttrib('class', 'selec');
                 
         $conteneur = new Zend_Form_Element_Select('nConteneur');
@@ -37,7 +37,7 @@ class FSite extends Zend_Form
         $conteneur->setMultiOptions($this->tabConteneur);
         $conteneur->setRegisterInArrayValidator(false);
 
-        // un input type text auquel on ajoute la classe datepicker 'pour jquery)
+        // un input type text auquel on ajoute la classe datepicker (pour jquery)
         $dateDebut = new Zend_Form_Element_Text('dateDebut');
         $dateDebut->setLabel('Date de debut : ');
         $dateDebut->setAttrib('class', 'datepicker cacher');
@@ -49,6 +49,7 @@ class FSite extends Zend_Form
         
         // bouton submit
         $submit = new Zend_Form_Element_Submit('sub');
+        $submit->setAttrib('class', 'bt_submit');
         $submit->setLabel('Envoyer');
 
         // une fois les éléments créés, il faut les ajouter au formulaire
