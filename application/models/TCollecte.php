@@ -71,7 +71,9 @@ class TCollecte extends Zend_Db_Table_Abstract
         if(!is_null($nConteneur))
         {
             // on a qu'une ligne, on utilise donc fetchRow (pas besoin de tri)
-            return $this->fetchRow($req)->toArray();
+            $res = $this->fetchRow($req);
+            // si $res contient qqch, on le retourne, sinon on retourne null
+            return $res ? $res->toArray() : null;
         }
         else
         {   // on trie du plus grand tonnage au plus petit

@@ -6,29 +6,41 @@
         <a href="#" id="showdates" onclick='showDates();'>Entrer une periode</a>
     </div>
 </div>
-<div>
 <?php
-    
-    // send : mise a true une fois le formulaire envoyé, inexistant avant
+    // send : mise a true une fois le formulaire envoyé, inexistant avant    
     if($this->send)
     {
-        // si on a une date de debut et une date de fin, on affiche des infos en plus
-        if($this->dateDebut != "" && $this->dateFin != "")
+        echo '<div class="resteTonnage">';
+        if($this->infosConteneur != null)
+        {
+        
+            // si on a une date de debut et une date de fin, on affiche des infos en plus
+            if($this->dateDebut != "" && $this->dateFin != "")
+            {
+                // converti les string en type date
+                $newDebut = new Zend_Date($this->dateDebut);
+                $newFin = new Zend_Date($this->dateFin);
+                // affiche la date dans un format lisible ex: '4 mars 2013'
+                echo '<p>Periode : 
+                    '.$newDebut->toString('dd MMM YYYY').' => '.$newFin->toString('dd MMM YYYY').
+                    '</p>';
+            }
+            // affiche le tonnage et l'adresse du conteneur
+            echo 'Tonnage = '.$this->infosConteneur['QTE'];
+            echo ' sur le site : "'.strtolower($this->infosConteneur['NOM_SITE']).'" ('.$this->infosConteneur['LOC_SITE'].')';
+            echo '<br>'.ucwords(strtolower($this->infosConteneur['NOM_LOCALITE']));
+        }
+        else
         {
             // converti les string en type date
             $newDebut = new Zend_Date($this->dateDebut);
             $newFin = new Zend_Date($this->dateFin);
-            
-            // affiche la date dans un format lisible ex: '4 mars 2013'
-            echo '<p>Periode : <br>
-                '.$newDebut->toString('dd MMM YYYY').' => '.$newFin->toString('dd MMM YYYY').
-                '</p>';
+            echo '<p>Aucun enregistrement pour le conteneur '.$this->nConteneur.' 
+                    pour la periode : '.$newDebut->toString('dd MMM YYYY').' =>
+                    '.$newFin->toString('dd MMM YYYY').'
+                </p>';
         }
-        // affiche le tonnage et l'adresse du conteneur
-        echo 'Tonnage = '.$this->infosConteneur['QTE'];
-        echo ' sur le site : "'.strtolower($this->infosConteneur['NOM_SITE']).'" ('.$this->infosConteneur['LOC_SITE'].')';
-        echo '<br>'.ucwords(strtolower($this->infosConteneur['NOM_LOCALITE']));
+        echo' </div>';
     }
 ?>
-    </div>
 <?php if($this->ajax) exit; ?>

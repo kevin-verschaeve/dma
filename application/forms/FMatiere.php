@@ -32,7 +32,7 @@ class FMatiere extends Zend_Form
         $radio = new Zend_Form_Element_Radio('radioMatiere');
         $radio->setLabel('Type de matière : ')
               ->setMultiOptions(array(
-                    'Verre Couleur' => 'Verre',
+                    'Verre Couleur' => 'Verre Couleur',
                     'Papier/Carton' => 'Papier/Carton',
                     'Corps Creux' => 'Corps Creux'
              ))

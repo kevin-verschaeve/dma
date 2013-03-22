@@ -1,18 +1,21 @@
 <h2>Importer un fichier csv</h2>
-<?php 
-    echo $this->formFichier;
-    
-    if($this->erreur) :
-?>
-<div id="erreurFichier">
-    <?php echo $this->erreur; ?>
-</div>
-    
-    <?php else : ?>
+<?php echo $this->formFichier; ?>
+    <?php
+        // si on a une erreur, on l'affiche
+        if($this->erreur) :
+    ?>
+    <div id="erreurFichier">
+        <p><?php echo $this->erreur; ?></p>
+    </div>
 
-<div id="infosImport">
-    <p><?php echo $this->nbLignesSupp;?> supprimées</p>
-    <p><?php echo $this->nbNouvellesLignes;?> lignes ajoutées</p>
-</div>
+    <?php
+        // sinon, si erreur n'est pas null (a false), on affiche le resultat de la requete
+        elseif(!is_null($this->erreur)) : 
+    ?>
 
+    <div id="infosImport">
+        <p><?php echo $this->nbLignesSupp;?> lignes supprimées</p>
+        <p><?php echo $this->nbNouvellesLignes;?> lignes ajoutées</p>
+    </div>
+    <!--    si $this->erreur == null, on vient d'arriver sur la page, on a encore rien fait   -->
     <?php endif; ?>

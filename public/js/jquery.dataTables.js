@@ -967,8 +967,8 @@
 			this.oLanguage = {
 				"sProcessing": "Processing...",
 				"sLengthMenu": "Afficher _MENU_ lignes",
-				"sZeroRecords": "Aucun résultats trouvé",
-				"sEmptyTable": "Aucune données disponibles",
+				"sZeroRecords": "Ce filtre ne retourne aucune ligne",
+				"sEmptyTable": "Aucun résultat",
 				"sLoadingRecords": "Loading...",
 				"sInfo": "Affichage des lignes _START_ à _END_ sur _TOTAL_",
 				"sInfoEmpty": "Affichage des lignes 0 à 0 sur 0",

@@ -29,7 +29,7 @@
         <div id="body" class="white">
             <?php echo $this->layout()->header; ?>
             
-            <div id="content">                
+            <div id="corps">         
                 <div id="menuGauche" class="left" >
                     <ul>
                         <li><a href="<?php echo $this->baseUrl('/');?>">Accueil</a></li>
@@ -39,7 +39,9 @@
                         <li><a href="<?php echo $this->baseUrl('/index/importer');?>">Importer .csv</a>
                     </ul>
                 </div>
-                <?php echo $this->layout()->content; ?>
+                <div id="content" class="reste">  
+                    <?php echo $this->layout()->content; ?>
+                </div>
             </div>
             <?php echo $this->layout()->footer; ?>
         </div>

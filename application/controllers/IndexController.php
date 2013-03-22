@@ -25,7 +25,7 @@ class IndexController extends Zend_Controller_Action
         $this->_helper->actionStack('tonnageajax', 'index');
     }
     /**
-     * Recupere les informations sur un conteneur, enfonction de la matiere
+     * Recupere les informations sur un conteneur, en fonction de la matiere
      * prealablement choisie, pendant une periode de temps limitée ou non
      */
     public function tonnageajaxAction()
@@ -43,54 +43,50 @@ class IndexController extends Zend_Controller_Action
 
             // si !ajax : on arrive sur la page (on a pas encore effectué de requete ajax)
         }
-        try{
-            $tcollecte = new TCollecte;
-            
-            // recupere les conteneurs et les matieres
-            $matieres = $tcollecte->getMatieres();
-            $tabConteneur = $tcollecte->getConteneurs($matiere);
-            
-            // copie les valeurs dans les clés (pour les select)            
-            $matieres = array_combine($matieres, $matieres);
-            $tabConteneur = array_combine($tabConteneur, $tabConteneur);
-            //Zend_Debug::dump($tabConteneur);exit;
-            
-            // cree le formulaire, on passe des parametres pour mettre des valeurs par defaut
-            $form = new FSite($tabConteneur, $matieres, $matiere);
+        $tcollecte = new TCollecte;
 
-            // recupere la requete
-            $request = $this->getRequest();
-            
-            // si la requete est de type POST, on vient d'une validation du formulaire
-            if($request->isPost())
-            {
-                // si le formulaire est valide (regles mises en places a la création du formulaire respectées)
-                if($form->isValid($_POST))
-                {
-                    // on recupere le contenu des champs, un par un, avec l'id du champ
-                    $nConteneur= $request->getParam('nConteneur');
-                    $dateDebut = $request->getParam('dateDebut', null);
-                    $dateFin = $request->getParam('dateFin', null);
-                    
-                    // recupere les informations
-                    // pour le conteneur $nConteneur gerant la matiere $matiere
-                    // pendant la periode >=$dateDabut <= $dateFin
-                    // si les dates sont null, la recherche ne se limitera pas dans le temps
-                    $infosConteneur = $tcollecte->getInfos($nConteneur, $matiere, $dateDebut, $dateFin);
-                    
-                    //Zend_Debug::dump($infosConteneur);exit;
-                    
-                    // envoi les variables a la vue
-                    $this->view->dateDebut = $dateDebut;
-                    $this->view->dateFin = $dateFin;
-                    $this->view->infosConteneur = $infosConteneur;
-                    $this->view->send = true;
-                }
-            } 
-        }catch(Exception $e)
+        // recupere les conteneurs et les matieres
+        $matieres = $tcollecte->getMatieres();
+        $tabConteneur = $tcollecte->getConteneurs($matiere);
+
+        // copie les valeurs dans les clés (pour les select)            
+        $matieres = array_combine($matieres, $matieres);
+        $tabConteneur = array_combine($tabConteneur, $tabConteneur);
+        //Zend_Debug::dump($tabConteneur);exit;
+
+        // cree le formulaire, on passe des parametres pour mettre des valeurs par defaut
+        $form = new FSite($tabConteneur, $matieres, $matiere);
+
+        // recupere la requete
+        $request = $this->getRequest();
+
+        // si la requete est de type POST, on vient d'une validation du formulaire
+        if($request->isPost())
         {
-            echo $e->getMessage();exit;
-        }
+            // si le formulaire est valide (regles mises en places a la création du formulaire respectées)
+            if($form->isValid($_POST))
+            {
+                // on recupere le contenu des champs, un par un, avec l'id du champ
+                $nConteneur= $request->getParam('nConteneur');
+                $dateDebut = $request->getParam('dateDebut', null);
+                $dateFin = $request->getParam('dateFin', null);
+
+                // recupere les informations
+                // pour le conteneur $nConteneur gerant la matiere $matiere
+                // pendant la periode >=$dateDabut <= $dateFin
+                // si les dates sont null, la recherche ne se limitera pas dans le temps
+                $infosConteneur = $tcollecte->getInfos($nConteneur, $matiere, $dateDebut, $dateFin);
+
+                //Zend_Debug::dump($infosConteneur);exit;
+
+                // envoi les variables a la vue
+                $this->view->nConteneur = $nConteneur;
+                $this->view->dateDebut = $dateDebut;
+                $this->view->dateFin = $dateFin;
+                $this->view->infosConteneur = $infosConteneur;
+                $this->view->send = true;
+            }
+        } 
         // envoi le formulaire a la vue
         $this->view->form = $form;
         $this->view->ajax = $ajax;
@@ -100,7 +96,7 @@ class IndexController extends Zend_Controller_Action
         $this->_helper->actionStack('header', 'index', 'default', array());
         
         $form = new FImport;
-        $erreur = ' ';
+        $erreur = null;
         
         $request = $this->getRequest();
         if($request->isPost())  // c'est une validation de formulaire
@@ -193,8 +189,8 @@ class IndexController extends Zend_Controller_Action
                                  $this->view->nbLignesSupp = $nbLignesSupp;
                                  $this->view->nbNouvellesLignes = $nbNouvellesLignes;
                              } else { $erreur = 'Erreur lors de la lecture du fichier'; }
-                         } else { $erreur = 'Erreur lors de la copie du fichier'; }
-                   } else { $erreur = 'Erreur lors de la copie du fichier'; }
+                         } else { $erreur = 'Erreur lors de la copie du fichier (dans temp)'; }
+                   } else { $erreur = 'Erreur lors de la copie du fichier dans archives)'; }
                 }
                 else
                 {   // mauvaise extension

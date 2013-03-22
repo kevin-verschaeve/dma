@@ -48,20 +48,18 @@ input[type="text"], select {
     margin-top : 0;    
 }
 .errors {
-    background: none repeat scroll 0 0 red;
-    border: 2px solid red;
-    border-radius: 5px 5px 5px 5px;
-    color: black;
-    list-style: none outside none;
+    color: red;
+    list-style-type : none;
     padding: 0;
     margin : 5px 5px 10px 5px ;
-    text-align : center;
-    margin: 3px 0 1px 10px;
+    margin: 9px 0 1px 10px;
     float: right;
 }
 .errors li {
-    padding-left : 20px;
-    background: url('/img/error.png') no-repeat;
+    padding : 0 10px 1px 30px;
+    background: url('/img/sprite.png') no-repeat -35px -1px;
+    font-size: 0.9em;
+    font-family: "twentytwelve";
 }
 .bt_submit {
     background: white;
