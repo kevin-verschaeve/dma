@@ -4,18 +4,19 @@
         // si on a une erreur, on l'affiche
         if($this->erreur) :
     ?>
-    <div id="erreurFichier">
-        <p><?php echo $this->erreur; ?></p>
-    </div>
+        <div id="erreurFichier">
+            <p><?php echo $this->erreur; ?></p>
+        </div>
 
-    <?php
-        // sinon, si erreur n'est pas null (a false), on affiche le resultat de la requete
-        elseif(!is_null($this->erreur)) : 
-    ?>
+        <?php
+            // sinon, si erreur n'est pas null (a false), on affiche le resultat de la requete
+            elseif(!is_null($this->erreur)) : 
+        ?>
 
-    <div id="infosImport">
-        <p><?php echo $this->nbLignesSupp;?> lignes supprimées</p>
-        <p><?php echo $this->nbNouvellesLignes;?> lignes ajoutées</p>
-    </div>
-    <!--    si $this->erreur == null, on vient d'arriver sur la page, on a encore rien fait   -->
+        <div id="infosImport">
+            <p><?php echo $this->nbLignesSupp;?> lignes supprimées</p>
+            <p><?php echo $this->nbNouvellesLignes;?> lignes ajoutées</p>
+        </div>
+    <?php else: ?>
+        <p id="msgImport">L'importation d'un fichier csv entraine la suppression des anciennes données</p>
     <?php endif; ?>
