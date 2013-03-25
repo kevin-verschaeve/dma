@@ -59,7 +59,7 @@ class IndexController extends Zend_Controller_Action
 
         // recupere la requete
         $request = $this->getRequest();
-
+        
         // si la requete est de type POST, on vient d'une validation du formulaire
         if($request->isPost())
         {
@@ -190,12 +190,13 @@ class IndexController extends Zend_Controller_Action
                                  $this->view->nbNouvellesLignes = $nbNouvellesLignes;
                              } else { $erreur = 'Erreur lors de la lecture du fichier'; }
                          } else { $erreur = 'Erreur lors de la copie du fichier (dans temp)'; }
-                   } else { $erreur = 'Erreur lors de la copie du fichier dans archives)'; }
+                   } else { $erreur = 'Erreur lors de la copie du fichier (dans archives)'; }
                 }
                 else
                 {   // mauvaise extension
-                    $erreur = 'Les fichiers .'.$extension.' ne sont pas pris en compte.
-                        <br>Seuls les fichiers .csv sont acceptés';
+                    //$erreur = 'Les fichiers .'.$extension.' ne sont pas pris en compte.'
+                    $erreur = $nomFichier.' invalide !'.'
+                         Seuls les fichiers .csv sont acceptés';
                 }  
             }
         }        

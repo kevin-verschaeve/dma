@@ -45,30 +45,56 @@ class FMatiere extends Zend_Form
         {
             $dateDebut = new Zend_Form_Element_Text('dateDebut');
             $dateDebut->setLabel('Date de debut : ');
-            $dateDebut->setAttrib('class', 'datepicker');
+            $dateDebut->setAttrib('class', 'datepicker aligner');
             $dateDebut->setRequired(true);
             $dateDebut->setAttrib('autocomplete', 'off');
             $this->addElement($dateDebut);
 
             $dateFin = new Zend_Form_Element_Text('dateFin');
             $dateFin->setLabel('Date de fin : ');
-            $dateFin->setAttrib('class', 'datepicker');
+            $dateFin->setAttrib('class', 'datepicker aligner');
             $dateFin->setRequired(true);
             $dateFin->setAttrib('autocomplete', 'off');
-            $this->addElement($dateFin);
-            
+            $this->addElement($dateFin);        
+
             // bouton submit
             $submit = new Zend_Form_Element_Submit('sub');
             $submit->setLabel('Envoyer');
             $submit->setAttrib('class', 'bt_submit');
             $this->addElement($submit);
-        }
-        
+       } 
+       
         $this->setElementDecorators(array(
             array('ViewHelper'),
             array('Errors', array('tag' => 'div', 'class' => 'errors')),
             array('Label', array('tag' => 'p', 'class' => 'spanform')),
             array('HtmlTag', array('tag' => 'div', 'class' => 'divform'))
          ));
+    }
+    public function loadDefaultDecorators()
+    {
+        $elementsToGroup = array();
+        // parcourt les elements créé au dessus
+        foreach ($this->getElements() as $element) {
+            // si celui en cours a la class aligner
+            if(in_array('aligner', explode(' ', $element->class)))
+            {
+                // on le sauvegarde
+                $elementsToGroup[] = $element;
+            }
+        }
+        // si on a au moins 1 valeur dans le tableau
+        if ($elementsToGroup) {
+            // créé un groupe avec les elements sauvegardés
+            $this->addDisplayGroup($elementsToGroup, 'divdate', array(
+                'order' => 1,   // le place en deuxieme position
+                'decorators' => array(  // met le decorateur
+                    'FormElements',
+                    array('HtmlTag', array('tag'=>'div', 'class' => 'divdate'))
+                )
+            ));
+        }
+
+        parent::loadDefaultDecorators();
     }
 }

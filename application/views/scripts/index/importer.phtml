@@ -1,22 +1,24 @@
 <h2>Importer un fichier csv</h2>
 <?php echo $this->formFichier; ?>
+<div class="both"></div>
+<?php
+    // si on a une erreur, on l'affiche
+    if($this->erreur) :
+?>
+    <div id="erreurFichier">
+        <p><?php echo $this->erreur; ?></p>
+    </div>
+
     <?php
-        // si on a une erreur, on l'affiche
-        if($this->erreur) :
+        // sinon, si erreur n'est pas null (a false), on affiche le resultat de la requete
+        elseif(!is_null($this->erreur)) : 
     ?>
-        <div id="erreurFichier">
-            <p><?php echo $this->erreur; ?></p>
-        </div>
 
-        <?php
-            // sinon, si erreur n'est pas null (a false), on affiche le resultat de la requete
-            elseif(!is_null($this->erreur)) : 
-        ?>
-
-        <div id="infosImport">
-            <p><?php echo $this->nbLignesSupp;?> lignes supprimées</p>
-            <p><?php echo $this->nbNouvellesLignes;?> lignes ajoutées</p>
-        </div>
-    <?php else: ?>
-        <p id="msgImport">L'importation d'un fichier csv entraine la suppression des anciennes données</p>
-    <?php endif; ?>
+    <div id="infosImport">
+        <h3>Importation terminée avec succès !</h3>
+        <p><?php echo $this->nbLignesSupp;?> lignes ont été supprimées</p>
+        <p><?php echo $this->nbNouvellesLignes;?> lignes ont été ajoutées</p>
+    </div>
+<?php else: ?>
+    <p id="msgImport">L'importation d'un fichier csv entraine la suppression des anciennes données</p>
+<?php endif; ?>

@@ -3,7 +3,11 @@
     <head>
         <title>DMA</title>
         <meta charset="utf-8" />
-        
+        <!--[if lte IE 8]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <!--<script type="text/javascript" src="https://getfirebug.com/firebug-lite.js"></script>-->
+
         <?php
             // CSS
             $this->headLink()->appendStylesheet($this->baseUrl('/css/reset.css'));
@@ -32,10 +36,9 @@
             <div id="corps">         
                 <div id="menuGauche" class="left" >
                     <ul>
-                        <li><a href="<?php echo $this->baseUrl('/');?>">Accueil</a></li>
-                        <li><a href="<?php echo $this->baseUrl('/index/tonnage');?>">Tonnage</a></li>
-                        <li><a href="<?php echo $this->baseUrl('/palmares/index');?>">Palmares</a></li>
+                        <li><a href="<?php echo $this->baseUrl('/');?>">Palmares</a></li>
                         <li><a href="<?php echo $this->baseUrl('/palmares/infosperiode');?>">Palmares entre dates</a></li>
+                        <li><a href="<?php echo $this->baseUrl('/index/tonnage');?>">Tonnage</a></li>
                         <li><a href="<?php echo $this->baseUrl('/index/importer');?>">Importer .csv</a>
                     </ul>
                 </div>

@@ -4,14 +4,8 @@ class TestController extends Zend_Controller_Action
 {
     public function indexAction()
     {
-        try {     
-            exit;
-            
-        }catch(Exception $e)
-        {
-            echo $e->getMessage();
-        }
-        exit;
+        $layout = Zend_Layout::getMvcInstance();
+        $layout->setLayout('vide'); 
     }
     public function piAction()
     {

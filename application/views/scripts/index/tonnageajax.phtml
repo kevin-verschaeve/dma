@@ -2,9 +2,7 @@
     // affiche le formulaire (avec les erreurs si il y en a)
     echo $this->form;
 ?>
-    <div id="showHideDates">
-        <a href="#" id="showdates" onclick='showDates();'>Entrer une periode</a>
-    </div>
+    <div class="both"></div>
 </div>
 <?php
     // send : mise a true une fois le formulaire envoyé, inexistant avant    
@@ -14,6 +12,8 @@
         if($this->infosConteneur != null)
         {
         
+            echo '<h3>Conteneur n° '.$this->infosConteneur['NO_CONTENEUR'].' 
+                ('.$this->infosConteneur['MATIERE'].')</h3>';
             // si on a une date de debut et une date de fin, on affiche des infos en plus
             if($this->dateDebut != "" && $this->dateFin != "")
             {
@@ -21,14 +21,19 @@
                 $newDebut = new Zend_Date($this->dateDebut);
                 $newFin = new Zend_Date($this->dateFin);
                 // affiche la date dans un format lisible ex: '4 mars 2013'
-                echo '<p>Periode : 
-                    '.$newDebut->toString('dd MMM YYYY').' => '.$newFin->toString('dd MMM YYYY').
+                echo '<p>Periode : du 
+                    '.$newDebut->toString('dd MMM YYYY').' au '.$newFin->toString('dd MMM YYYY').
                     '</p>';
             }
             // affiche le tonnage et l'adresse du conteneur
-            echo 'Tonnage = '.$this->infosConteneur['QTE'];
-            echo ' sur le site : "'.strtolower($this->infosConteneur['NOM_SITE']).'" ('.$this->infosConteneur['LOC_SITE'].')';
-            echo '<br>'.ucwords(strtolower($this->infosConteneur['NOM_LOCALITE']));
+            echo '<p>'.$this->infosConteneur['QTE'].'T';
+            echo ' sur le site : '.strtolower($this->infosConteneur['NOM_SITE']);
+            if($this->infosConteneur['LOC_SITE'])
+            {
+                echo ' ('.ucwords(strtolower($this->infosConteneur['LOC_SITE'])).')';
+            }
+            echo '</p>';
+            echo '<p>'.ucwords(strtolower($this->infosConteneur['NOM_LOCALITE'])).'</p>';
         }
         else
         {
@@ -36,11 +41,20 @@
             $newDebut = new Zend_Date($this->dateDebut);
             $newFin = new Zend_Date($this->dateFin);
             echo '<p>Aucun enregistrement pour le conteneur '.$this->nConteneur.' 
-                    pour la periode : '.$newDebut->toString('dd MMM YYYY').' =>
+                    pour la periode du '.$newDebut->toString('dd MMM YYYY').' au
                     '.$newFin->toString('dd MMM YYYY').'
                 </p>';
         }
         echo' </div>';
     }
+    else 
+    {  
 ?>
-<?php if($this->ajax) exit; ?>
+    <p id="msgInfosContenur">
+        Selectionnez une matiere, pour avoir les conteneurs correspondants.<br />
+        Vous pouvez spécifier une période, si vous ne le faites pas, les données 
+        affichées iront de la date la plus ancienne à aujourd'hui.
+    </p>
+<?php   
+    }
+ if($this->ajax) exit; ?>

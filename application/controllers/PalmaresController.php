@@ -60,6 +60,9 @@ class PalmaresController  extends Zend_Controller_Action
                 $tcollecte = new TCollecte;
                 $infosConteneur = $tcollecte->getInfos(null ,$matiere, $dateDebut, $dateFin);
                 
+                $this->view->matiere = $matiere;
+                $this->view->dateDebut = $dateDebut;
+                $this->view->dateFin = $dateFin;
                 $this->view->infosConteneur = $infosConteneur;
                 $this->view->send = true;
             }

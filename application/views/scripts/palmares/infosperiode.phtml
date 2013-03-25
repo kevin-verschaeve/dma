@@ -1,8 +1,13 @@
-<h2>Liste des conteneurs pour une période</h2>
-<?php  echo $this->formMatiere; ?>
-
+<h2>Statistiques pour une période</h2>
+<div id="divPalmares">
+    <?php  echo $this->formMatiere; ?>
+</div>
 <?php if($this->send) : ?>
-<div id="tbinfos" class="reste">
+<p>
+    Statistiques pour les conteneurs <?php echo strtolower($this->matiere); ?>
+    pour la periode du <?php echo $this->dateDebut; ?> au <?php echo $this->dateFin;?>
+</p>
+
 <table class="display" id="datatable">
     <thead>
         <tr>
@@ -29,21 +34,24 @@
         $i = 1;
         foreach($this->infosConteneur as $unSite)
         {
-            echo '<tr>
-                    <td>'.$i.'</td>
-                    <td>'.$unSite['NO_CONTENEUR'].'</td>
-                    <td>'.$unSite['NOM_SITE'].', '.$unSite['LOC_SITE'].'</td>
-                    <td>'.$unSite['NOM_LOCALITE'].'</td>
-                    <td>'.$unSite['QTE'].'</td>
-                    <td>'.$unSite['LEVEES'].'</td>
-                </tr>';
+             echo '<tr class="gradeA">
+                        <td>'.$i.'</td>
+                        <td>'.$unSite['NO_CONTENEUR'].'</td>
+                        <td>'.ucwords(strtolower($unSite['NOM_SITE']));//
+                        if($unSite['LOC_SITE'] != '')
+                        {
+                            echo ', '.ucwords(strtolower($unSite['LOC_SITE']));
+                        }
+                  echo '</td><td>'.ucwords(strtolower($unSite['NOM_LOCALITE'])).'</td>
+                        <td>'.$unSite['QTE'].'</td>
+                        <td>'.$unSite['LEVEES'].'</td>
+                    </tr>';
             $i++;
         }
         
     ?>
     </tbody>
 </table> 
-</div>
 <script type="text/javascript">
 $(document).ready(function() {
    $('#datatable').dataTable({
@@ -52,4 +60,7 @@ $(document).ready(function() {
     });
 });
 </script>
+
+<?php else: ?>
+    <p id="msgStats">Selectionnez une matiere et une periode pour obtenir les statistiques</p>
 <?php endif; ?>
