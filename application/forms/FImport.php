@@ -15,6 +15,7 @@ class FImport extends Zend_Form
         $fichier = new Zend_Form_Element_File('input_fichier');
         $fichier->setAttrib('enctype', 'multipart/form-data');
         $fichier->setLabel('Importer : ');
+        $fichier->setAttrib('style', 'width:300px;');
         $fichier->setRequired(true);
         
         $submit = new Zend_Form_Element_Submit('sub_fichier');

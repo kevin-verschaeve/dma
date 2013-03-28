@@ -1,0 +1,38 @@
+<p class="infos">Les conteneurs sélectionnés sont ceux que vous souhaitez voir apparaitre</p>
+
+<form action="/index/changeconteneur" method="post" id="formChangeConteneur">
+<?php
+    $i=0; $idBloc = 0;
+    $precLocalite = '';
+    $premierPassage = true;
+    
+    foreach($this->conteneurs as $conteneur)
+    {
+        if($precLocalite != $conteneur['NOM_COMMUNE'])
+        {
+            if (!$premierPassage) echo '<div style="clear:both"></div></div>';  // blocCommune
+            echo '<div class="BlocCommune" id="blocCommune_'.$idBloc.'">';
+            echo '<p class="nomCommune">';
+                  //  echo '<input type="checkbox" class="toutCocher" id="cocheTout_'.$idBloc.'"/>
+                  //  <span  id="'.$idBloc.'">Tout cocher</span>';
+                    echo $conteneur['NOM_COMMUNE'].'
+                    <a href="#sub_changeConteneur">Valider 
+                        <img class="flechebas" src="'.$this->baseUrl('/img/fleche_bas.png').'" alt="fleche bas" title="Aller tout en bas" />
+                    </a>
+                </p>';
+            $precLocalite = $conteneur['NOM_COMMUNE'];
+            $idBloc++;
+        }
+        $checked = $conteneur['STAT_SITE'] == 1 ? 'checked="checked"' : '';
+        //echo '<div class="blocConteneur">';
+            echo '<label for="cont_'.$i.'">'.$conteneur['NO_CONTENEUR'].'</label>';
+            echo '<input id="cont_'.$i.'" type="checkbox" value="'.$conteneur['ID_SITE'].'" name="cbconteneurs[]" '.$checked.' />';
+        //echo '</div>';  // blocConteneur
+            
+        $premierPassage = false;
+        $i++;
+    }
+    echo '</div>';
+?>
+    <input type="submit" value="Valider" id="sub_changeConteneur" />
+</form>

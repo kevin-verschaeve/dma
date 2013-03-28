@@ -1,0 +1,49 @@
+
+<?php echo $this->fcommunes; ?>
+<?php if($this->erreur) : ?>
+    <div id="erreurGraph"><p><?php echo $this->erreur; ?></p></div>
+<?php endif; ?>
+    <div id="chart_div" ></div>
+    
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+ <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+       
+        var data = google.visualization.arrayToDataTable([
+            ['COMMUNE', 'ID SITE'],
+        <?php
+        $data ='';
+        foreach($this->TparConteneur as $site)
+        {
+          $data .= "['".addslashes(utf8_encode($site['NOM_EMPLACEMENT']))." (".$site['NO_CONTENEUR'].")', ".(int)$site['QTE']."],";
+        }
+        echo $data;
+        
+        if($this->nomCommune != '') {
+            $title = "Tonnage par conteneur ($this->nomCommune)";
+        }
+        else {
+            $title = 'Erreur! Commune introuvable';
+        }
+        ?>
+            ]);
+          
+        var options = {
+          title: '<?php echo $title; ?>',
+          titleTextStyle : { color  : 'white', fontSize: 20}, 
+          height : '100%',
+          legend : {textStyle: {color:'white', fontSize : 15}},
+          chartArea: { width:"100%",height:"70%", left:0},
+          backgroundColor : 'transparent',
+          is3D: true
+          
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+        
+
+      }
+</script>

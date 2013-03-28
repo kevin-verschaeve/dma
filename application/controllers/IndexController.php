@@ -172,7 +172,6 @@ class IndexController extends Zend_Controller_Action
                                          'C_DATE' => $data[14],
                                          'C_HEURE' => $data[15]
                                      );
-                                     
                                      // on appelle la fonction qui réalise l'insert dans le modele
                                      $tdata->inserer($ligne);
                                      
@@ -202,6 +201,76 @@ class IndexController extends Zend_Controller_Action
         }        
         $this->view->erreur = $erreur;
         $this->view->formFichier = $form;
+    }
+    /**
+     * Affiche tous les conteneurs triés par communes
+     * et permet de specifier si on souhaite ou non les inclures
+     * lors de nos select
+     */
+    public function changeconteneurAction()
+    {
+        $this->_helper->actionStack('header', 'index');
+        
+        $tcollecte = new TCollecte;
+        
+        $request = $this->getRequest();
+        if($request->isPost())  // le formulaire a été validé
+        {
+            // recupere tous les checkbox cochés
+            $idSites = $request->getParam('cbconteneurs');
+            
+            $tsite = new TSite;
+            // va changer l'etat dans la base
+            $tsite->changeEtatStat($idSites);
+        }
+        // retourne les conteneur de chaque commune
+        $conteneurs = $tcollecte->getConteneursParCommune();
+        $this->view->conteneurs = $conteneurs;
+    }
+    public function graphiqueAction()
+    {
+        try {
+            $this->_helper->actionStack('header', 'index', 'default', array());
+            $id = $this->getRequest()->getParam('commune', 20);
+
+            // recupere les liste des communes, pour le select
+            $tcommune = new TCommune;
+            $communes = $tcommune->getCommunes();
+            $nomCommune = '';
+            
+            $lesCommunes = array();
+            foreach($communes as $uneCommune)
+            {
+                $lesCommunes[$uneCommune['ID_COMMUNE']] = $uneCommune['NOM_COMMUNE'];
+                
+                // si l'id en cours est celui de la commune, on sauvegarde le nom
+                if((int)$id == $uneCommune['ID_COMMUNE'])
+                {
+                    $nomCommune = $uneCommune['NOM_COMMUNE'];
+                }
+            }
+            // créé le formulaire
+            $fcommunes = new FCommune($lesCommunes, $id);
+
+            $this->view->fcommunes = $fcommunes;
+
+            if($id != false && (int)$id > 0)    // une ville est choisie, ou on a celle par defaut (Saint Quentin)
+            {
+                $tc = new TCollecte;
+                // on va chercher tous ses conteneur avec leur tonnages
+                $TparConteneur = $tc->getTonnageConteneur((int)$id);
+                $this->view->nomCommune = $nomCommune;
+                $this->view->TparConteneur = $TparConteneur;
+            }
+            else 
+            {
+                $this->view->erreur = 'La ville choisie n\'existe pas !';
+            }
+        }
+        catch(Exception $e)
+        {
+            echo $e->getMessage();exit;
+        }
     }
 }
 

@@ -19,6 +19,7 @@ class PalmaresController  extends Zend_Controller_Action
      */
     public function infosAction()
     {
+        try {
         // recupere le bouton radio selectionné
         $matiere = $this->getRequest()->getParam('radio', 'Verre Couleur');
         $ajax = $this->getRequest()->getParam('ajax', false);
@@ -39,6 +40,10 @@ class PalmaresController  extends Zend_Controller_Action
         // on envoi les variables a la vue
         $this->view->infosConteneur = $infosConteneur;
         $this->view->ajax = $ajax;
+        }catch(Exception $e)
+        {
+            echo $e->getMessage();exit;
+        }
     }
     public function infosperiodeAction()
     {
@@ -59,7 +64,7 @@ class PalmaresController  extends Zend_Controller_Action
                 
                 $tcollecte = new TCollecte;
                 $infosConteneur = $tcollecte->getInfos(null ,$matiere, $dateDebut, $dateFin);
-                
+
                 $this->view->matiere = $matiere;
                 $this->view->dateDebut = $dateDebut;
                 $this->view->dateFin = $dateFin;

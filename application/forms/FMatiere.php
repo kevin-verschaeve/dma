@@ -58,7 +58,7 @@ class FMatiere extends Zend_Form
             $this->addElement($dateFin);        
 
             // bouton submit
-            $submit = new Zend_Form_Element_Submit('sub');
+            $submit = new Zend_Form_Element_Submit('sub_infosPeriode');
             $submit->setLabel('Envoyer');
             $submit->setAttrib('class', 'bt_submit');
             $this->addElement($submit);

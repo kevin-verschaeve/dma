@@ -3,7 +3,7 @@
     <?php  echo $this->formMatiere; ?>
 </div>
 <?php if($this->send) : ?>
-<p>
+<p id="annonceStats">
     Statistiques pour les conteneurs <?php echo strtolower($this->matiere); ?>
     pour la periode du <?php echo $this->dateDebut; ?> au <?php echo $this->dateFin;?>
 </p>
@@ -40,7 +40,7 @@
                         <td>'.ucwords(strtolower($unSite['NOM_SITE']));//
                         if($unSite['LOC_SITE'] != '')
                         {
-                            echo ', '.ucwords(strtolower($unSite['LOC_SITE']));
+                            echo ', '.utf8_encode(ucwords(strtolower($unSite['LOC_SITE'])));
                         }
                   echo '</td><td>'.ucwords(strtolower($unSite['NOM_LOCALITE'])).'</td>
                         <td>'.$unSite['QTE'].'</td>
@@ -62,5 +62,5 @@ $(document).ready(function() {
 </script>
 
 <?php else: ?>
-    <p id="msgStats">Selectionnez une matiere et une periode pour obtenir les statistiques</p>
+    <p class="infos">Selectionnez une matiere et une periode pour obtenir les statistiques</p>
 <?php endif; ?>

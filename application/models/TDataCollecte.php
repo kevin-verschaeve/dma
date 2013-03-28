@@ -14,6 +14,7 @@ class TDataCollecte  extends Zend_Db_Table_Abstract
     }
     public function videTable()
     {
+        // condition vraie pour supprimer toutes les lignes de la table
         return $this->delete('1=1');
     }
 }

@@ -35,19 +35,20 @@ class TCollecte extends Zend_Db_Table_Abstract
      */
     public function getInfos($nConteneur =null, $matiere ='Verre Couleur', $dateDebut =null, $dateFin =null)
     {
-        // retourne les infos sur un conteneur et sa quantite collecte
-        // (sans limite de temps)
         $imbriquee = $this->select()->distinct()
                           ->from($this->_name,array('ID_SITE'))
                     ;
         //Zend_Debug::dump($this->fetchAll($imbriquee)->toArray());
         //echo $imbriquee->assemble();exit;
 
+        // retourne les infos sur un conteneur et sa quantite collecte
+        // (sans limite de temps)
         $req = $this->select()->setIntegrityCheck(false)
                     ->from(array('c'=>$this->_name),array('count(*) levees','SUM(QTE_COLLECTE) qte','NO_CONTENEUR', 'NOM_GROUPEMENT', 'NOM_LOCALITE', 'MATIERE', 'VOLUME'))
                     ->join(array('s'=>'t_site'),'c.ID_SITE=s.ID_SITE', '*')
                     ->where('c.ID_SITE IN (?)', new Zend_Db_Expr($imbriquee))
                     ->where('MATIERE = ?', $matiere)
+                    ->where('STAT_SITE = ?', 1)
                 ;
         // si on a specifié une periode
         if(!is_null($dateDebut) && !is_null($dateFin) && $dateDebut !="" && $dateFin != "")
@@ -66,7 +67,7 @@ class TCollecte extends Zend_Db_Table_Abstract
         $req->group('c.NO_CONTENEUR, 
                 c.NOM_GROUPEMENT, c.NOM_LOCALITE,
                 c.MATIERE, c.VOLUME, s.ID_SITE, s.ID_COMMUNE, s.LOC_SITE, 
-                s.NOM_SITE, s.USED_SITE');
+                s.NOM_SITE, s.USED_SITE, s.STAT_SITE');
         
         if(!is_null($nConteneur))
         {
@@ -80,6 +81,46 @@ class TCollecte extends Zend_Db_Table_Abstract
             $req->order('qte DESC');
             //echo $req->assemble();exit;
             return $this->fetchAll($req)->toArray();
+        }
+    }
+    public function getConteneursParCommune()
+    {
+        try {
+        $req = $this->select()->setIntegrityCheck(false)
+                    ->distinct()
+                    ->from(array('c'=>$this->_name), 'NO_CONTENEUR')
+                    ->join(array('co'=>'T_COMMUNE'),'c.ID_COMMUNE=co.ID_COMMUNE', 'NOM_COMMUNE')
+                    ->join(array('s'=>'T_SITE'),'c.ID_SITE=s.ID_SITE', array('ID_SITE','STAT_SITE'))
+                    ->order('NOM_COMMUNE DESC, NO_CONTENEUR ASc')
+                ;
+        
+        //Zend_Debug::dump($this->fetchAll($req)->toArray());exit;
+        return $this->fetchAll($req)->toArray();
+        }
+        catch(Exception $e)
+        {
+            echo $e->getMessage();exit;
+        }
+    }
+    public function getTonnageConteneur($idCommune)
+    {
+        try {
+        
+        $req = $this->select()->setIntegrityCheck(false)
+                    ->from(array('c'=>$this->_name),array('SUM(QTE_COLLECTE) qte','NO_CONTENEUR'))
+                    ->join(array('p'=>'T_PRESTATAIRE'),'p.NO_CONTENEUR=c.NO_CONTENEUR',array('NOM_EMPLACEMENT'))
+                    ->where('c.ID_COMMUNE = ?', $idCommune)
+                ;
+        
+        $req->group('c.NO_CONTENEUR, c.NOM_LOCALITE, NOM_EMPLACEMENT');
+        
+         // on trie du plus grand tonnage au plus petit
+            $req->order('qte DESC');
+            return $this->fetchAll($req)->toArray();
+        }
+        catch(Exception $e)
+        {
+            echo $e->getMessage();exit;
         }
     }
 }

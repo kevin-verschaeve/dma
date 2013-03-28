@@ -14,6 +14,8 @@
             $this->headLink()->appendStylesheet($this->baseUrl('/css/base.css'));
             $this->headLink()->appendStylesheet($this->baseUrl('/css/forms.css'));
             $this->headLink()->appendStylesheet($this->baseUrl('/css/import.css'));
+            $this->headLink()->appendStylesheet($this->baseUrl('/css/regleConteneurs.css'));
+
             $this->headLink()->appendStylesheet($this->baseUrl('/css/datatables/demo_page.css'));
             $this->headLink()->appendStylesheet($this->baseUrl('/css/datatables/demo_table.css'));          
             $this->headLink()->appendStylesheet($this->baseUrl('/css/smoothness/jquery-ui-1.10.1.custom.css'));
@@ -27,7 +29,6 @@
             $this->headScript()->appendFile($this->baseUrl('/js/jquery.ui.datepicker-fr.js'));
             echo $this->headScript();
         ?>
-        
     </head>
     <body>
         <div id="body" class="white">
@@ -40,6 +41,8 @@
                         <li><a href="<?php echo $this->baseUrl('/palmares/infosperiode');?>">Palmares entre dates</a></li>
                         <li><a href="<?php echo $this->baseUrl('/index/tonnage');?>">Tonnage</a></li>
                         <li><a href="<?php echo $this->baseUrl('/index/importer');?>">Importer .csv</a>
+                        <li><a href="<?php echo $this->baseUrl('/index/changeconteneur');?>">Gerer conteneurs</a>
+                        <li><a href="<?php echo $this->baseUrl('/index/graphique');?>">Graphiques</a>
                     </ul>
                 </div>
                 <div id="content" class="reste">  

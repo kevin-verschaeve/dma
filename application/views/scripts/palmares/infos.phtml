@@ -5,7 +5,7 @@
 ?>
 <div id="recup">
     <table id="datatable" class="<?php echo $class; ?> display">
-          <thead>
+     <thead>
             <tr>
                 <th>n°</th>
                 <th>n° conteneur</th>
@@ -25,7 +25,7 @@
                 <th>Nb relevés</th>
             </tr>
         </tfoot>
-        <tbody>  
+        <tbody>
             <?php
                 $i = 1;
                 foreach($this->infosConteneur as $unSite)
@@ -33,12 +33,13 @@
                     echo '<tr class="gradeA">
                             <td>'.$i.'</td>
                             <td>'.$unSite['NO_CONTENEUR'].'</td>
-                            <td>'.ucwords(strtolower($unSite['NOM_SITE']));//
+                            <td>'.ucwords(strtolower($unSite['NOM_SITE']));
                             if($unSite['LOC_SITE'] != '')
                             {
-                                echo ', '.ucwords(strtolower($unSite['LOC_SITE']));
+                                echo ', '.utf8_encode(ucfirst(strtolower($unSite['LOC_SITE'])));
                             }
-                      echo '</td><td>'.ucwords(strtolower($unSite['NOM_LOCALITE'])).'</td>
+                      echo '</td>
+                            <td>'.ucwords(strtolower($unSite['NOM_LOCALITE'])).'</td>
                             <td>'.$unSite['QTE'].'</td>
                             <td>'.$unSite['LEVEES'].'</td>
                         </tr>';
