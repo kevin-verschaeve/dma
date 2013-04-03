@@ -4,56 +4,54 @@ class TestController extends Zend_Controller_Action
 {
     public function indexAction()
     {
+        
+        $layout = Zend_Layout::getMvcInstance();
+        $layout->setLayout('vide');
         try 
         {
+            $dd = '03/04/2013';
+            //echo serialize($dd);
+        }
+        catch(Exception $e)
+        {
+            echo $e->getMessage();
+        }
+        exit;
         
-            $layout = Zend_Layout::getMvcInstance();
-            $layout->setLayout('vide');
-            $tcommune = new TCommune;
-            $communes = $tcommune->getCommunes();
+    }
+    public function pdfAction()
+    {
+        $this->_helper->actionStack('header', 'index', 'default', array());
+        $tsite = new TSite;
+        $sites = $tsite->getInfos();
+        //Zend_Debug::dump($coms);exit;
+        
+        try 
+        {
+            $pdf = new Zend_Pdf(); 
+            $page = $pdf->newPage(Zend_Pdf_Page::SIZE_A4); 
+            $pdf->pages = array_reverse($pdf->pages);
+            $pdf->pages[] = $page; 
+            $page->setFont(Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA), 10); 
 
-            $lesCommunes = array();
-            foreach($communes as $uneCommune)
+            $xText = 20;   $yText = 720;
+            $rectX1 = 10;  $rectY1 = 735;
+            $rectX2 = 150; $rectY2 = 695;
+            // Draw text 
+            foreach($sites as $com)
             {
-                $lesCommunes[$uneCommune['ID_COMMUNE']] = $uneCommune['NOM_COMMUNE'];
+                $txt = $page->drawText($com['NOM_SITE'], $xText, $yText);
+                $page->drawRectangle($rectX1, $rectY1, $rectX2 , $rectY2, Zend_Pdf_Page::SHAPE_DRAW_STROKE);
+                $yText -= 20; $rectY1 -= 20; $rectY2 -= 20;
             }
-            $fcommunes = new FCommune($lesCommunes);
+            $pdf->save('example.pdf');
+            //$this->_redirect('/example.pdf');
 
-            $this->view->fcommunes = $fcommunes;
-            
-            
-            /* */
         }
         catch(Exception $e)
         {
             echo $e->getMessage();exit;
         }
-        
-    }
-    public function retestAction()
-    {
-        $this->_helper->actionStack('header', 'index', 'default', array());
-        $id = $this->getRequest()->getParam('sel_commune', false);
-       
-        $tcommune = new TCommune;
-        $communes = $tcommune->getCommunes();
-
-        $lesCommunes = array();
-        foreach($communes as $uneCommune)
-        {
-            $lesCommunes[$uneCommune['ID_COMMUNE']] = $uneCommune['NOM_COMMUNE'];
-        }
-        $fcommunes = new FCommune($lesCommunes);
-
-        $this->view->fcommunes = $fcommunes;
-       
-        if($id != false)
-        {
-            $tc = new TCollecte;
-            $TparConteneur = $tc->getTonnageConteneur($id);
-            $this->view->TparConteneur = $TparConteneur;
-        }
-        
     }
     
     public function piAction()

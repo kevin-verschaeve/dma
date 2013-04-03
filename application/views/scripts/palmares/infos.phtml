@@ -2,53 +2,157 @@
     $class = 'bis';
     if(!$this->ajax)
         $class = 'prems';
+    
+    // si on a cliqué sur le bouton de generation de pdf
+    if($this->creerPdf == 'ok') :
+        ob_start(); // on commence l'enregistrement de l'html qui suit
 ?>
-<div id="recup">
-    <table id="datatable" class="<?php echo $class; ?> display">
-     <thead>
-            <tr>
-                <th>n°</th>
-                <th>n° conteneur</th>
-                <th class="thadresse">Adresse</th>
-                <th class="thcommune">Commune</th>
-                <th>Tonnage</th>
-                <th>Nb relevés</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th>n°</th>
-                <th>n° conteneur</th>
-                <th>Adresse</th>
-                <th>Commune</th>
-                <th>Tonnage</th>
-                <th>Nb relevés</th>
-            </tr>
-        </tfoot>
-        <tbody>
-            <?php
-                $i = 1;
-                foreach($this->infosConteneur as $unSite)
-                {
-                    echo '<tr class="gradeA">
-                            <td>'.$i.'</td>
-                            <td>'.$unSite['NO_CONTENEUR'].'</td>
-                            <td>'.ucwords(strtolower($unSite['NOM_SITE']));
-                            if($unSite['LOC_SITE'] != '')
-                            {
-                                echo ', '.utf8_encode(ucfirst(strtolower($unSite['LOC_SITE'])));
-                            }
-                      echo '</td>
-                            <td>'.ucwords(strtolower($unSite['NOM_LOCALITE'])).'</td>
-                            <td>'.$unSite['QTE'].'</td>
-                            <td>'.$unSite['LEVEES'].'</td>
-                        </tr>';
-                    $i++;
-                }
-            ?>
-        </tbody>
-    </table>
-</div>
+        <style type="text/css">
+            th { border: 1px solid black; }
+        </style>
+        <page backtop="20mm" backbottom="10mm">
+        <page_header>
+            <h1 style="text-align:center;">Statistiques <?php echo $this->matiere;?></h1>   <hr>
+        </page_header>
+        <page_footer>
+            <hr>
+            <p style="text-align:center;">stats.pdf |
+                <?php echo new Zend_Date; ?>
+            </p>
+        </page_footer>
+        <br>
+        <table cellpadding="0" cellspacing="0" style="width: 100%; border: 1px solid black; background: #E7E7E7; text-align: center; font-size: 10pt;">
+         <thead>
+                <tr>
+                    <th style="width: 5%">n°</th>
+                    <th style="width: 10%">n° site</th>
+                    <th style="width: 50%">Adresse</th>
+                    <th style="width: 15%">Commune</th>
+                    <th style="width: 10%">Tonnage</th>
+                    <th style="width: 10%">Nb relevés</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th style="width: 5%">n°</th>
+                    <th style="width: 10%">n° site</th>
+                    <th style="width: 50%">Adresse</th>
+                    <th style="width: 15%">Commune</th>
+                    <th style="width: 10%">Tonnage</th>
+                    <th style="width: 10%">Nb relevés</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                <?php
+                    $i = 1;
+                    foreach($this->infosSite as $unSite)
+                    {
+                        echo '<tr>
+                                <td style="width: 5%">'.$i.'</td>
+                                <td style="width: 10%">'.$unSite['ID_SITE'].'</td>
+                                <td style="width: 50%">'.$unSite['NOM_SITE'];
+                                if($unSite['LOC_SITE'] != '')
+                                {
+                                    echo ', '.utf8_encode($unSite['LOC_SITE']);
+                                }
+                          echo '</td>
+                                <td style="width: 15%">'.$unSite['NOM_LOCALITE'].'</td>
+                                <td style="width: 10%">'.$unSite['QTE'].'</td>
+                                <td style="width: 10%">'.$unSite['LEVEES'].'</td>
+                            </tr>';
+                        $i++;
+                    }
+                ?>
+            </tbody>
+        </table>
+        
+<?php 
+    // on arrive sur la page de facon "normale"
+    else : 
+        // "converti" la matiere en entier, pour eviter les espaces et donc pouvoir la passer dans l'url
+        $mat = 1;
+        switch($this->matiere)
+        {
+            case 'Verre Couleur' : $mat = 1; 
+                break;
+            case 'Papier/Carton' : $mat = 2;
+                break;
+            case 'Corps Creux' : $mat = 3;
+        }
+?>
+    <div id="removeBouton"> <!-- vidé a chaque changement sur les radio, pour ne pas se retrouver avec plusieurs forms   -->
+       <!-- on met le bouton de generation de pdf -->
+       <form method="post" action="/palmares/infos/radio/<?php echo $mat; ?>" >
+            <input type="hidden" name="creerPdf" value="ok">
+            <input type="submit" value="PDF" >
+        </form>
+    </div>
+       <!-- on refait le code de la page sans le css spécifique au pdf    -->
+        <div id="recup">
+            <table id="datatable" class="<?php echo $class; ?> display">
+             <thead>
+                    <tr>
+                        <th>n°</th>
+                        <th>n° site</th>
+                        <th>Adresse</th>
+                        <th>Commune</th>
+                        <th>Tonnage</th>
+                        <th>Nb relevés</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>n°</th>
+                        <th>n° site</th>
+                        <th>Adresse</th>
+                        <th>Commune</th>
+                        <th>Tonnage</th>
+                        <th>Nb relevés</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <?php
+                        $i = 1;
+                        foreach($this->infosSite as $unSite)
+                        {
+                            echo '<tr class="gradeA">
+                                    <td>'.$i.'</td>
+                                    <td>'.$unSite['ID_SITE'].'</td>
+                                    <td>'.$unSite['NOM_SITE'];
+                                    if($unSite['LOC_SITE'] != '')
+                                    {
+                                        echo ', '.utf8_encode($unSite['LOC_SITE']);
+                                    }
+                              echo '</td>
+                                    <td>'.$unSite['NOM_LOCALITE'].'</td>
+                                    <td>'.$unSite['QTE'].'</td>
+                                    <td>'.$unSite['LEVEES'].'</td>
+                                </tr>';
+                            $i++;
+                        }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+   <?php endif; ?>
+
+<?php
+    if($this->creerPdf == 'ok') 
+    {
+        echo '</page>';
+        // on termine le flux html et on l'enregistre
+        $content = ob_get_clean();
+        require_once($this->baseUrl('/html2pdf/html2pdf.class.php'));
+        $html2pdf = new HTML2PDF('P', 'A4', 'fr');
+        // ecris l'html dans un document pdf
+        $html2pdf->writeHTML($content);
+        // affiche le pdf en lui donnant un nom
+        $html2pdf->Output('stats.pdf');
+        exit;   // ne pas virer
+    }
+    else    // si on ne veut pas (encore) créer de pdf, on peut ajouter le javascript
+    {       // sinon, on ne le prend pas car la balise script n'est pas gerée par HTML2PDF
+?>
 <script type="text/javascript">
 // applique le datatable 
 // on le met ici car il faut le réexcuter a chaque changement de tableau
@@ -60,4 +164,4 @@ $(document).ready(function() {
     });
 });
 </script>
-<?php if($this->ajax) exit; ?>
+<?php } if($this->ajax) exit; ?>

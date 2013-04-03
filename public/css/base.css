@@ -21,12 +21,24 @@ h2 {
     margin : 10px 0;
     font-size : 2em;
 }
+h3 {
+    font-size : 1.5em;
+    margin : 10px 0;
+    font-family:  "averia";
+}
+header {
+    font-size: 3em;
+    font-family: "twentytwelve";
+}
+header a {
+    color : black;
+}
 header, footer {
     padding : 10px;
 }
 header p, footer p {
     text-align : center;
-    color : #09223B;
+    color : #09223B !important;
 }
 #body {
     background-color: #DCEDfa;
@@ -36,37 +48,23 @@ header p, footer p {
     background-color:  #09223B; 
 }
 #content {
-    min-height: 435px;
+    min-height: 600px;
     padding-left: 20px;
     background-color:  #09223B; 
     border-left : 1px solid white;
-}
-#showHideDates {
-    text-align: right;
-    margin : 20px 10px 10px 0;
-}
-#showHideDates a {
-    border-radius: 6px;
-    padding : 5px;
-    border : 1px solid white;
-    background-color: #a8ddeb;
-}
-#showHideDates a:hover {
-    box-shadow: 2px 2px 3px black inset;
-    text-shadow: 1px 1px 2px black;
+    position : relative;
 }
 #datatable {
     width : 100% !important;
+    color : black;
 }
 #datatable_wrapper {
-    margin: 50px 0;
+    margin-bottom : 50px;
     width : 100%;
 }
-.thadresse {
-    width : 295px;
-}
-.thcommune {
-    width : 70px;
+.tdcb {
+    text-align: center;
+    position : relative;
 }
 table {
     border-collapse: collapse;
@@ -90,6 +88,9 @@ table td {
     padding : 10px;
     margin-top : 20px;
 }
+.both {
+    clear : both;
+}
 /***************    MENU VERTICAL   ****************************/
 #menuGauche {
     /*width : 200px;*/
@@ -106,4 +107,29 @@ table td {
 #menuGauche li:hover {
     list-style-type: square;
     text-decoration: underline;
+}
+
+/***************    TONNAGE     *********************************/
+.resteTonnage p {
+    margin : 10px 0;
+}
+/*****************  GRAPHIQUE   *********************************/
+#FCommune {
+    text-align: center;
+}
+#chart_div {
+   /* width : 500px;*/
+    height: 600px;
+}
+
+/************************   ERREUR  *****************************/
+#erreurGraph {
+    color : red;
+    margin-top : 20px;
+    text-align: center;
+}
+#erreurGraph p {
+    padding : 0 10px 1px 30px;
+    background: url('/img/sprite.png') no-repeat -35px -1px;
+    display : inline;
 }

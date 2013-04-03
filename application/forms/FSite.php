@@ -2,13 +2,13 @@
 
 class FSite extends Zend_Form
 {
-    private $tabConteneur;
+    private $tabSite;
     private $tabMatieres;
     private $matChecked;
     
-    public function __construct($tabConteneur, $tabMatieres, $matChecked)
+    public function __construct($tabSite, $tabMatieres, $matChecked)
     {
-        $this->tabConteneur = $tabConteneur;
+        $this->tabSite = $tabSite;
         $this->tabMatieres = $tabMatieres;
         $this->matChecked = $matChecked;
         parent::__construct();
@@ -32,9 +32,9 @@ class FSite extends Zend_Form
                 ->setValue($this->matChecked)   // selectionne une valeur par defaut
                 ->setAttrib('class', 'selec');
                 
-        $conteneur = new Zend_Form_Element_Select('nConteneur');
-        $conteneur->setLabel('Conteneur : ')
-                ->setMultiOptions($this->tabConteneur)
+        $conteneur = new Zend_Form_Element_Select('nSite');
+        $conteneur->setLabel('Site : ')
+                ->setMultiOptions($this->tabSite)
                 ->setRegisterInArrayValidator(false);
 
         // un input type text auquel on ajoute la classe datepicker (pour jquery)

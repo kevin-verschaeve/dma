@@ -12,12 +12,16 @@
       function drawChart() {
        
         var data = google.visualization.arrayToDataTable([
-            ['COMMUNE', 'ID SITE'],
+            ['EMPLACEMENT', 'TONNAGE'],
         <?php
         $data ='';
+        $max = count($this->TparConteneur);
+        $i = 1;
         foreach($this->TparConteneur as $site)
         {
-          $data .= "['".addslashes(utf8_encode($site['NOM_EMPLACEMENT']))." (".$site['NO_CONTENEUR'].")', ".(int)$site['QTE']."],";
+          $data .= "['".addslashes(utf8_encode($site['NOM_EMPLACEMENT']))."', ".(int)$site['QTE']."]";
+          $data .= $i == $max ? '' : ',';
+          $i++;
         }
         echo $data;
         
@@ -36,7 +40,7 @@
           height : '100%',
           legend : {textStyle: {color:'white', fontSize : 15}},
           chartArea: { width:"100%",height:"70%", left:0},
-          backgroundColor : 'transparent',
+          backgroundColor : '#09223B',
           is3D: true
           
         };

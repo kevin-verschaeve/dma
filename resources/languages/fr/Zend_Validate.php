@@ -131,5 +131,5 @@ return array (
     "Too much words, maximum '%max%' are allowed but '%count%' were counted" => "Trop de mots, un maximum de '%max%' est requis, '%count%' ont été fournis",
     "Unknown country within the IBAN '%value%'" => "Pays inconnu pour l'IBAN '%value%'",
     "Unknown error while uploading file '%value%'" => "Erreur inconnue lors de l'envoi du fichier '%value%'",
-    "Value is required and can't be empty" => "Veuillez remplir ce champs",
+    "Value is required and can't be empty" => "Veuillez remplir ce champ",
 );

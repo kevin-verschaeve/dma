@@ -2,12 +2,6 @@
 
 class IndexController extends Zend_Controller_Action
 {
-    public function indexAction()
-    {
-        // appelle l'action header du controller index
-        // peut lui passer des parametres dans le tableau
-        $this->_helper->actionStack('header', 'index', 'default', array());
-    }
     public function headerAction()
     {
         // appelle l'action footer et affiche le contenu du header
@@ -21,6 +15,8 @@ class IndexController extends Zend_Controller_Action
     }
     public function tonnageAction()
     {
+        // appelle l'action header du controller index
+        // peut lui passer des parametres dans le tableau
         $this->_helper->actionStack('header', 'index', 'default', array());
         $this->_helper->actionStack('tonnageajax', 'index');
     }
@@ -30,6 +26,7 @@ class IndexController extends Zend_Controller_Action
      */
     public function tonnageajaxAction()
     {
+        try {
         // recupere les parametres par leur nom, et leur met une valeur par defaut si vide
         $matiere = $this->getRequest()->getParam('sel_matiere', 'Verre Couleur');
         $ajax = $this->getRequest()->getParam('ajax', false);
@@ -44,18 +41,18 @@ class IndexController extends Zend_Controller_Action
             // si !ajax : on arrive sur la page (on a pas encore effectué de requete ajax)
         }
         $tcollecte = new TCollecte;
-
+        
         // recupere les conteneurs et les matieres
         $matieres = $tcollecte->getMatieres();
-        $tabConteneur = $tcollecte->getConteneurs($matiere);
-
+        $tabSite = $tcollecte->getSites($matiere);
+        
         // copie les valeurs dans les clés (pour les select)            
         $matieres = array_combine($matieres, $matieres);
-        $tabConteneur = array_combine($tabConteneur, $tabConteneur);
+        $tabSite = array_combine($tabSite, $tabSite);
         //Zend_Debug::dump($tabConteneur);exit;
 
         // cree le formulaire, on passe des parametres pour mettre des valeurs par defaut
-        $form = new FSite($tabConteneur, $matieres, $matiere);
+        $form = new FSite($tabSite, $matieres, $matiere);
 
         // recupere la requete
         $request = $this->getRequest();
@@ -67,29 +64,34 @@ class IndexController extends Zend_Controller_Action
             if($form->isValid($_POST))
             {
                 // on recupere le contenu des champs, un par un, avec l'id du champ
-                $nConteneur= $request->getParam('nConteneur');
+                $nSite = $request->getParam('nSite');
                 $dateDebut = $request->getParam('dateDebut', null);
                 $dateFin = $request->getParam('dateFin', null);
 
                 // recupere les informations
-                // pour le conteneur $nConteneur gerant la matiere $matiere
-                // pendant la periode >=$dateDabut <= $dateFin
+                // pour le site $nSite gerant la matiere $matiere
+                // pendant la periode >=$dateDebut <= $dateFin
                 // si les dates sont null, la recherche ne se limitera pas dans le temps
-                $infosConteneur = $tcollecte->getInfos($nConteneur, $matiere, $dateDebut, $dateFin);
+                $tsite = new TSite;
+                $infosSite = $tsite->getInfos($nSite, $matiere, $dateDebut, $dateFin, false);
 
-                //Zend_Debug::dump($infosConteneur);exit;
+                //Zend_Debug::dump($infosSite);exit;
 
                 // envoi les variables a la vue
-                $this->view->nConteneur = $nConteneur;
+                $this->view->nSite = $nSite;
                 $this->view->dateDebut = $dateDebut;
                 $this->view->dateFin = $dateFin;
-                $this->view->infosConteneur = $infosConteneur;
+                $this->view->infosSite = $infosSite;
                 $this->view->send = true;
             }
         } 
         // envoi le formulaire a la vue
         $this->view->form = $form;
         $this->view->ajax = $ajax;
+        }catch(Exception $e)
+        {
+            echo $e->getMessage();exit;
+        }
     }
     public function importerAction()
     {
@@ -210,66 +212,68 @@ class IndexController extends Zend_Controller_Action
     public function changeconteneurAction()
     {
         $this->_helper->actionStack('header', 'index');
+        $ajax = $this->getRequest()->getParam('ajax', false);
         
-        $tcollecte = new TCollecte;
         
-        $request = $this->getRequest();
-        if($request->isPost())  // le formulaire a été validé
+        $tsite = new TSite;
+        
+        if($ajax)
         {
             // recupere tous les checkbox cochés
-            $idSites = $request->getParam('cbconteneurs');
+            $idSite = $this->getRequest()->getParam('site', false);
+            $etat =  $this->getRequest()->getParam('etat', false);
             
-            $tsite = new TSite;
+            //Zend_Debug::dump($idSites);exit;
+            
             // va changer l'etat dans la base
-            $tsite->changeEtatStat($idSites);
+            $tsite->changeEtatStat($idSite, $etat);
+            exit;
         }
-        // retourne les conteneur de chaque commune
-        $conteneurs = $tcollecte->getConteneursParCommune();
-        $this->view->conteneurs = $conteneurs;
+        else 
+        {
+            // retourne les conteneur de chaque commune
+            $sites = $tsite->getSitesCommunes();
+            //Zend_Debug::dump($sites);exit;
+            $this->view->sites = $sites;
+        }
     }
     public function graphiqueAction()
     {
-        try {
-            $this->_helper->actionStack('header', 'index', 'default', array());
-            $id = $this->getRequest()->getParam('commune', 20);
+        $this->_helper->actionStack('header', 'index', 'default', array());
+        $id = $this->getRequest()->getParam('commune', 20);
 
-            // recupere les liste des communes, pour le select
-            $tcommune = new TCommune;
-            $communes = $tcommune->getCommunes();
-            $nomCommune = '';
-            
-            $lesCommunes = array();
-            foreach($communes as $uneCommune)
-            {
-                $lesCommunes[$uneCommune['ID_COMMUNE']] = $uneCommune['NOM_COMMUNE'];
-                
-                // si l'id en cours est celui de la commune, on sauvegarde le nom
-                if((int)$id == $uneCommune['ID_COMMUNE'])
-                {
-                    $nomCommune = $uneCommune['NOM_COMMUNE'];
-                }
-            }
-            // créé le formulaire
-            $fcommunes = new FCommune($lesCommunes, $id);
+        // recupere les liste des communes, pour le select
+        $tcommune = new TCommune;
+        $communes = $tcommune->getCommunes();
+        $nomCommune = '';
 
-            $this->view->fcommunes = $fcommunes;
+        $lesCommunes = array();
+        foreach($communes as $uneCommune)
+        {
+            $lesCommunes[$uneCommune['ID_COMMUNE']] = $uneCommune['NOM_COMMUNE'];
 
-            if($id != false && (int)$id > 0)    // une ville est choisie, ou on a celle par defaut (Saint Quentin)
+            // si l'id en cours est celui de la commune cherchée, on sauvegarde le nom
+            if((int)$id == $uneCommune['ID_COMMUNE'])
             {
-                $tc = new TCollecte;
-                // on va chercher tous ses conteneur avec leur tonnages
-                $TparConteneur = $tc->getTonnageConteneur((int)$id);
-                $this->view->nomCommune = $nomCommune;
-                $this->view->TparConteneur = $TparConteneur;
-            }
-            else 
-            {
-                $this->view->erreur = 'La ville choisie n\'existe pas !';
+                $nomCommune = $uneCommune['NOM_COMMUNE'];
             }
         }
-        catch(Exception $e)
+        // créé le formulaire
+        $fcommunes = new FCommune($lesCommunes, $id);
+
+        $this->view->fcommunes = $fcommunes;
+
+        if($id != false && (int)$id > 0)    // une ville est choisie, ou on a celle par defaut (Saint Quentin)
         {
-            echo $e->getMessage();exit;
+            $tc = new TSite;
+            // on va chercher tous ses conteneur avec leur tonnages
+            $TparConteneur = $tc->getTonnageSite((int)$id);
+            $this->view->nomCommune = $nomCommune;
+            $this->view->TparConteneur = $TparConteneur;
+        }
+        else 
+        {
+            $this->view->erreur = 'La ville choisie n\'existe pas !';
         }
     }
 }

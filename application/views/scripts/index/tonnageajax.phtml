@@ -9,11 +9,16 @@
     if($this->send)
     {
         echo '<div class="resteTonnage">';
-        if($this->infosConteneur != null)
+        if($this->infosSite != null)
         {
         
-            echo '<h3>Conteneur n° '.$this->infosConteneur['NO_CONTENEUR'].' 
-                ('.$this->infosConteneur['MATIERE'].')</h3>';
+            echo '<h3>Site n° '.$this->infosSite['ID_SITE'].' : 
+                '.strtolower($this->infosSite['NOM_SITE']);
+            if($this->infosSite['LOC_SITE'])
+            {
+                echo ' ('.ucwords(strtolower($this->infosSite['LOC_SITE'])).')';
+            }  
+            echo '</h3>';
             // si on a une date de debut et une date de fin, on affiche des infos en plus
             if($this->dateDebut != "" && $this->dateFin != "")
             {
@@ -26,21 +31,15 @@
                     '</p>';
             }
             // affiche le tonnage et l'adresse du conteneur
-            echo '<p>'.$this->infosConteneur['QTE'].'T';
-            echo ' sur le site : '.strtolower($this->infosConteneur['NOM_SITE']);
-            if($this->infosConteneur['LOC_SITE'])
-            {
-                echo ' ('.ucwords(strtolower($this->infosConteneur['LOC_SITE'])).')';
-            }
-            echo '</p>';
-            echo '<p>'.ucwords(strtolower($this->infosConteneur['NOM_LOCALITE'])).'</p>';
+            echo '<p>'.$this->infosSite['QTE'].'T</p>';
+            echo '<p>'.ucwords(strtolower($this->infosSite['NOM_LOCALITE'])).'</p>';
         }
         else
         {
             // converti les string en type date
             $newDebut = new Zend_Date($this->dateDebut);
             $newFin = new Zend_Date($this->dateFin);
-            echo '<p>Aucun enregistrement pour le conteneur '.$this->nConteneur.' 
+            echo '<p>Aucun enregistrement pour le site n°'.$this->nSite.' 
                     pour la periode du '.$newDebut->toString('dd MMM YYYY').' au
                     '.$newFin->toString('dd MMM YYYY').'
                 </p>';

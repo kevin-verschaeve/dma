@@ -1,15 +1,44 @@
-<head>
-    <meta charset="UTF-8" />
-    <script type="text/javascript" src="/js/jquery-1.9.1.js"></script>
-    <script type='text/javascript'>
-        $(document).ready(function() {
-            $('#sel_communes').change(function() {
-                var commune = $('#sel_communes').val();
-                window.location = '/test/retest/sel_commune/'+commune;
-            });
-        });
-    </script>
-</head>
-<?php
-    echo $this->fcommunes;
-?>
+<table>
+    <thead>
+        <tr>
+            <th>n°</th>
+            <th>n° site</th>
+            <th>Adresse</th>
+            <th>Commune</th>
+            <th>Tonnage</th>
+            <th>Nb relevés</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>n°</th>
+            <th>n° site</th>
+            <th>Adresse</th>
+            <th>Commune</th>
+            <th>Tonnage</th>
+            <th>Nb relevés</th>
+        </tr>
+    </tfoot>
+    <tbody>
+    <?php
+        $i = 1;
+        foreach($this->infosSite as $unSite)
+        {
+            echo '<tr>
+                    <td>'.$i.'</td>
+                    <td>'.$unSite['ID_SITE'].'</td>
+                    <td>'.$unSite['NOM_SITE'];
+                    if($unSite['LOC_SITE'] != '')
+                    {
+                        echo ', '.utf8_encode($unSite['LOC_SITE']);
+                    }
+              echo '</td>
+                    <td>'.$unSite['NOM_LOCALITE'].'</td>
+                    <td>'.$unSite['QTE'].'</td>
+                    <td>'.$unSite['LEVEES'].'</td>
+                </tr>';
+            $i++;
+        }
+    ?>
+    </tbody>
+</table>

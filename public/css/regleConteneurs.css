@@ -1,0 +1,23 @@
+.blocConteneur {
+    float : left;
+    margin : 10px;
+}
+.nomCommune {
+    border : 1px solid white;
+    padding : 10px;
+    margin : 10px 20px;
+    text-align: center;
+    position : relative;
+}
+.nomCommune a {    
+    position : absolute;
+    top : 10px;
+    right : 25px;
+}
+.flechebas {
+    width : 8px;
+    height : 12px;
+}
+.blocCommune label, .blocCommune input {
+    margin: 10px;
+}

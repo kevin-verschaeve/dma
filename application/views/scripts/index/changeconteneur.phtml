@@ -1,38 +1,57 @@
-<p class="infos">Les conteneurs sélectionnés sont ceux que vous souhaitez voir apparaitre</p>
+<h2>Sites à utiliser</h2>
 
-<form action="/index/changeconteneur" method="post" id="formChangeConteneur">
-<?php
-    $i=0; $idBloc = 0;
-    $precLocalite = '';
-    $premierPassage = true;
-    
-    foreach($this->conteneurs as $conteneur)
-    {
-        if($precLocalite != $conteneur['NOM_COMMUNE'])
-        {
-            if (!$premierPassage) echo '<div style="clear:both"></div></div>';  // blocCommune
-            echo '<div class="BlocCommune" id="blocCommune_'.$idBloc.'">';
-            echo '<p class="nomCommune">';
-                  //  echo '<input type="checkbox" class="toutCocher" id="cocheTout_'.$idBloc.'"/>
-                  //  <span  id="'.$idBloc.'">Tout cocher</span>';
-                    echo $conteneur['NOM_COMMUNE'].'
-                    <a href="#sub_changeConteneur">Valider 
-                        <img class="flechebas" src="'.$this->baseUrl('/img/fleche_bas.png').'" alt="fleche bas" title="Aller tout en bas" />
-                    </a>
-                </p>';
-            $precLocalite = $conteneur['NOM_COMMUNE'];
-            $idBloc++;
-        }
-        $checked = $conteneur['STAT_SITE'] == 1 ? 'checked="checked"' : '';
-        //echo '<div class="blocConteneur">';
-            echo '<label for="cont_'.$i.'">'.$conteneur['NO_CONTENEUR'].'</label>';
-            echo '<input id="cont_'.$i.'" type="checkbox" value="'.$conteneur['ID_SITE'].'" name="cbconteneurs[]" '.$checked.' />';
-        //echo '</div>';  // blocConteneur
-            
-        $premierPassage = false;
-        $i++;
-    }
-    echo '</div>';
-?>
-    <input type="submit" value="Valider" id="sub_changeConteneur" />
-</form>
+<div id="adminSites">
+<p class="infos">Cochez ou décochez un site pour le prendre ou non en compte dans les statistiques</p>
+    <table id="datatable" class="display">
+         <thead>
+                <tr>
+                    <th>n°</th>
+                    <th>n° site</th>
+                    <th>Adresse</th>
+                    <th>Commune</th>
+                    <th>Utiliser ?</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>n°</th>
+                    <th>n° site</th>
+                    <th>Adresse</th>
+                    <th>Commune</th>
+                    <th>Utiliser ?</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                <?php
+                    $i = 1;
+                    foreach($this->sites as $unSite)
+                    {
+                        echo '<tr class="gradeA">
+                                <td>'.$i.'</td>
+                                <td>'.$unSite['ID_SITE'].'</td>
+                                <td>'.$unSite['NOM_SITE'];
+                                if($unSite['LOC_SITE'] != '')
+                                {
+                                    echo ', '.utf8_encode($unSite['LOC_SITE']);
+                                }
+                            echo '</td><td>'.$unSite['NOM_COMMUNE'].'</td>';
+
+                            $checked = $unSite['STAT_SITE'] == 1 ? 'checked="checked"' : '';
+                            echo '<td id="cont_'.$i.'" class="tdcb">
+                                    <input class="cbsite" type="checkbox" name="cbsites[]" value="'.$unSite['ID_SITE'].'" '.$checked.' />
+                                </td>';
+                        echo '</tr>';
+                        $i++;
+                    }
+                ?>
+            </tbody>
+    </table>
+    </div>
+<script type="text/javascript">
+$(document).ready(function() {
+   $('#datatable').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers"
+    });
+});
+</script>

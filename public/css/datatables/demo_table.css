@@ -188,10 +188,17 @@ table.display td.center {
 table.display tr.odd.gradeA {
 	background-color: #E2E4FF;
 }
+table.display tr.odd.gradeA:hover {
+    background: #ACE0FF;
+}
 
 table.display tr.even.gradeA {
 	background-color: white;
 }
+table.display tr.even.gradeA:hover {
+    background: #bbb;
+}
+
 
 table.display tr.odd.gradeC {
 	background-color: #E2E4FF;
@@ -351,7 +358,6 @@ tr.even td.sorting_3 {
 	background-color: white;
 }
 
-
 /* For the Conditional-CSS grading rows */
 /*
  	Colour calculations (based off the main row colours)
@@ -361,7 +367,7 @@ tr.even td.sorting_3 {
 	Level 2:
 	  dd > d1
 	  ee > e2
- */
+
 tr.odd.gradeA td.sorting_1 {
 	background-color: #e2ddff;
 }
@@ -381,7 +387,7 @@ tr.even.gradeA td.sorting_1 {
 tr.even.gradeA td.sorting_2 {
 	background-color: #e2ffe2;
 }
-
+ 
 tr.even.gradeA td.sorting_3 {
 	background-color: #e2ffe2;
 }
@@ -457,11 +463,10 @@ tr.even.gradeU td.sorting_2 {
 tr.even.gradeU td.sorting_3 {
 	background-color: #e2e2e2;
 }
-
-
+*/
 /*
  * Row highlighting example
- */
+ 
 .ex_highlight #example tbody tr.even:hover, #example tbody tr.even td.highlighted {
 	background-color: #ECFFB3;
 }
@@ -502,7 +507,7 @@ tr.even.gradeU td.sorting_3 {
 	background-color: #DBFF70;
 }
 
-
+*/
 /*
  * KeyTable
  */
@@ -536,10 +541,4 @@ div.box {
 	overflow: auto;
 	border: 1px solid #8080FF;
 	background-color: #E5E5FF;
-}
-
-
-/**************************************************************************/
-tr.gradeA:hover {
-    color : blue;
 }

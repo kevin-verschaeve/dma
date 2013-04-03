@@ -1,1 +1,0 @@
-Invoke-Command -Computer R0202054 -ScriptBlock {sqlldr userid=DMA/DMA@PROD10 control=C:\wamp\www\dma\resources\sqlloader\Collecte.ctl data=C:\wamp\www\dma\resources\temp\bidon.csv errors=0)

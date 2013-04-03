@@ -1,10 +1,10 @@
-input[type="text"], select {
+input[type="text"], .selec {
     width : 120px;
 }
 .zend_form {
-    /*background-color: red;*/
+    /*background-color: red;
+    display : inline-block;*/
     border : 2px solid #a8ddeb;
-    display : inline-block;
     padding : 10px;
     margin-top: 20px;
     position : relative;
@@ -13,46 +13,18 @@ input[type="text"], select {
 #radioMatiere-element label {
     margin-left : 20px;
 }
-.divdate {
-    display : none;
-}
-.formConteneur .divform p {
-    width : 110px !important;
-}
 .divform p {
-    display: inline-block;
-    margin: 5px 0;
-    width: 130px;
-    text-align: right;
+    display : inline;
+    color : #a8ddeb;
 }
-#sub-label {
-    display : none;
-}
-#FmatiereSeul .divform {
-    margin : 0;
-}
-#FmatiereSeul {
-    margin-bottom : -20px
-}
-/* le dernier .divform */
-#Fmatiere .divform:last-child {
-    margin-left: 120px;
-    margin-top : 10px;
-}
-.formConteneur .divform:last-child {
-    margin-left : 60px; 
-    margin-top : 10px;
-}
-.divdate .divform:last-child {
-    margin-left : 0; 
-    margin-top : 0;    
+#sub-label, #sub_infosPeriode-label {
+    display : none !important;
 }
 .errors {
     color: red;
     list-style-type : none;
     padding: 0;
-    margin : 5px 5px 10px 5px ;
-    margin: 9px 0 1px 10px;
+    margin: 1px 0 1px 5px;
     float: right;
 }
 .errors li {
@@ -61,16 +33,77 @@ input[type="text"], select {
     font-size: 0.9em;
     font-family: "twentytwelve";
 }
-.bt_submit {
+.bt_submit, #show, #hide, #removeBouton input {
     background: white;
-    border-radius : 15px;
-    border: 1px outset #a8ddeb;
+    padding : 2px;
+    margin-top: -2px;
+    border: 1px solid #a8ddeb;
+    cursor : pointer;
 }
-.bt_submit:hover {
+.bt_submit:hover, #removeBouton input:hover {
     cursor : pointer;
     box-shadow: 2px -2px 5px #a8ddeb;
+}   
+/********************   form statistiques   ********************************/
+#divPalmares .zend_form {
+    border : none;
+    margin-top : 0;
 }
 
+#divPalmares {
+    border : 2px solid #a8ddeb;
+}
+#annonceStats {
+    margin-top : 30px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+#Fmatiere {
+    display: inline-block;
+}
+#FmatiereSeul {
+    margin-bottom: 30px;
+}
+#FmatiereSeul, #divPalmares, #Fmatiere {
+    text-align: center;
+}
+#Fmatiere .divdate .divform {
+    margin : 10px 10px;
+}
+.divdate {
+    text-align : left;
+}
+#Fmatiere .divform p {
+    text-align: right;
+    width : 126px;
+    display : inline-block;
+}
+
+
+/********************    form tonnage       ********************************/
+
+.formConteneur .divform {
+    float: left;
+    margin-right:  10px;
+}
+.formConteneur .divform:last-child {
+    float: none;
+}
+.formConteneur .divdate .divform:last-child {
+    margin-left : 0; 
+    margin-top : 0;    
+}
+.formConteneur .divdate {
+    display : none;
+}
+#sub {
+    margin-left : 20px;
+    width : 120px;
+}
+#sub_infosPeriode {
+    width : 120px;
+    margin-left : -100px;
+}
 /********************    form import fichier csv    ************************/
 #Fimport dd, #Fimport dt {
     display : inline-block;
@@ -80,8 +113,14 @@ input[type="text"], select {
 }
 #Fimport .errors {
     position: absolute;
-    left: 0;
-    top: 50px;
-    margin: 0;
-    width: 100%;
+    left : -7px;
+    top: 90px;
+}
+
+
+/***************    BOUTON PDF  *********************************/
+#removeBouton {
+    position: absolute;
+    top : 75px;
+    right : 20px;   
 }
