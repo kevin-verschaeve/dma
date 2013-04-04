@@ -48,6 +48,7 @@ input[type="text"], .selec {
 #divPalmares .zend_form {
     border : none;
     margin-top : 0;
+    display: inline-block;
 }
 
 #divPalmares {
@@ -57,9 +58,6 @@ input[type="text"], .selec {
     margin-top : 30px;
     margin-bottom: 5px;
     text-align: center;
-}
-#Fmatiere {
-    display: inline-block;
 }
 #FmatiereSeul {
     margin-bottom: 30px;

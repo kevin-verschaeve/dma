@@ -1,4 +1,4 @@
-
+# regle l'environnement de l'application
 SetEnv APPLICATION_ENV development
 
 RewriteEngine On

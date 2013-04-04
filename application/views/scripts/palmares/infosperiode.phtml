@@ -36,8 +36,8 @@
 <table class="display" id="datatable">
     <thead>
         <tr>
-            <th>n°</th>
-            <th>n° site</th>
+            <th>N°</th>
+            <th>N° Site</th>
             <th>Adresse</th>
             <th>Commune</th>
             <th>Tonnage</th>
@@ -46,8 +46,8 @@
     </thead>
     <tfoot>
         <tr>
-            <th>n°</th>
-            <th>n° site</th>
+            <th>N°</th>
+            <th>N° Site</th>
             <th>Adresse</th>
             <th>Commune</th>
             <th>Tonnage</th>
@@ -97,7 +97,6 @@ $(document).ready(function() {
     ?>
     <style type="text/css">
         th { border: 1px solid black; }
-        td { border: 0.1px solid black; }
     </style>
     <page backtop="20mm" backbottom="10mm">
         <page_header><h1 style="text-align:center;">Statistiques <?php echo $this->dateDebut.' : '.$this->dateFin; ?></h1><hr></page_header>
@@ -110,8 +109,8 @@ $(document).ready(function() {
         <table cellpadding="0" cellspacing="0" style="width: 100%; border: 1px solid black; background: #E7E7E7; text-align: center; font-size: 10pt;">
             <thead>
                 <tr>
-                    <th style="width: 5%">n°</th>
-                    <th style="width: 10%">n° site</th>
+                    <th style="width: 5%">N°</th>
+                    <th style="width: 10%">N° Site</th>
                     <th style="width: 50%">Adresse</th>
                     <th style="width: 15%">Commune</th>
                     <th style="width: 10%">Tonnage</th>
@@ -120,8 +119,8 @@ $(document).ready(function() {
             </thead>
             <tfoot>
                 <tr>
-                    <th style="width: 5%">n°</th>
-                    <th style="width: 10%">n° site</th>
+                    <th style="width: 5%">N°</th>
+                    <th style="width: 10%">N° Site</th>
                     <th style="width: 50%">Adresse</th>
                     <th style="width: 15%">Commune</th>
                     <th style="width: 10%">Tonnage</th>
@@ -136,12 +135,13 @@ $(document).ready(function() {
                      echo '<tr>
                                 <td style="width: 5%">'.$i.'</td>
                                 <td style="width: 10%">'.$unSite['ID_SITE'].'</td>
-                                <td style="width: 50%">'.$unSite['NOM_SITE'];//
+                                <td style="text-align: left; width: 50%">'.$unSite['NOM_SITE'];//
                                 if($unSite['LOC_SITE'] != '')
                                 {
                                     echo ', '.utf8_encode($unSite['LOC_SITE']);
                                 }
-                          echo '</td><td style="width: 15%">'.$unSite['NOM_LOCALITE'].'</td>
+                          echo '</td>
+                                <td style="text-align: left; width: 15%">'.$unSite['NOM_LOCALITE'].'</td>
                                 <td style="width: 10%">'.$unSite['QTE'].'</td>
                                 <td style="width: 10%">'.$unSite['LEVEES'].'</td>
                             </tr>';

@@ -35,6 +35,7 @@ header a {
 }
 header, footer {
     padding : 10px;
+    min-height : 50px;
 }
 header p, footer p {
     text-align : center;

@@ -26,7 +26,6 @@ class IndexController extends Zend_Controller_Action
      */
     public function tonnageajaxAction()
     {
-        try {
         // recupere les parametres par leur nom, et leur met une valeur par defaut si vide
         $matiere = $this->getRequest()->getParam('sel_matiere', 'Verre Couleur');
         $ajax = $this->getRequest()->getParam('ajax', false);
@@ -88,11 +87,13 @@ class IndexController extends Zend_Controller_Action
         // envoi le formulaire a la vue
         $this->view->form = $form;
         $this->view->ajax = $ajax;
-        }catch(Exception $e)
-        {
-            echo $e->getMessage();exit;
-        }
     }
+    /**
+     * Creer et gere un formulaire contenant seulement un input type file
+     * recupere le fichier selectionné, le copie dans le dossier archive
+     * parcours chaque ligne du fichier et les insere en bdd, apres avoir vidé la table
+     * Gere les erreurs s'il y en a
+     */
     public function importerAction()
     {
         $this->_helper->actionStack('header', 'index', 'default', array());
@@ -206,8 +207,7 @@ class IndexController extends Zend_Controller_Action
     }
     /**
      * Affiche tous les conteneurs triés par communes
-     * et permet de specifier si on souhaite ou non les inclures
-     * lors de nos select
+     * et permet de specifier si on souhaite ou non les inclures dans les statitisques
      */
     public function changeconteneurAction()
     {
@@ -237,6 +237,10 @@ class IndexController extends Zend_Controller_Action
             $this->view->sites = $sites;
         }
     }
+    /**
+     * Recupere les commune et les affiches dans une liste
+     * Affiche un graphique avec en valeur par defaut saint quentin, ou la valeur choisie dans la liste
+     */
     public function graphiqueAction()
     {
         $this->_helper->actionStack('header', 'index', 'default', array());

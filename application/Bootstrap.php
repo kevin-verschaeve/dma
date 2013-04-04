@@ -7,20 +7,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Registry::set('config', new Zend_Config($this->getOptions()));
         parent::run();
     }
+    // recupere les infos de application.ini, et les met dans le registre
     protected function _initConfig()
     {
-        // recupere les infos de application.ini, et les met dans le registre
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH.'/configs/application.ini', APPLICATION_ENV);
         Zend_Registry::set('config', $this->_config);
         Zend_Registry::set('env', APPLICATION_ENV);
     }
+    // regle la bdd et la connexion avec le .ini
     protected function _initDB()
     {
-        // regle la bdd et la connexion avec le .ini
         $db = Zend_Db::factory($this->_config->db); 
         Zend_Db_Table_Abstract::setDefaultAdapter($db);
         Zend_Registry::set('db', $db);
-        
     }
     protected function _initLoader() 
     {

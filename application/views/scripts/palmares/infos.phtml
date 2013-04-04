@@ -24,8 +24,8 @@
         <table cellpadding="0" cellspacing="0" style="width: 100%; border: 1px solid black; background: #E7E7E7; text-align: center; font-size: 10pt;">
          <thead>
                 <tr>
-                    <th style="width: 5%">n°</th>
-                    <th style="width: 10%">n° site</th>
+                    <th style="width: 5%">N°</th>
+                    <th style="width: 10%">N° Site</th>
                     <th style="width: 50%">Adresse</th>
                     <th style="width: 15%">Commune</th>
                     <th style="width: 10%">Tonnage</th>
@@ -34,8 +34,8 @@
             </thead>
             <tfoot>
                 <tr>
-                    <th style="width: 5%">n°</th>
-                    <th style="width: 10%">n° site</th>
+                    <th style="width: 5%">N°</th>
+                    <th style="width: 10%">N° Site</th>
                     <th style="width: 50%">Adresse</th>
                     <th style="width: 15%">Commune</th>
                     <th style="width: 10%">Tonnage</th>
@@ -50,13 +50,13 @@
                         echo '<tr>
                                 <td style="width: 5%">'.$i.'</td>
                                 <td style="width: 10%">'.$unSite['ID_SITE'].'</td>
-                                <td style="width: 50%">'.$unSite['NOM_SITE'];
+                                <td style="text-align: left; width: 50%">'.$unSite['NOM_SITE'];
                                 if($unSite['LOC_SITE'] != '')
                                 {
                                     echo ', '.utf8_encode($unSite['LOC_SITE']);
                                 }
                           echo '</td>
-                                <td style="width: 15%">'.$unSite['NOM_LOCALITE'].'</td>
+                                <td style="text-align: left; width: 15%">'.$unSite['NOM_LOCALITE'].'</td>
                                 <td style="width: 10%">'.$unSite['QTE'].'</td>
                                 <td style="width: 10%">'.$unSite['LEVEES'].'</td>
                             </tr>';
@@ -92,8 +92,8 @@
             <table id="datatable" class="<?php echo $class; ?> display">
              <thead>
                     <tr>
-                        <th>n°</th>
-                        <th>n° site</th>
+                        <th>N°</th>
+                        <th>N° Site</th>
                         <th>Adresse</th>
                         <th>Commune</th>
                         <th>Tonnage</th>
@@ -102,8 +102,8 @@
                 </thead>
                 <tfoot>
                     <tr>
-                        <th>n°</th>
-                        <th>n° site</th>
+                        <th>N°</th>
+                        <th>N° Site</th>
                         <th>Adresse</th>
                         <th>Commune</th>
                         <th>Tonnage</th>

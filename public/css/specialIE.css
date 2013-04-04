@@ -1,0 +1,17 @@
+
+.divdate p {
+    float : left;
+}
+#Fmatiere .divdate .divform {
+    margin : 10px 10px 10px 245px !important;
+}
+#Fmatiere .divform p {
+    display: inline;
+    zoom : 1;
+}
+
+#geneIE {
+    padding-left : 0;
+    margin-top : 0;
+    background: none;
+}

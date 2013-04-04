@@ -6,6 +6,8 @@ class FSite extends Zend_Form
     private $tabMatieres;
     private $matChecked;
     
+    // surcharge le constructeur pour y ajouter nos parametres
+    // puis appelle le constructeur parent
     public function __construct($tabSite, $tabMatieres, $matChecked)
     {
         $this->tabSite = $tabSite;
@@ -19,19 +21,22 @@ class FSite extends Zend_Form
         $this->setAction('/index/tonnage')
                   ->setMethod('post');
         
-        // configure les decorateurs (a revoir)
+        // configure les decorateurs
         $this->setDecorators(array(
             'FormElements',
-            //array('HtmlTag', array('tag' => 'div')),
             'Form',
         ));
+        
         // creation des elements du formulaire
+        
+        // créé un select des differentes matieres
         $matiere = new Zend_Form_Element_Select('sel_matiere');
         $matiere->setLabel('Matiere : ')
                 ->setMultiOptions($this->tabMatieres)   // rempli le select avec un tableau
                 ->setValue($this->matChecked)   // selectionne une valeur par defaut
                 ->setAttrib('class', 'selec');
                 
+        // créé un select des site pour la matiere selectionnée
         $conteneur = new Zend_Form_Element_Select('nSite');
         $conteneur->setLabel('Site : ')
                 ->setMultiOptions($this->tabSite)
@@ -70,19 +75,27 @@ class FSite extends Zend_Form
          ));
         
     }
+    /**
+     * Permet de regrouper des elements ayant la meme classe
+     * et de leur ajouter des attributs
+     */
     public function loadDefaultDecorators()
     {
         $elementsToGroup = array();
+        // parcours tous les elements créés au dessus
         foreach ($this->getElements() as $element) {
+            // si l'element en cours a la classe cacher
             if(in_array('cacher', explode(' ', $element->class)))
             {
+                // on le sauvegarde
                 $elementsToGroup[] = $element;
             }
         }
+        // pour etre sur que l'on a des elements sauvegardés
         if ($elementsToGroup) {
             $this->addDisplayGroup($elementsToGroup, 'divdate', array(
-                'order' => 2,
-                'decorators' => array(
+                'order' => 2,   // place le groupe en 3eme position (commence a 0)
+                'decorators' => array(  // ajoute un decorateur
                     'FormElements',
                     array('HtmlTag', array('tag'=>'div', 'class' => 'divdate'))
                 )

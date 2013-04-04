@@ -1,16 +1,26 @@
 
 <?php echo $this->fcommunes; ?>
+
+<!-- si on a une erreur -->
 <?php if($this->erreur) : ?>
     <div id="erreurGraph"><p><?php echo $this->erreur; ?></p></div>
 <?php endif; ?>
+    
+    <!-- le div dans lequel sera mis le graphique une fois généré -->
     <div id="chart_div" ></div>
     
+    <!-- recupere l'api   -->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
- <script type="text/javascript">
+    <script type="text/javascript">
+      
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
+      
+      // dessine le graphique et le place dans le div
       function drawChart() {
        
+       // créer un tableau a 2 dimensions, avec pour chaque ligne (sauf la premiere qui contient les tritre des colonnes)
+       // le nom de l'emplacement et son tonnage
         var data = google.visualization.arrayToDataTable([
             ['EMPLACEMENT', 'TONNAGE'],
         <?php
@@ -31,9 +41,9 @@
         else {
             $title = 'Erreur! Commune introuvable';
         }
-        ?>
-            ]);
+        ?> ]);
           
+        // regle les options du graphique
         var options = {
           title: '<?php echo $title; ?>',
           titleTextStyle : { color  : 'white', fontSize: 20}, 
@@ -42,12 +52,9 @@
           chartArea: { width:"100%",height:"70%", left:0},
           backgroundColor : '#09223B',
           is3D: true
-          
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         chart.draw(data, options);
-        
-
       }
 </script>
