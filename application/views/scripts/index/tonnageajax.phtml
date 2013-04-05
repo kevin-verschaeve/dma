@@ -26,12 +26,12 @@
                 $newDebut = new Zend_Date($this->dateDebut);
                 $newFin = new Zend_Date($this->dateFin);
                 // affiche la date dans un format lisible ex: '4 mars 2013'
-                echo '<p>Periode : du 
+                echo '<p>Période : du 
                     '.$newDebut->toString('dd MMM YYYY').' au '.$newFin->toString('dd MMM YYYY').
                     '</p>';
             }
             // affiche le tonnage et l'adresse du conteneur
-            echo '<p>'.$this->infosSite['QTE'].'T</p>';
+            echo '<p>'.$this->infosSite['QTE'].'T en '.$this->infosSite['LEVEES'].' levées</p>';
             echo '<p>'.ucwords(strtolower($this->infosSite['NOM_LOCALITE'])).'</p>';
         }
         else
@@ -40,7 +40,7 @@
             $newDebut = new Zend_Date($this->dateDebut);
             $newFin = new Zend_Date($this->dateFin);
             echo '<p>Aucun enregistrement pour le site n°'.$this->nSite.' 
-                    pour la periode du '.$newDebut->toString('dd MMM YYYY').' au
+                    pour la période du '.$newDebut->toString('dd MMM YYYY').' au
                     '.$newFin->toString('dd MMM YYYY').'
                 </p>';
         }
@@ -50,7 +50,7 @@
     {  
 ?>
     <p class="infos">
-        Selectionnez une matiere, pour avoir les conteneurs correspondants.<br />
+        Sélectionnez une matière, pour avoir les conteneurs correspondants.<br />
         Vous pouvez spécifier une période, si vous ne le faites pas, les données 
         affichées iront de la date la plus ancienne à aujourd'hui.
     </p>

@@ -142,51 +142,56 @@ class IndexController extends Zend_Controller_Action
                         {   
                              // on ouvre le fichier en lecture seule
                              $handle = fopen($tempo, "r");
-                             if($handle)
-                             {  // il est ouvert
-                                 
+                             if($handle)  // il est ouvert
+                             {      
                                  $nbNouvellesLignes = 0;
                                  $tdata = new TDataCollecte;
                                  
                                  // on vide la table de toutes ses lignes
                                  $nbLignesSupp = $tdata->videTable();
                                  
-                                 // on parcourt le fichier ligne par ligne, avec ";" comme delimiteur
-                                 while (($data = fgetcsv($handle, 0, ";")) !== FALSE) {
-                                     // on créé un tableau avec 
-                                     // en clé : le nom de la colonne dans la table
-                                     // en valeur : la valeur a inserer pour cette colonne
-                                     // $data recupere la ligne pointée par le curseur
-                                     $ligne = array(
-                                         'C_NOMGRPGRP' => $data[0],
-                                         'C_NOMGROUPEMENT' => $data[1],
-                                         'C_FILLER1' => $data[2],
-                                         'C_MATIERE' => $data[3],
-                                         'C_INSEE' => $data[4],
-                                         'C_COMMUNE' => $data[5],
-                                         'C_LOCALITE' => $data[6],
-                                         'C_EMPLACEMENT' => $data[7],
-                                         'C_CONTENEUR' => $data[8],
-                                         'C_PATE' => $data[9],
-                                         'C_VOLUME' => $data[10],
-                                         'C_COLLECTE' => $data[11],
-                                         'C_FILLER2' => $data[12],
-                                         'C_FILLER3' => $data[13],
-                                         'C_DATE' => $data[14],
-                                         'C_HEURE' => $data[15]
-                                     );
-                                     // on appelle la fonction qui réalise l'insert dans le modele
-                                     $tdata->inserer($ligne);
-                                     
-                                     // compte le nombre de lignes
-                                     $nbNouvellesLignes++;
+                                 try {
+                                    // on parcourt le fichier ligne par ligne, avec ";" comme delimiteur
+                                    while (($data = fgetcsv($handle, 0, ";")) !== FALSE) {
+                                        // on créé un tableau avec 
+                                        // en clé : le nom de la colonne dans la table
+                                        // en valeur : la valeur a inserer pour cette colonne
+                                        // $data recupere la ligne pointée par le curseur
+                                        $ligne = array(
+                                            'C_NOMGRPGRP' => $data[0],
+                                            'C_NOMGROUPEMENT' => $data[1],
+                                            'C_FILLER1' => $data[2],
+                                            'C_MATIERE' => $data[3],
+                                            'C_INSEE' => $data[4],
+                                            'C_COMMUNE' => $data[5],
+                                            'C_LOCALITE' => $data[6],
+                                            'C_EMPLACEMENT' => $data[7],
+                                            'C_CONTENEUR' => $data[8],
+                                            'C_PATE' => $data[9],
+                                            'C_VOLUME' => $data[10],
+                                            'C_COLLECTE' => $data[11],
+                                            'C_FILLER2' => $data[12],
+                                            'C_FILLER3' => $data[13],
+                                            'C_DATE' => $data[14],
+                                            'C_HEURE' => $data[15]
+                                        );
+                                        // on appelle la fonction qui réalise l'insert dans le modele
+                                        $tdata->inserer($ligne);
+
+                                        // compte le nombre de lignes
+                                        $nbNouvellesLignes++;
+                                        $erreur = false;
+                                    }
+                                 }
+                                 catch(Exception $e)
+                                 {
+                                     $erreur = 'Fichier incorrect !';
                                  }
                                  // on ferme le fichier
                                  fclose($handle);      
                                  
                                  // supprime le fichier temporaire
                                  unlink($tempo);
-                                 $erreur = false;
                                  
                                  $this->view->nbLignesSupp = $nbLignesSupp;
                                  $this->view->nbNouvellesLignes = $nbNouvellesLignes;

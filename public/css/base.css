@@ -82,7 +82,7 @@ table td {
 }
 .reste {
     display : inline-block;
-    width : 80%;
+    width : 77%;
 }
 .resteTonnage {
     border-radius: 5px 5px 5px 5px;
@@ -131,6 +131,6 @@ table td {
 }
 #erreurGraph p {
     padding : 0 10px 1px 30px;
-    background: url('/img/sprite.png') no-repeat -35px -1px;
+    background: url('/img/error2.png') no-repeat;
     display : inline;
 }

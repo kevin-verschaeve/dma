@@ -7,12 +7,12 @@
 #erreurFichier p {
     color : red;
     padding-left : 30px;
-    background: url('/img/sprite.png') no-repeat -35px 0;
+    background: url('/img/error2.png') no-repeat;
 }
 .infos {
     padding-left : 20px;
     margin-top : 10px;
-    background : url('/img/infos.jpg') no-repeat;
+    background : url('/img/infos.png') no-repeat;
 }
 #input_fichier-label {
     color : #a8ddeb;

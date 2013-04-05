@@ -29,7 +29,7 @@ input[type="text"], .selec {
 }
 .errors li {
     padding : 0 10px 1px 30px;
-    background: url('/img/sprite.png') no-repeat -35px -1px;
+    background: url('/img/error2.png') no-repeat;
     font-size: 0.9em;
     font-family: "twentytwelve";
 }
