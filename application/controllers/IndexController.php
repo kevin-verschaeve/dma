@@ -26,6 +26,7 @@ class IndexController extends Zend_Controller_Action
      */
     public function tonnageajaxAction()
     {
+        try {
         // recupere les parametres par leur nom, et leur met une valeur par defaut si vide
         $matiere = $this->getRequest()->getParam('sel_matiere', 'Verre Couleur');
         $ajax = $this->getRequest()->getParam('ajax', false);
@@ -87,6 +88,10 @@ class IndexController extends Zend_Controller_Action
         // envoi le formulaire a la vue
         $this->view->form = $form;
         $this->view->ajax = $ajax;
+        }catch(Exception $e)
+        {
+            echo $e->getMessage();exit;
+        }
     }
     /**
      * Creer et gere un formulaire contenant seulement un input type file
@@ -249,14 +254,18 @@ class IndexController extends Zend_Controller_Action
     public function graphiqueAction()
     {
         $this->_helper->actionStack('header', 'index', 'default', array());
-        $id = $this->getRequest()->getParam('commune', 20);
+        $id = $this->getRequest()->getParam('commune', false);
 
+        $filtreUneCommune = false;
+        
+        $tc = new TSite;
         // recupere les liste des communes, pour le select
         $tcommune = new TCommune;
-        $communes = $tcommune->getCommunes();
+        $communes = $tcommune->getCommunes(true);
         $nomCommune = '';
 
         $lesCommunes = array();
+        $lesCommunes[0] = '-- Toutes les communes --';
         foreach($communes as $uneCommune)
         {
             $lesCommunes[$uneCommune['ID_COMMUNE']] = $uneCommune['NOM_COMMUNE'];
@@ -272,18 +281,64 @@ class IndexController extends Zend_Controller_Action
 
         $this->view->fcommunes = $fcommunes;
 
-        if($id != false && (int)$id > 0)    // une ville est choisie, ou on a celle par defaut (Saint Quentin)
+        if($id)
         {
-            $tc = new TSite;
-            // on va chercher tous ses conteneur avec leur tonnages
-            $TparConteneur = $tc->getTonnageSite((int)$id);
-            $this->view->nomCommune = $nomCommune;
-            $this->view->TparConteneur = $TparConteneur;
+            if($id != false && (int)$id > 0)    // une ville est choisie, ou on a celle par defaut (Saint Quentin)
+            {
+                // on va chercher tous ses conteneur avec leur tonnages
+                $TparConteneur = $tc->getTonnageSite((int)$id);
+                //Zend_Debug::dump($TparConteneur);exit;
+                $this->view->nomCommune = $nomCommune;
+                $this->view->tonnage = $TparConteneur;
+            }
+            else 
+            {
+                $this->view->erreur = 'La ville choisie n\'existe pas !';
+            }
+            $filtreUneCommune = true;
         }
-        else 
+        else
         {
-            $this->view->erreur = 'La ville choisie n\'existe pas !';
+            $tParCommune = $tc->getTonnageCommunes();
+            //Zend_Debug::dump($tParCommune);exit;
+            $this->view->tonnage = $tParCommune;
         }
+        $this->view->filtreUneCommune = $filtreUneCommune;
+    }
+    public function nouveausiteAction()
+    {
+        $this->_helper->actionStack('header', 'index', 'default', array());
+        
+        $fnvsite = new FnvSite;
+        $request = $this->getRequest();
+        
+        $send = false;
+        
+        if($request->isPost())
+        {
+            if($fnvsite->isValid($_POST))
+            {
+                $commune = $request->getParam('commune');
+                $nConteneur = $request->getParam('nconteneur');
+                $adresse = $request->getParam('adresse');
+                $nsite = $request->getParam('nsite');
+                
+                $donnees = array(
+                    'ID_COMMUNE' => $commune,
+                    'NO_CONTENEUR' => $nConteneur,
+                    'NOM_EMPLACEMENT' => $adresse,
+                    'ID_SITE' => $nsite
+                );
+                
+                $tprestataire = new TPrestataire;
+                $tprestataire->ajouterConteneur($donnees);
+                
+                $this->view->donnees = $donnees;
+                $send = true;
+            }
+        }
+        $this->view->send = $send;
+        $this->view->fnvsite = $fnvsite;
     }
 }
 

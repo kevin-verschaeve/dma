@@ -35,14 +35,15 @@
             <?php echo $this->layout()->header; ?>
             
             <div id="corps">         
-                <div id="menuGauche" class="left" >
+                <div id="menuGauche"  > <!-- class="left"-->
                     <ul>
-                        <li><a href="<?php echo $this->baseUrl('/');?>">Palmarès</a></li>
-                        <li><a href="<?php echo $this->baseUrl('/palmares/infosperiode');?>">Palmarès pour une période</a></li>
-                        <li><a href="<?php echo $this->baseUrl('/index/tonnage');?>">Informations pour un site</a></li>
-                        <li><a href="<?php echo $this->baseUrl('/index/importer');?>">Importer .csv</a>
-                        <li><a href="<?php echo $this->baseUrl('/index/graphique');?>">Graphiques</a>
-                        <li><a href="<?php echo $this->baseUrl('/index/changeconteneur');?>">Admin</a>
+                       <li><a href="<?php echo $this->baseUrl('/');?>">Palmarès</a></li><!--
+                    --><li><a href="<?php echo $this->baseUrl('/palmares/infosperiode');?>">Palmarès pour une période</a></li><!--
+                    --><li><a href="<?php echo $this->baseUrl('/index/tonnage');?>">Informations pour un site</a></li><!--
+                    --><li><a href="<?php echo $this->baseUrl('/index/importer');?>">Importer .csv</a><!--
+                    --><li><a href="<?php echo $this->baseUrl('/index/graphique');?>">Graphiques</a><!--
+                    --><li><a href="<?php echo $this->baseUrl('/index/nouveausite');?>">Ajouter un site</a><!--
+                    --><li><a href="<?php echo $this->baseUrl('/index/changeconteneur');?>">Admin</a>
                     </ul>
                 </div>
                 <div id="content" class="reste">  

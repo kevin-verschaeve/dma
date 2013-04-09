@@ -50,10 +50,10 @@ header p, footer p {
 }
 #content {
     min-height: 600px;
-    padding-left: 20px;
-    background-color:  #09223B; 
-    border-left : 1px solid white;
     position : relative;
+    /*padding-left: 20px;
+    background-color:  #09223B; 
+    border-left : 1px solid white;*/
 }
 #datatable {
     width : 100% !important;
@@ -81,8 +81,9 @@ table td {
     float : left;
 }
 .reste {
-    display : inline-block;
-    width : 77%;
+    /*display : inline-block;
+    width : 77%;*/
+    padding: 10px;
 }
 .resteTonnage {
     border-radius: 5px 5px 5px 5px;
@@ -92,22 +93,30 @@ table td {
 .both {
     clear : both;
 }
+
 /***************    MENU VERTICAL   ****************************/
 #menuGauche {
-    /*width : 200px;*/
-    padding-right : 20px;
     font-family: "twentytwelve";
     font-size : 0.9em;
+    min-height: 50px; 
 }
 #menuGauche ul {
-    padding : 20px 10px 0 20px;
+    text-align: center;
 }
-#menuGauche li {
-    margin : 8px 0;
+#menuGauche ul li {
+    display: inline-block;
+    margin-left: 5px;
+    background: #DCEDFA;
+    border-radius: 0 0 5px 5px;
 }
-#menuGauche li:hover {
-    list-style-type: square;
-    text-decoration: underline;
+#menuGauche ul li:hover a{
+    box-shadow: 0px 0px 3px black inset;
+}
+
+#menuGauche ul li a {
+    padding: 15px;  
+    color: black;
+    display: block;
 }
 
 /***************    TONNAGE     *********************************/
@@ -120,10 +129,11 @@ table td {
 }
 #chart_div {
    /* width : 500px;*/
-    height: 600px;
+    height: 400px;
+   margin-top : 20px; 
 }
 
-/************************   ERREUR  *****************************/
+/************************   ERREUR GRAPHIQUE  *****************************/
 #erreurGraph {
     color : red;
     margin-top : 20px;

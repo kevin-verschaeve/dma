@@ -40,7 +40,7 @@ class FMatiere extends Zend_Form
             // valeur : affichée à lécran
             // pour d'autres options, rajouter une ligne dans le tableau
               ->setMultiOptions(array(
-                    'Verre Couleur' => 'Verre Couleur',
+                    'Verre Couleur' => 'Verre',
                     'Papier/Carton' => 'Papier/Carton',
                     'Corps Creux' => 'Corps Creux'
              ))

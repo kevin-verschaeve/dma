@@ -89,6 +89,7 @@ class TSite extends Zend_Db_Table_Abstract
                     ->join(array('c'=>'T_COLLECTE'),'s.ID_SITE=c.ID_SITE',array('SUM(c.QTE_COLLECTE) qte'))
                     ->join(array('p'=>'T_PRESTATAIRE'),'p.NO_CONTENEUR=c.NO_CONTENEUR',array('NOM_EMPLACEMENT'))
                     ->where('s.ID_COMMUNE = ?', $idCommune)
+                    ->where('s.STAT_SITE = ?', 1)
                 ;
         
         $req->group('NOM_EMPLACEMENT');
@@ -96,6 +97,18 @@ class TSite extends Zend_Db_Table_Abstract
          // on trie du plus grand tonnage au plus petit
         $req->order('qte DESC');
         return $this->fetchAll($req)->toArray();
+    }
+    public function getTonnageCommunes()
+    {
+        $req = $this->select()->setIntegrityCheck(false)
+                    ->from(array('s'=>$this->_name),array())
+                    ->join(array('c'=>'T_COLLECTE'),'s.ID_SITE=c.ID_SITE',array('SUM(c.QTE_COLLECTE) qte'))
+                    ->join(array('co'=>'T_COMMUNE'),'s.ID_COMMUNE=co.ID_COMMUNE',array('NOM_COMMUNE'))
+                    ->where('STAT_SITE = ?', 1)
+                    ->group('s.ID_COMMUNE, co.NOM_COMMUNE')
+                ;
+        return $this->fetchAll($req)->toArray();
+                    
     }
     /**
      * Retourne les informations de tous les sites de toutes le communes

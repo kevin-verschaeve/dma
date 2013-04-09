@@ -34,11 +34,13 @@ class FSite extends Zend_Form
         $matiere->setLabel('Matiere : ')
                 ->setMultiOptions($this->tabMatieres)   // rempli le select avec un tableau
                 ->setValue($this->matChecked)   // selectionne une valeur par defaut
-                ->setAttrib('class', 'selec');
+                ->setAttrib('class', 'selec')
+                ->setAttrib('onchange','change();');
+                ;
                 
         // créé un select des site pour la matiere selectionnée
-        $conteneur = new Zend_Form_Element_Select('nSite');
-        $conteneur->setLabel('Site : ')
+        $site = new Zend_Form_Element_Select('nSite');
+        $site->setLabel('Site : ')
                 ->setMultiOptions($this->tabSite)
                 ->setRegisterInArrayValidator(false);
 
@@ -62,7 +64,7 @@ class FSite extends Zend_Form
         // une fois les éléments créés, il faut les ajouter au formulaire
         $this->addElements(array(
                 $matiere,
-                $conteneur, 
+                $site, 
                 $dateDebut,
                 $dateFin,
                 $submit

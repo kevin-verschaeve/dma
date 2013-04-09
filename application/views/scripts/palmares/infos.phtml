@@ -112,7 +112,7 @@
                 </tfoot>
                 <tbody>
                     <?php
-                        $i = 1;
+                        $i = 1; $total = 0;
                         foreach($this->infosSite as $unSite)
                         {
                             echo '<tr class="gradeA">
@@ -129,10 +129,16 @@
                                     <td>'.$unSite['LEVEES'].'</td>
                                 </tr>';
                             $i++;
+                            $qte = str_replace(',', '.', $unSite['QTE']);
+                            $total += $qte;
                         }
                     ?>
                 </tbody>
             </table>
+            <div>
+                Tonnage total : <?php echo $total;?> <br>
+                Tonnage : <span id="calcule">0</span>
+            </div>
         </div>
    <?php endif; ?>
 
@@ -154,14 +160,11 @@
     {       // sinon, on ne le prend pas car la balise script n'est pas gerée par HTML2PDF
 ?>
 <script type="text/javascript">
-// applique le datatable 
+// on appelle la fonction qui créé le datatable
 // on le met ici car il faut le réexcuter a chaque changement de tableau
 // verre couleur -> papier/carton, etc...
 $(document).ready(function() {
-   $('#datatable').dataTable({
-        "bJQueryUI": true,
-        "sPaginationType": "full_numbers"
-    });
+    doDatatables();
 });
 </script>
 <?php } if($this->ajax) exit; ?>

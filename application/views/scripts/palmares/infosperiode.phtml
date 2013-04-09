@@ -56,7 +56,7 @@
     </tfoot>
     <tbody>
     <?php
-        $i = 1;
+        $i = 1; $total = 0;
         foreach($this->infosSite as $unSite)
         {
              echo '<tr class="gradeA">
@@ -72,17 +72,20 @@
                         <td>'.$unSite['LEVEES'].'</td>
                     </tr>';
             $i++;
+            $qte = str_replace(',', '.', $unSite['QTE']);
+            $total += $qte;
         }
         
     ?>
     </tbody>
 </table> 
+<div>
+    Tonnage total : <?php echo $total;?> <br>
+    Tonnage : <span id="calcule">0</span>
+</div>
 <script type="text/javascript">
 $(document).ready(function() {
-   $('#datatable').dataTable({
-        "bJQueryUI": true,
-        "sPaginationType": "full_numbers"
-    });
+    doDatatables();
 });
 </script>
 

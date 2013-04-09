@@ -23,50 +23,44 @@ $(document).ready(function() {
             $('#recup').html(data);
         });
     });
-    // au changement de valeur du select
-    $('.selec').change(function() {
-        // recupere la valeur selectionnée
-        var matiere = $('.selec').val();
-        // appel a la fonction permettant de recuperer les infos en fonction de la matiere
-        $.get('/index/tonnageajax', {sel_matiere:matiere, ajax:true}, function(data) {
-            // vide le div.formConteneur
-            $('.formConteneur').empty();
-            // y place la vue de tonnageajax
-            $('.formConteneur').html(data);
-        });
-    });
     
     $('#sel_communes').change(function() {
         var commune = $('#sel_communes').val();
-        window.location = '/index/graphique/commune/'+commune;
+        var url = commune == 0 ? '' : '/commune/'+commune;
+        window.location = '/index/graphique'+url;
     });
+   
+    $('#blocFormTonnage form > .divform:last-child').prepend('<button type="button" id="show" name="showDates">Entrer une periode</button>');
     
-       
-    $('.formConteneur .divform:last-child').prepend('<button type="button" id="show" name="showDates">Entrer une periode</button>');
-    $('.formConteneur .divdate .divform:last-child button').remove();
-    attendAction();
-    
+    attendAction();    
 });
+function change() {
+    var matiere = $('#sel_matiere').val();
+    $.ajax({
+        method : 'get',
+        url: '/index/tonnageajax',
+        data : {sel_matiere:matiere, ajax:true},
+        success : function(data) {
+            $('#blocFormTonnage').empty();
+            $('#blocFormTonnage').html(data);
+            $('#blocFormTonnage form > .divform:last-child').prepend('<button type="button" id="show" name="showDates">Entrer une periode</button>');
+        }
+    });
+}
 function attendAction() {
     // au click sur id=show
     $('#show').on('click', function() {
+        $('.divdate').fadeIn(500);
         // on verifie si on est sur IE, pour ajuster un effet, et l'affichage des dates
         // qui n'allaient pas
         if(checkIE()) {
-            $('.divdate').fadeIn(500);
-            $('.formConteneur .divdate').css('display', 'inline-block');
-        }
-        else {
-            // un autre effet pour les autres navigateurs
-            $('.divdate').effect('bounce', {times : 3}, 500);
+            $('#blocFormTonnage .divdate').css('display', 'inline');
         }
         
         // supprime le bouton que l'on vient de cliqué
         $('#show').remove();
-        $('#sub').css('margin-top', '5px');
         // créé le nouveau bouton (celui qui servira a cacher ce qu'on vien de montrer)
-        $('.formConteneur .divform:last-child').prepend('<button type="button" id="hide" name="hideDates">Annuler</button>');
-        $('.formConteneur .divdate .divform:last-child button').remove();
+        $('#blocFormTonnage form > .divform:last-child').prepend('<button type="button" id="hide" name="hideDates">Annuler</button>');
         // rappel de cette fonction pour attendre un nouveau click
         attendAction();
     });
@@ -81,10 +75,8 @@ function attendAction() {
         
         // supprime le bouton qui vient d'être cliqué
         $('#hide').remove();
-        $('#sub').css('margin-top', '0');
         // créé le nouveau bouton, qui sert a faire apparaitre les dates
-        $('.formConteneur .divform:last-child').prepend('<button type="button" id="show" name="showDates">Entrer une periode</button>');
-        $('.formConteneur .divdate .divform:last-child button').remove();
+        $('#blocFormTonnage form > .divform:last-child').prepend('<button type="button" id="show" name="showDates">Entrer une periode</button>');
         // attend la prochaine action
         attendAction();
     });    
@@ -104,7 +96,6 @@ function attendAction() {
            $('#tempo').remove();
         });
     });
-    
 }
 /**
  * 
@@ -125,4 +116,38 @@ function checkIE() {
     else {
         alert('pas ie');
     }*/
+}
+
+function doDatatables() {
+    $('#datatable').dataTable({
+        "bJQueryUI": true,
+        "bProcessing" : true,
+        "sPaginationType": "full_numbers",
+        // appelé a chaque création de ligne
+        "fnRowCallback": function( nRow, aData ) {
+            // recupere la valeur de la colonne tonnage
+            // remplace les , en . pour pouvoir convertir en float
+            // converti en float
+            var TenCours = aData[4];
+            var Treplace = TenCours.replace(',','.');
+            var tonnageEnCours = parseFloat(Treplace);
+            
+            // recupere la valeur de l'ancien tonnage (avant d'ajouter celui de cette ligne)
+            // et fait les meme conversions que l'autre tonnage
+            var oldT = $('#calcule').text();
+            var oldTreplace = oldT.replace(',','.');
+            var oldTonnage = parseFloat(oldTreplace);
+            
+            // calcule le nouveau tonnage
+            var nvTonnage = oldTonnage + tonnageEnCours;
+            // arrondi a 3 chiffre apres la virgule, insert le nouveau tonnage dans la page
+            $('#calcule').html(nvTonnage.toFixed(3));
+            return nRow;
+        },
+        "fnPreDrawCallback" : function() {
+            // reinitialise le tonnage a 0
+            $('#calcule').empty();
+            $('#calcule').text('0');
+        }
+    });
 }

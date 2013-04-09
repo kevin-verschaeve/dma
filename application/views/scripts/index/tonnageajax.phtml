@@ -48,13 +48,17 @@
     }
     else 
     {  
-?>
+        if(!$this->ajax):
+    ?>
+
     <p class="infos">
         Sélectionnez une matière, pour avoir les conteneurs correspondants.<br />
         Vous pouvez spécifier une période, si vous ne le faites pas, les données 
         affichées iront de la date la plus ancienne à aujourd'hui.
     </p>
-<?php   
+    
+<?php
+        endif;
     }
     if($this->ajax) exit;
 ?>

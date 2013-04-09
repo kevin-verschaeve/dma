@@ -11,50 +11,70 @@
     
     <!-- recupere l'api   -->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-      
+    <script type="text/javascript">      
       google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-      
-      // dessine le graphique et le place dans le div
-      function drawChart() {
-       
-       // créer un tableau a 2 dimensions, avec pour chaque ligne (sauf la premiere qui contient les tritre des colonnes)
-       // le nom de l'emplacement et son tonnage
-        var data = google.visualization.arrayToDataTable([
-            ['EMPLACEMENT', 'TONNAGE'],
-        <?php
-        $data ='';
-        $max = count($this->TparConteneur);
-        $i = 1;
-        foreach($this->TparConteneur as $site)
-        {
-          $data .= "['".addslashes(utf8_encode($site['NOM_EMPLACEMENT']))."', ".(int)$site['QTE']."]";
-          $data .= $i == $max ? '' : ',';
-          $i++;
-        }
-        echo $data;
-        
-        if($this->nomCommune != '') {
-            $title = "Tonnage par site ($this->nomCommune)";
-        }
-        else {
-            $title = 'Erreur! Commune introuvable';
-        }
-        ?> ]);
-          
-        // regle les options du graphique
-        var options = {
-          title: '<?php echo $title; ?>',
-          titleTextStyle : { color  : 'white', fontSize: 20}, 
-          height : '100%',
-          legend : {textStyle: {color:'white', fontSize : 15}},
-          chartArea: { width:"100%",height:"70%", left:0},
-          backgroundColor : '#09223B',
-          is3D: true
-        };
+      google.setOnLoadCallback(drawVisualization);
 
-        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
+      function drawVisualization() {
+      
+        <?php 
+          if($this->nomCommune != '') {
+              $title = "'Tonnage par site ($this->nomCommune)'";
+          }
+          else {
+              $title = "'Erreur! Commune introuvable'";
+          }
+        ?>
+      
+      
+        var wrapper = new google.visualization.ChartWrapper({
+          chartType: 'ColumnChart',
+          dataTable: [
+              ['', <?php 
+                if($this->filtreUneCommune)
+                {
+                    $libelle = 'NOM_EMPLACEMENT';
+                }
+                else 
+                {
+                    $libelle = 'NOM_COMMUNE';
+                    $title = "'Toutes les communes'";
+                }
+                $data ="";
+                $max = count($this->tonnage);
+                $i = 1;
+                foreach($this->tonnage as $site)
+                {
+                  $data .= "'".addslashes(utf8_encode($site[$libelle]))."'";
+                  $data .= $i == $max ? "]," : ",";
+                  $i++;
+                }
+                $i = 1;
+                $data .= "['',";
+                foreach($this->tonnage as $site)
+                {
+                  $data .= (int)$site['QTE'];
+                  $data .= $i == $max ? '' : ',';
+                  $i++;
+                }
+                echo $data;
+              ?>                
+            ]],
+          options: {
+            'title': <?php echo $title;?>,
+            height : '100%',
+            chartArea: { height:"70%", left:40},
+            backgroundColor : '#E6E6E6',
+            legend : {textStyle: {fontSize : 15}},
+            titleTextStyle : {fontSize: 20}, 
+            tooltip : { showColorCode : true }
+          },
+          containerId: 'chart_div'
+        });
+        
+        wrapper.draw();
       }
+      
+      
+      
 </script>

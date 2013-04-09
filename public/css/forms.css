@@ -17,7 +17,7 @@ input[type="text"], .selec {
     display : inline;
     color : #a8ddeb;
 }
-#sub-label, #sub_infosPeriode-label {
+#sub-label, #sub_infosPeriode-label, #sub_nvsite-label {
     display : none !important;
 }
 .errors {
@@ -33,12 +33,15 @@ input[type="text"], .selec {
     font-size: 0.9em;
     font-family: "twentytwelve";
 }
-.bt_submit, #show, #hide, #removeBouton input {
+.bt_submit, #show, #hide, #removeBouton input, #sub_nvsite {
     background: white;
     padding : 2px;
     margin-top: -2px;
     border: 1px solid #a8ddeb;
     cursor : pointer;
+}
+#removeBouton input {
+    margin-top : 10px;
 }
 .bt_submit:hover, #removeBouton input:hover {
     cursor : pointer;
@@ -84,9 +87,6 @@ input[type="text"], .selec {
     float: left;
     margin-right:  10px;
 }
-.formConteneur .divform:last-child {
-    float: none;
-}
 .formConteneur .divdate .divform:last-child {
     margin-left : 0; 
     margin-top : 0;    
@@ -114,6 +114,42 @@ input[type="text"], .selec {
     left : -7px;
     top: 90px;
 }
+
+/***********************    form Nouveau site       ************************/
+#fnvsite {
+    text-align: center;
+}
+#divfnvsite {
+    display : inline-block;
+}
+.blocnvsite {
+    margin : 10px 0;
+    text-align : right;
+}
+.blocnvsite > p {
+    float: left;
+    text-align : right;
+    color: #A8DDEB;
+}
+.blocnvsite > input {
+    margin-left : 5px;
+    width : 188px;
+}
+.erreurValid li {
+    text-align: right;
+    color : #cd0a0a;
+}
+
+#ajoutSite {
+    padding : 20px;
+}
+#ajoutSite h4 {
+    font-size: 2em;
+}
+#ajoutSite > p {
+    margin: 10px;
+}
+
 
 
 /***************    BOUTON PDF  *********************************/

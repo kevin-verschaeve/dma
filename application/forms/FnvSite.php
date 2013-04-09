@@ -1,0 +1,70 @@
+<?php
+
+class FnvSite extends Zend_Form
+{
+    private $communes;
+    
+    public function __construct() {
+        
+        $tcommune = new TCommune;
+        $coms = $tcommune->getCommunes(false);
+        $lesCommunes = array();
+        foreach ($coms as $uneCommune)
+        {
+            $lesCommunes[$uneCommune['ID_COMMUNE']] = $uneCommune['NOM_COMMUNE'];
+        }
+        $this->communes = $lesCommunes;
+        
+        parent::__construct();
+    }
+
+    public function init() {
+        $this->setAction('/index/nouveausite')
+             ->setMethod('post')
+             ->setName('fnvsite');
+        
+        $this->setDecorators(array(
+            'FormElements',
+            array('HtmlTag', array('tag' => 'div', 'id'=>'divfnvsite')),
+            array('Form',array('class'=>'zend_form')), // ajoute la class zend_form au formulaire
+        ));
+        
+        $nSite = new Zend_Form_Element_Text('nsite');
+        $nSite->setLabel('Attribuer un n° de site : ')
+              ->addValidator('digits')
+              ->addValidator('greaterThan',false, array('min'=>0))
+              ->setRequired(true)
+                ;
+        
+        $nConteneur = new Zend_Form_Element_Text('nconteneur');
+        $nConteneur->setLabel('N° du conteneur (prestataire) : ')
+                   ->setRequired(true)
+                ;
+        
+        $commune = new Zend_Form_Element_Select('commune');
+        $commune->setLabel('Commune : ');
+        $commune->addMultiOptions($this->communes);
+        
+        $adresse = new Zend_Form_Element_Text('adresse');
+        $adresse->setLabel('Adresse : ');
+        
+        $submit = new Zend_Form_Element_Submit('sub_nvsite');
+        $submit->setLabel('Ajouter');
+        
+        $this->addElements(array(
+                    $nSite,
+                    $nConteneur,
+                    $commune,
+                    $adresse,
+                    $submit
+                ));
+        
+        $this->setElementDecorators(array(
+            array('ViewHelper'),
+            array('Errors', array('tag' => 'div', 'class' => 'erreurValid')),
+            array('Label', array('tag' => 'p')),
+            array('HtmlTag', array('tag' => 'div', 'class' => 'blocnvsite'))
+         ));
+        
+    }
+}

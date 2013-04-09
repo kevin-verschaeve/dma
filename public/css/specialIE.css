@@ -15,3 +15,16 @@
     margin-top : 0;
     background: none;
 }
+
+#menuGauche ul li {
+    display: inline !important;
+    zoom :1;
+}
+
+#removeBouton input {
+    margin-top: 0 !important;
+}
+
+#blocFormTonnage .divDate {
+    zoom : -1;
+}

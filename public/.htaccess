@@ -1,5 +1,5 @@
 # regle l'environnement de l'application
-SetEnv APPLICATION_ENV production
+SetEnv APPLICATION_ENV development
 
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} -s [OR]

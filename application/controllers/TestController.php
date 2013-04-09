@@ -5,7 +5,7 @@ class TestController extends Zend_Controller_Action
     public function indexAction()
     {
         
-        $layout = Zend_Layout::getMvcInstance();
+       /* $layout = Zend_Layout::getMvcInstance();
         $layout->setLayout('vide');
         try 
         {
@@ -16,7 +16,7 @@ class TestController extends Zend_Controller_Action
         {
             echo $e->getMessage();
         }
-        exit;
+        exit;*/
         
     }
     public function pdfAction()

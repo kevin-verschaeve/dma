@@ -1,0 +1,13 @@
+<?php 
+    echo $this->fnvsite;
+    
+    if($this->send) : 
+?>
+    <div id="ajoutSite">
+        <h4>Ajout réussi</h4>
+        <p>Conteneur n° <?php echo $this->donnees['NO_CONTENEUR'];?></p>
+        <p>Site n° <?php echo $this->donnees['ID_SITE'];?></p>
+        <p>Adresse : <?php echo $this->donnees['NOM_EMPLACEMENT'];?></p>
+    </div>
+    
+<?php endif; ?>
