@@ -48,6 +48,9 @@ class FnvSite extends Zend_Form
         $adresse = new Zend_Form_Element_Text('adresse');
         $adresse->setLabel('Adresse : ');
         
+        $complement = new Zend_Form_Element_Text('complement');
+        $complement->setLabel('Complement : ');
+        
         $submit = new Zend_Form_Element_Submit('sub_nvsite');
         $submit->setLabel('Ajouter');
         
@@ -56,6 +59,7 @@ class FnvSite extends Zend_Form
                     $nConteneur,
                     $commune,
                     $adresse,
+                    $complement,
                     $submit
                 ));
         

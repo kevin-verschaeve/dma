@@ -258,9 +258,9 @@ class IndexController extends Zend_Controller_Action
 
         $filtreUneCommune = false;
         
-        $tc = new TSite;
-        // recupere les liste des communes, pour le select
+        $tsite = new TSite;
         $tcommune = new TCommune;
+        // recupere les liste des communes, pour le select
         $communes = $tcommune->getCommunes(true);
         $nomCommune = '';
 
@@ -283,10 +283,10 @@ class IndexController extends Zend_Controller_Action
 
         if($id)
         {
-            if($id != false && (int)$id > 0)    // une ville est choisie, ou on a celle par defaut (Saint Quentin)
+            if($id != false && (int)$id > 0)    // une ville est choisie
             {
                 // on va chercher tous ses conteneur avec leur tonnages
-                $TparConteneur = $tc->getTonnageSite((int)$id);
+                $TparConteneur = $tsite->getTonnageSite((int)$id);
                 //Zend_Debug::dump($TparConteneur);exit;
                 $this->view->nomCommune = $nomCommune;
                 $this->view->tonnage = $TparConteneur;
@@ -299,12 +299,15 @@ class IndexController extends Zend_Controller_Action
         }
         else
         {
-            $tParCommune = $tc->getTonnageCommunes();
+            $tParCommune = $tsite->getTonnageCommunes();
             //Zend_Debug::dump($tParCommune);exit;
             $this->view->tonnage = $tParCommune;
         }
         $this->view->filtreUneCommune = $filtreUneCommune;
     }
+    /**
+     * Ajouter un site en base
+     */
     public function nouveausiteAction()
     {
         $this->_helper->actionStack('header', 'index', 'default', array());
@@ -313,6 +316,7 @@ class IndexController extends Zend_Controller_Action
         $request = $this->getRequest();
         
         $send = false;
+        $msg = false;
         
         if($request->isPost())
         {
@@ -321,9 +325,10 @@ class IndexController extends Zend_Controller_Action
                 $commune = $request->getParam('commune');
                 $nConteneur = $request->getParam('nconteneur');
                 $adresse = $request->getParam('adresse');
+                $complement = $request->getParam('complement');
                 $nsite = $request->getParam('nsite');
                 
-                $donnees = array(
+                $donneesPrestataire = array(
                     'ID_COMMUNE' => $commune,
                     'NO_CONTENEUR' => $nConteneur,
                     'NOM_EMPLACEMENT' => $adresse,
@@ -331,14 +336,37 @@ class IndexController extends Zend_Controller_Action
                 );
                 
                 $tprestataire = new TPrestataire;
-                $tprestataire->ajouterConteneur($donnees);
+                $insertPrest = $tprestataire->ajouterConteneur($donneesPrestataire);
                 
-                $this->view->donnees = $donnees;
+                $donneesSite = array(
+                    'ID_COMMUNE' => $commune,
+                    'ID_SITE' => $nsite,
+                    'NOM_SITE' => $adresse,
+                    'LOC_SITE' => $complement,
+                    'USED_SITE' => 1,
+                    'STAT_SITE' => 1
+                );
+                
+                $tsite = new TSite;
+                $insertSite = $tsite->ajouter($donneesSite);
+                
+                
+                if($insertPrest && $insertSite)
+                {
+                    $this->view->donnees = $donneesPrestataire;
+                    $this->view->complement = $complement;
+                    $msg = 'Insertion réussie';
+                }
+                else
+                {
+                    $msg = 'Echec lors de la création';
+                }
                 $send = true;
             }
         }
         $this->view->send = $send;
         $this->view->fnvsite = $fnvsite;
+        $this->view->message = $msg;
     }
 }
 

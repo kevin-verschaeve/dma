@@ -27,68 +27,63 @@
     <?php endif; ?>
 </div>
 <?php endif; ?>
+
 <?php if($this->send) : ?>
-<p id="annonceStats">
-    Statistiques pour les conteneurs <?php echo strtolower($this->matiere); ?>
-    pour la période du <?php echo $this->dateDebut; ?> au <?php echo $this->dateFin;?>
-</p>
+        <p id="annonceStats">
+            Statistiques pour les conteneurs <?php echo strtolower($this->matiere); ?>
+            pour la période du <?php echo $this->dateDebut; ?> au <?php echo $this->dateFin;?>
+        </p>
 
-<table class="display" id="datatable">
-    <thead>
-        <tr>
-            <th>N°</th>
-            <th>N° Site</th>
-            <th>Adresse</th>
-            <th>Commune</th>
-            <th>Tonnage</th>
-            <th>Nb relevés</th>
-        </tr>
-    </thead>
-    <tfoot>
-        <tr>
-            <th>N°</th>
-            <th>N° Site</th>
-            <th>Adresse</th>
-            <th>Commune</th>
-            <th>Tonnage</th>
-            <th>Nb relevés</th>
-        </tr>
-    </tfoot>
-    <tbody>
-    <?php
-        $i = 1; $total = 0;
-        foreach($this->infosSite as $unSite)
-        {
-             echo '<tr class="gradeA">
-                        <td>'.$i.'</td>
-                        <td>'.$unSite['ID_SITE'].'</td>
-                        <td>'.$unSite['NOM_SITE'];//
-                        if($unSite['LOC_SITE'] != '')
-                        {
-                            echo ', '.utf8_encode($unSite['LOC_SITE']);
-                        }
-                  echo '</td><td>'.$unSite['NOM_LOCALITE'].'</td>
-                        <td>'.$unSite['QTE'].'</td>
-                        <td>'.$unSite['LEVEES'].'</td>
-                    </tr>';
-            $i++;
-            $qte = str_replace(',', '.', $unSite['QTE']);
-            $total += $qte;
-        }
-        
-    ?>
-    </tbody>
-</table> 
-<div>
-    Tonnage total : <?php echo $total;?> <br>
-    Tonnage : <span id="calcule">0</span>
-</div>
-<script type="text/javascript">
-$(document).ready(function() {
-    doDatatables();
-});
-</script>
+        <table class="display" id="datatable">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>N° Site</th>
+                    <th>Adresse</th>
+                    <th>Commune</th>
+                    <th>Tonnage</th>
+                    <th>Nb relevés</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>N°</th>
+                    <th>N° Site</th>
+                    <th>Adresse</th>
+                    <th>Commune</th>
+                    <th>Tonnage</th>
+                    <th>Nb relevés</th>
+                </tr>
+            </tfoot>
+            <tbody>
+            <?php
+                $i = 1; $total = 0;
+                foreach($this->infosSite as $unSite)
+                {
+                     echo '<tr class="gradeA">
+                                <td>'.$i.'</td>
+                                <td>'.$unSite['ID_SITE'].'</td>
+                                <td>'.$unSite['NOM_SITE'];//
+                                if($unSite['LOC_SITE'] != '')
+                                {
+                                    echo ', '.utf8_encode($unSite['LOC_SITE']);
+                                }
+                          echo '</td><td>'.$unSite['NOM_LOCALITE'].'</td>
+                                <td>'.$unSite['QTE'].'</td>
+                                <td>'.$unSite['LEVEES'].'</td>
+                            </tr>';
+                    $i++;
+                    $qte = str_replace(',', '.', $unSite['QTE']);
+                    $total += $qte;
+                }
 
+            ?>
+            </tbody>
+        </table> 
+       <p id="totaux">
+           <span id="ttotal"></span> 
+           (<?php echo $total;?> Total)
+       </p>
 <?php 
     else:
         if($this->creerPdf == 'ok') : 
@@ -100,6 +95,7 @@ $(document).ready(function() {
     ?>
     <style type="text/css">
         th { border: 1px solid black; }
+        td { border : .1px solid black; padding : 5px;}
     </style>
     <page backtop="20mm" backbottom="10mm">
         <page_header><h1 style="text-align:center;">Statistiques <?php echo $this->dateDebut.' : '.$this->dateFin; ?></h1><hr></page_header>
@@ -137,14 +133,14 @@ $(document).ready(function() {
                 {
                      echo '<tr>
                                 <td style="width: 5%">'.$i.'</td>
-                                <td style="width: 10%">'.$unSite['ID_SITE'].'</td>
-                                <td style="text-align: left; width: 50%">'.$unSite['NOM_SITE'];//
+                                <td style="width: 10%">'.ucfirst(strtolower($unSite['ID_SITE'].'</td>
+                                <td style="text-align: left; width: 50%; padding-left : 5px;">'.$unSite['NOM_SITE']));
                                 if($unSite['LOC_SITE'] != '')
                                 {
-                                    echo ', '.utf8_encode($unSite['LOC_SITE']);
+                                    echo ', '.utf8_encode(ucfirst(strtolower($unSite['LOC_SITE'])));
                                 }
                           echo '</td>
-                                <td style="text-align: left; width: 15%">'.$unSite['NOM_LOCALITE'].'</td>
+                                <td style="text-align: left; width: 15%">'.ucfirst(strtolower($unSite['NOM_LOCALITE'])).'</td>
                                 <td style="width: 10%">'.$unSite['QTE'].'</td>
                                 <td style="width: 10%">'.$unSite['LEVEES'].'</td>
                             </tr>';
@@ -157,7 +153,7 @@ $(document).ready(function() {
     </page>
     <?php 
         $content = ob_get_clean();
-        
+        ob_end_clean();
         require_once($this->baseUrl('/html2pdf/html2pdf.class.php'));
         $html2pdf = new HTML2PDF('P', 'A4', 'fr');
         // ecris l'html dans un document pdf

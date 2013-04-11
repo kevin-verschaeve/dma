@@ -21,9 +21,10 @@ class TSite extends Zend_Db_Table_Abstract
      * pour une matiere (Verre couleur par defaut)
      * pendant une periode (si pas spécifiée, ou un champs sur deux remplis => 
      * depuis le premier relevé a aujourdhui)
-     * et le nombre de relevés effectués pour avoir le tonnage sur un conteneur
+     * le nombre de relevés effectués 
+     * le tonnage du ou des conteneur(s)
      * 
-     * @param string $nSite : le numero du site
+     * @param int $nSite : le numero du site
      * @param string $matiere : la matiere du conteneur que l'on cherche
      * @param date $dateDebut : date de debut de periode de recherche
      * @param date $dateFin : date de fin
@@ -80,7 +81,6 @@ class TSite extends Zend_Db_Table_Abstract
     /**
      * Retourne le nom et le tonnage de chaque site dans la commune $idCommune
      * @param int $idCommune : la commune recherchée
-     * @return type
      */
     public function getTonnageSite($idCommune)
     {
@@ -90,14 +90,15 @@ class TSite extends Zend_Db_Table_Abstract
                     ->join(array('p'=>'T_PRESTATAIRE'),'p.NO_CONTENEUR=c.NO_CONTENEUR',array('NOM_EMPLACEMENT'))
                     ->where('s.ID_COMMUNE = ?', $idCommune)
                     ->where('s.STAT_SITE = ?', 1)
+                    ->group('p.NOM_EMPLACEMENT')
+                    ->order('qte DESC')
                 ;
         
-        $req->group('NOM_EMPLACEMENT');
-        
-         // on trie du plus grand tonnage au plus petit
-        $req->order('qte DESC');
         return $this->fetchAll($req)->toArray();
     }
+    /**
+     * Le total du tonnage de tous les sites pour chaque commune
+     */
     public function getTonnageCommunes()
     {
         $req = $this->select()->setIntegrityCheck(false)
@@ -106,12 +107,13 @@ class TSite extends Zend_Db_Table_Abstract
                     ->join(array('co'=>'T_COMMUNE'),'s.ID_COMMUNE=co.ID_COMMUNE',array('NOM_COMMUNE'))
                     ->where('STAT_SITE = ?', 1)
                     ->group('s.ID_COMMUNE, co.NOM_COMMUNE')
+                    ->order('qte DESC')
                 ;
         return $this->fetchAll($req)->toArray();
                     
     }
     /**
-     * Retourne les informations de tous les sites de toutes le communes
+     * Les informations de tous les sites de toutes les communes
      */
     public function getSitesCommunes()
     {
@@ -120,8 +122,16 @@ class TSite extends Zend_Db_Table_Abstract
                     ->distinct()
                     ->from(array('s'=>$this->_name), array('NOM_SITE', 'LOC_SITE','ID_SITE','STAT_SITE'))
                     ->join(array('co'=>'T_COMMUNE'),'s.ID_COMMUNE=co.ID_COMMUNE', 'NOM_COMMUNE')
-                    ->order('NOM_COMMUNE DESC, ID_SITE ASc')
+                    ->order('NOM_COMMUNE DESC, ID_SITE ASC')
                 ;
         return $this->fetchAll($req)->toArray();
+     }
+     /**
+      * Ajouter un site
+      * @param array : $donnees tableau de données a inserer (nomDuChamp => valeurDuChamp)
+      */
+     public function ajouter($donnees)
+     {
+         return $this->insert($donnees);
      }
 }

@@ -2,12 +2,17 @@
     echo $this->fnvsite;
     
     if($this->send) : 
+        if($this->message) :
 ?>
+        <div><h4><?php echo $this->message;?></h4></div>
+    <?php endif; ?>
+    
     <div id="ajoutSite">
-        <h4>Ajout réussi</h4>
         <p>Conteneur n° <?php echo $this->donnees['NO_CONTENEUR'];?></p>
         <p>Site n° <?php echo $this->donnees['ID_SITE'];?></p>
-        <p>Adresse : <?php echo $this->donnees['NOM_EMPLACEMENT'];?></p>
+        <p>
+            Adresse : <?php echo $this->donnees['NOM_EMPLACEMENT'];?>
+            (<?php echo $this->complement;?>)
+        </p>
     </div>
-    
 <?php endif; ?>

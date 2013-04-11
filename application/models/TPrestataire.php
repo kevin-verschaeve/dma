@@ -10,6 +10,6 @@ class TPrestataire  extends Zend_Db_Table_Abstract
      */
     public function ajouterConteneur($donnees)
     {
-        $this->insert($donnees);
+        return $this->insert($donnees);
     }
 }

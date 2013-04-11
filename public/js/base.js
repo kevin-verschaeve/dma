@@ -21,6 +21,7 @@ $(document).ready(function() {
             // insert le contenu de la vue appelée par l'action, dans le div id="recup"
             $('#recup').empty();
             $('#recup').html(data);
+            doDatatables();
         });
     });
     
@@ -32,7 +33,8 @@ $(document).ready(function() {
    
     $('#blocFormTonnage form > .divform:last-child').prepend('<button type="button" id="show" name="showDates">Entrer une periode</button>');
     
-    attendAction();    
+    attendAction();   
+    doDatatables();
 });
 function change() {
     var matiere = $('#sel_matiere').val();
@@ -120,34 +122,62 @@ function checkIE() {
 
 function doDatatables() {
     $('#datatable').dataTable({
-        "bJQueryUI": true,
+        "bJQueryUI": true,  // ajoute le style par defaut (jqueryUI) sur la table
+        // affiche une information de chargement de la table si trop longue a charger
         "bProcessing" : true,
-        "sPaginationType": "full_numbers",
-        // appelé a chaque création de ligne
-        "fnRowCallback": function( nRow, aData ) {
-            // recupere la valeur de la colonne tonnage
-            // remplace les , en . pour pouvoir convertir en float
-            // converti en float
-            var TenCours = aData[4];
-            var Treplace = TenCours.replace(',','.');
-            var tonnageEnCours = parseFloat(Treplace);
+        "sPaginationType": "full_numbers",  // le mode de navigation dans les pages du tableau
+        // le nombre de résultat que l'utilisateur peut choisir
+        "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Tous"]],
+        
+        // appelé a la création du footer de la table
+        "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) 
+        {            
+            var tr = nRow.getElementsByTagName('th');
+            var thtonnage = tr[4];
             
-            // recupere la valeur de l'ancien tonnage (avant d'ajouter celui de cette ligne)
-            // et fait les meme conversions que l'autre tonnage
-            var oldT = $('#calcule').text();
-            var oldTreplace = oldT.replace(',','.');
-            var oldTonnage = parseFloat(oldTreplace);
-            
-            // calcule le nouveau tonnage
-            var nvTonnage = oldTonnage + tonnageEnCours;
-            // arrondi a 3 chiffre apres la virgule, insert le nouveau tonnage dans la page
-            $('#calcule').html(nvTonnage.toFixed(3));
-            return nRow;
-        },
-        "fnPreDrawCallback" : function() {
-            // reinitialise le tonnage a 0
-            $('#calcule').empty();
-            $('#calcule').text('0');
-        }
+            if( thtonnage.textContent !== "Utiliser ?") 
+            {
+                /*
+                // parcours Toutes les lignes du tableau
+                var TenCours = total = 0;
+                for ( var i=0 ; i<aaData.length ; i++ )
+                { 
+                    // recupere le tonnage de la ligne en cours
+                    TenCours = aaData[i][4];
+                    // remplace les "," par des "." pour la conversion en float
+                    TenCours = TenCours.replace(',','.');
+                    // converti en float
+                    TenCours = parseFloat(TenCours);
+
+                    // ajoute le tonnage en cours au tonnage total
+                    total += TenCours; 
+                }
+                 */
+                // parcours seulement les lignes affichées (a cause d'un filtre, tri...)
+                TenCours = 0;
+                var totalpage = 0;
+                for ( var i=iStart ; i<iEnd ; i++ )
+                {
+                    // recupere le tonnage de la ligne en cours
+                    TenCours = aaData[ aiDisplay[i] ][4];
+                    // remplace les "," par des "." pour la conversion en float
+                    TenCours = TenCours.replace(',','.');
+                    // converti en float
+                    TenCours = parseFloat(TenCours);
+
+                    // ajoute le tonnage en cours au tonnage total de la page
+                    totalpage += TenCours; 
+
+                }
+
+                // modifi le td du footer, en y placant les 2 totaux recupérés
+                /*
+                var nCells = nRow.getElementsByTagName('th');
+                nCells[4].innerHTML = totalpage.toFixed(3) + ' T <br>('+ total.toFixed(3) +' Total)';
+                */
+                
+                $('#ttotal').html(totalpage.toFixed(3)+' T');
+            }
+        }                
     });
 }

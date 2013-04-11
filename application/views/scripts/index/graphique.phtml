@@ -18,12 +18,22 @@
       function drawVisualization() {
       
         <?php 
-          if($this->nomCommune != '') {
-              $title = "'Tonnage par site ($this->nomCommune)'";
-          }
-          else {
-              $title = "'Erreur! Commune introuvable'";
-          }
+            
+            if($this->filtreUneCommune)
+            {
+                $libelle = 'NOM_EMPLACEMENT';
+                if($this->nomCommune != '') {
+                  $title = "'Tonnage par commune ($this->nomCommune)'";
+                }
+                else {
+                  $title = "'Erreur! Commune introuvable'";
+                }
+            }
+            else 
+            {
+                $libelle = 'NOM_COMMUNE';
+                $title = "'Toutes les communes'";
+            }
         ?>
       
       
@@ -31,15 +41,6 @@
           chartType: 'ColumnChart',
           dataTable: [
               ['', <?php 
-                if($this->filtreUneCommune)
-                {
-                    $libelle = 'NOM_EMPLACEMENT';
-                }
-                else 
-                {
-                    $libelle = 'NOM_COMMUNE';
-                    $title = "'Toutes les communes'";
-                }
                 $data ="";
                 $max = count($this->tonnage);
                 $i = 1;
@@ -61,12 +62,11 @@
               ?>                
             ]],
           options: {
-            'title': <?php echo $title;?>,
+            title : <?php echo $title;?>,
             height : '100%',
-            chartArea: { height:"70%", left:40},
-            backgroundColor : '#E6E6E6',
-            legend : {textStyle: {fontSize : 15}},
-            titleTextStyle : {fontSize: 20}, 
+            chartArea: { height:"70%", left:40 },
+            legend : { textStyle: { fontSize : 15 }},
+            titleTextStyle : { fontSize : 20 }, 
             tooltip : { showColorCode : true }
           },
           containerId: 'chart_div'
