@@ -241,14 +241,14 @@ class IndexController extends Zend_Controller_Action
         }
         else 
         {
-            // retourne les conteneur de chaque commune
+            // retourne les conteneurs de chaque commune
             $sites = $tsite->getSitesCommunes();
             //Zend_Debug::dump($sites);exit;
             $this->view->sites = $sites;
         }
     }
     /**
-     * Recupere les commune et les affiches dans une liste
+     * Recupere les communes et les affiches dans une liste
      * Affiche un graphique avec en valeur par defaut saint quentin, ou la valeur choisie dans la liste
      */
     public function graphiqueAction()
@@ -287,7 +287,6 @@ class IndexController extends Zend_Controller_Action
             {
                 // on va chercher tous ses conteneur avec leur tonnages
                 $TparConteneur = $tsite->getTonnageSite((int)$id);
-                //Zend_Debug::dump($TparConteneur);exit;
                 $this->view->nomCommune = $nomCommune;
                 $this->view->tonnage = $TparConteneur;
             }

@@ -54,7 +54,8 @@
                 $data .= "['',";
                 foreach($this->tonnage as $site)
                 {
-                  $data .= (int)$site['QTE'];
+                  $qte = str_replace(",", ".", $site['QTE']);
+                  $data .= round($qte);
                   $data .= $i == $max ? '' : ',';
                   $i++;
                 }
