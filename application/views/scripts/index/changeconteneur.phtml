@@ -1,4 +1,4 @@
-<h2>Sites à utiliser</h2>
+    <h2>Sites à utiliser</h2>
 
 <div id="adminSites">
 <p class="infos">Cochez ou décochez un site pour le prendre ou non en compte dans les statistiques</p>
@@ -10,6 +10,7 @@
                 <th>Adresse</th>
                 <th>Commune</th>
                 <th>Utiliser ?</th>
+                <th style="display: none;"></th>
             </tr>
         </thead>
         <tfoot>
@@ -19,6 +20,7 @@
                 <th>Adresse</th>
                 <th>Commune</th>
                 <th>Utiliser ?</th>
+                <th style="display: none;"></th>
             </tr>
         </tfoot>
         <tbody>
@@ -29,17 +31,17 @@
                     echo '<tr class="gradeA">
                             <td>'.$i.'</td>
                             <td>'.$unSite['ID_SITE'].'</td>
-                            <td>'.$unSite['NOM_SITE'];
+                            <td>'.ucfirst(strtolower($unSite['NOM_SITE']));
                             if($unSite['LOC_SITE'] != '')
                             {
-                                echo ', '.utf8_encode($unSite['LOC_SITE']);
+                                echo ', '.utf8_encode(ucfirst(strtolower($unSite['LOC_SITE'])));
                             }
-                        echo '</td><td>'.$unSite['NOM_COMMUNE'].'</td>';
+                        echo '</td><td>'.ucfirst(strtolower($unSite['NOM_COMMUNE'])).'</td>';
 
                         $checked = $unSite['STAT_SITE'] == 1 ? 'checked="checked"' : '';
                         echo '<td id="cont_'.$i.'" class="tdcb">
                                 <input class="cbsite" type="checkbox" name="cbsites[]" value="'.$unSite['ID_SITE'].'" '.$checked.' />
-                            </td>';
+                            </td><td style="display: none;"></td>';
                     echo '</tr>';
                     $i++;
                 }
@@ -47,3 +49,8 @@
         </tbody>
     </table>
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+         doDatatables(null);
+    });
+</script>

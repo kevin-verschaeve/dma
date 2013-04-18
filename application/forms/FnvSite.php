@@ -51,6 +51,16 @@ class FnvSite extends Zend_Form
         $complement = new Zend_Form_Element_Text('complement');
         $complement->setLabel('Complement : ');
         
+        $matiere = new Zend_Form_Element_MultiCheckbox('matieres');
+        $matiere->setLabel('Type de matière : ')
+              ->setMultiOptions(array(
+                    'VERRE' => 'Verre',
+                    'CORPS_PLATS' => 'Corps Plats',
+                    'CORPS_CREUX' => 'Corps Creux'
+                ))
+            ->setValue('VERRE')
+            ->setSeparator('&nbsp;&nbsp;');
+        
         $submit = new Zend_Form_Element_Submit('sub_nvsite');
         $submit->setLabel('Ajouter');
         
@@ -60,6 +70,7 @@ class FnvSite extends Zend_Form
                     $commune,
                     $adresse,
                     $complement,
+                    $matiere,
                     $submit
                 ));
         

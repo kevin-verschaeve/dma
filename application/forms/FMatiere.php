@@ -15,7 +15,7 @@ class FMatiere extends Zend_Form
         $this->id = $id ? 'FmatiereSeul' : 'Fmatiere';
         $this->classeRadio = $periode ? 'plustard' : 'rad';
         // si on a une periode, l'action ira vers infosperiode, sinon vers index
-        $this->action = $periode ? '/palmares/infosperiode' : '/palmares/index';
+        $this->action = $periode ? '/palmares/infosperiode' : '/palmares/index';        
         parent::__construct();
     }
     public function init()
@@ -40,12 +40,12 @@ class FMatiere extends Zend_Form
             // valeur : affichée à lécran
             // pour d'autres options, rajouter une ligne dans le tableau
               ->setMultiOptions(array(
-                    'Verre Couleur' => 'Verre',
-                    'Papier/Carton' => 'Papier/Carton',
-                    'Corps Creux' => 'Corps Creux'
+                    'VERRE' => 'Verre',
+                    'CORPS_PLATS' => 'Corps Plats',
+                    'CORPS_CREUX' => 'Corps Creux'
              ))
             // coche par defaut le radio Verre Couleur
-            ->setValue('Verre Couleur')
+            ->setValue('VERRE')
             // met les boutons a la suite (le separateur par defaut etant \n )
             ->setSeparator('&nbsp;&nbsp;');
         $radio->setAttrib('class', $this->classeRadio);
@@ -75,7 +75,7 @@ class FMatiere extends Zend_Form
             $dateFin->setRequired(true);
             // enleve l'autocompletion du navigateur (gene le datepicker)
             $dateFin->setAttrib('autocomplete', 'off');
-            $this->addElement($dateFin);        
+            $this->addElement($dateFin);     
 
             // bouton submit
             $submit = new Zend_Form_Element_Submit('sub_infosPeriode');

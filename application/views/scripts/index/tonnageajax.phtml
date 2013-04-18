@@ -31,18 +31,21 @@
                     '</p>';
             }
             // affiche le tonnage et l'adresse du conteneur
-            echo '<p>'.$this->infosSite['QTE'].'T en '.$this->infosSite['LEVEES'].' levées</p>';
+            echo '<p>'.$this->infosSite['QTE'].'T en '.$this->infosSite['LEVEES'].' levée(s)</p>';
             echo '<p>'.ucwords(strtolower($this->infosSite['NOM_LOCALITE'])).'</p>';
         }
         else
         {
-            // converti les string en type date
-            $newDebut = new Zend_Date($this->dateDebut);
-            $newFin = new Zend_Date($this->dateFin);
-            echo '<p>Aucun enregistrement pour le site n°'.$this->nSite.' 
-                    pour la période du '.$newDebut->toString('dd MMM YYYY').' au
-                    '.$newFin->toString('dd MMM YYYY').'
-                </p>';
+            echo '<p>Aucun enregistrement pour le site n°'.$this->nSite; 
+            if(!empty($this->dateDebut) && !empty($this->dateFin))
+            {
+                // converti les string en type date
+                $newDebut = new Zend_Date($this->dateDebut);
+                $newFin = new Zend_Date($this->dateFin);
+                echo ' pour la période du '.$newDebut->toString('dd MMM YYYY').' au
+                    '.$newFin->toString('dd MMM YYYY');
+            }
+            echo '</p>';
         }
         echo' </div>';
     }

@@ -3,17 +3,16 @@
 }
 #erreurFichier {
     margin-top : 20px;
-}
-#erreurFichier p {
-    color : red;
-    padding-left : 30px;
-    background: url('/img/error2.png') no-repeat;
+    color : red
 }
 .infos {
     padding-left : 20px;
     margin-top : 10px;
     background : url('/img/infos.png') no-repeat;
 }
-#input_fichier-label {
+#input_fichier-label, #radioMatiere-label {
     color : #a8ddeb;
+}
+#divimport {
+    text-align : center;
 }

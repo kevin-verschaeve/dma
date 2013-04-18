@@ -4,12 +4,14 @@ class FCommune extends Zend_Form
 {
     private $lesCommunes;
     private $idCommune;
+    private $lamatiere;
     
     // surcharge le constructeur pour y ajouter nos parametres
     // puis appelle le constructeur parent
-    public function __construct($lesCommunes, $idCommune){
+    public function __construct($lesCommunes, $idCommune, $lamatiere){
         $this->lesCommunes = $lesCommunes;
         $this->idCommune = $idCommune;
+        $this->lamatiere = $lamatiere;
         parent::__construct();
     }
     public function init()
@@ -27,6 +29,21 @@ class FCommune extends Zend_Form
         // ajoute la class zend_form a ce formulaire
         $this->setAttrib('class', 'zend_form');
         
+        $matiere = new Zend_Form_Element_Radio('matiere');
+        $matiere->setLabel('Type de matière : ')
+            // clé du tableau : value du bouton radio
+            // valeur : affichée à lécran
+            // pour d'autres options, rajouter une ligne dans le tableau
+              ->setMultiOptions(array(
+                    'VERRE' => 'Verre',
+                    'CORPS_PLATS' => 'Corps Plats',
+                    'CORPS_CREUX' => 'Corps Creux'
+             ))
+            // coche par defaut le radio Verre Couleur
+            ->setValue($this->lamatiere)
+            // met les boutons a la suite (le separateur par defaut etant \n )
+            ->setSeparator('&nbsp;&nbsp;');
+        
         // créé un select, dont la valeur selectionné par defaut sera celle portant l'id $this->idCommune
         // $this->lesCommunes est un array(idCommune => nomCommune)
         // la clé du tableau est mise en value de chaque option
@@ -36,8 +53,13 @@ class FCommune extends Zend_Form
         $communes->setLabel('Communes : ')  
                 ->setMultiOptions($this->lesCommunes);
         
+        // bouton submit
+        $submit = new Zend_Form_Element_Submit('sub_graphique');
+        $submit->setLabel('Envoyer');
+        $submit->setAttrib('class', 'bt_submit');
+            
         // ajoute l'element au formulaire
-        $this->addElement($communes);
+        $this->addElements(array($matiere,$communes, $submit));
         
         
         // decore chaque element du formulaire

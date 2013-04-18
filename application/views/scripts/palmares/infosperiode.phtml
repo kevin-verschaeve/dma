@@ -5,21 +5,12 @@
     <?php  echo $this->formMatiere; ?>
     <?php 
         if($this->send): 
-            $mat = 1;
-            switch($this->matiere)
-            {
-                case 'Verre Couleur' : $mat = 1; 
-                    break;
-                case 'Papier/Carton' : $mat = 2;
-                    break;
-                case 'Corps Creux' : $mat = 3;
-            }
             $dd = str_replace('/', '-', $this->dateDebut);
             $df = str_replace('/', '-', $this->dateFin);
     ?>
     <div id="removeBouton">
        <!-- on met le bouton de generation de pdf -->
-       <form method="post" action="/palmares/infosperiode/radioMatiere/<?php echo $mat;?>/dd/<?php echo $dd; ?>/df/<?php echo $df; ?>" >
+       <form method="post" action="/palmares/infosperiode/radioMatiere/<?php echo $this->matiere;?>/dd/<?php echo $dd; ?>/df/<?php echo $df; ?>" >
             <input type="hidden" name="creerPdf" value="ok">
             <input type="submit" value="PDF" >
         </form>
@@ -63,12 +54,12 @@
                      echo '<tr class="gradeA">
                                 <td>'.$i.'</td>
                                 <td>'.$unSite['ID_SITE'].'</td>
-                                <td>'.$unSite['NOM_SITE'];//
+                                <td>'.ucfirst(strtolower($unSite['NOM_SITE']));
                                 if($unSite['LOC_SITE'] != '')
                                 {
-                                    echo ', '.utf8_encode($unSite['LOC_SITE']);
+                                    echo ', '.utf8_encode(ucfirst(strtolower($unSite['LOC_SITE'])));
                                 }
-                          echo '</td><td>'.$unSite['NOM_LOCALITE'].'</td>
+                          echo '</td><td>'.ucfirst(strtolower($unSite['NOM_LOCALITE'])).'</td>
                                 <td>'.$unSite['QTE'].'</td>
                                 <td>'.$unSite['LEVEES'].'</td>
                             </tr>';
@@ -84,6 +75,12 @@
            <span id="ttotal"></span> 
            (<?php echo $total;?> Total)
        </p>
+       
+       <script type="text/javascript">
+           $(document).ready(function() {
+                doDatatables({ "sType": "numeric-comma" });
+           });
+       </script>
 <?php 
     else:
         if($this->creerPdf == 'ok') : 

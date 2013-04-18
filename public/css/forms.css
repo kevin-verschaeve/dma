@@ -15,7 +15,8 @@ input[type="text"], .selec {
     display : inline;
     color : #a8ddeb;
 }
-#sub-label, #sub_infosPeriode-label, #sub_nvsite-label {
+#sub-label, #sub_infosPeriode-label, #sub_nvsite-label, 
+#show-label, #sub_fichier-label, #sub_graphique-label {
     display : none !important;
 }
 .errors {
@@ -27,7 +28,6 @@ input[type="text"], .selec {
 }
 .errors li {
     padding : 0 10px 1px 30px;
-    background: url('/img/error2.png') no-repeat;
     font-size: 0.9em;
     font-family: "twentytwelve";
 }
@@ -41,7 +41,7 @@ input[type="text"], .selec {
 #removeBouton input {
     margin-top : 10px;
 }
-.bt_submit:hover, #removeBouton input:hover {
+.bt_submit:hover, #removeBouton input:hover, #sub_nvsite:hover {
     cursor : pointer;
     box-shadow: 2px -2px 5px #a8ddeb;
 }   
@@ -66,8 +66,8 @@ input[type="text"], .selec {
 #FmatiereSeul, #divPalmares, #Fmatiere {
     text-align: center;
 }
-#Fmatiere .divdate .divform {
-    margin : 10px 10px;
+#Fmatiere .divdate .divform, #FCommune .divform {
+    margin : 10px;
 }
 .divdate {
     text-align : left;
@@ -101,18 +101,19 @@ input[type="text"], .selec {
     margin-left : -100px;
 }
 /********************    form import fichier csv    ************************/
-#Fimport dd, #Fimport dt {
-    display : inline-block;
+#Fimport div {
+    margin: 10px 0;
 }
-#input_fichier-label + dd {
-    width : 230px;
+#Fimport {
+    display: inline-block;
+}
+#input_fichier-label {
+    float: left;
+    margin-top: 3px;
 }
 #Fimport .errors {
-    position: absolute;
-    left : -7px;
-    top: 90px;
+    float : none !important;
 }
-
 /***********************    form Nouveau site       ************************/
 #fnvsite {
     text-align: center;
@@ -123,6 +124,9 @@ input[type="text"], .selec {
 .blocnvsite {
     margin : 10px 0;
     text-align : right;
+}
+#divfnvsite #matiere {
+    width : 188px;
 }
 .blocnvsite > p {
     float: left;
@@ -144,10 +148,7 @@ input[type="text"], .selec {
 #ajoutSite > p {
     margin: 10px;
 }
-
-
-
-/***************    BOUTON PDF  *********************************/
+/*************************  BOUTON PDF  ************************************/
 #removeBouton {
     position: absolute;
     top : 75px;

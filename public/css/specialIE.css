@@ -16,7 +16,7 @@
     background: none;
 }
 
-#menuGauche ul li {
+#menuGauche ul li, #divfnvsite {
     display: inline !important;
     zoom :1;
 }

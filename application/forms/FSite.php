@@ -34,7 +34,6 @@ class FSite extends Zend_Form
         $matiere->setLabel('Matiere : ')
                 ->setMultiOptions($this->tabMatieres)   // rempli le select avec un tableau
                 ->setValue($this->matChecked)   // selectionne une valeur par defaut
-                ->setAttrib('class', 'selec')
                 ->setAttrib('onchange','change();');
                 ;
                 
@@ -55,6 +54,11 @@ class FSite extends Zend_Form
         $dateFin->setLabel('Date de fin : ')
                 ->setAttrib('class', 'datepicker cacher')
                 ->setAttrib('autocomplete', 'off');
+            
+            
+        $btdates = new Zend_Form_Element_Button('show');
+        $btdates->setLabel('Entrer une période');
+        $btdates->setAttrib('onclick','showdates();');
         
         // bouton submit
         $submit = new Zend_Form_Element_Submit('sub');
@@ -67,6 +71,7 @@ class FSite extends Zend_Form
                 $site, 
                 $dateDebut,
                 $dateFin,
+                $btdates,
                 $submit
             ));
         $this->setElementDecorators(array(

@@ -20,7 +20,7 @@ class PalmaresController  extends Zend_Controller_Action
     public function infosAction()
     {
         // recupere le bouton radio selectionné
-        $matiere = $this->getRequest()->getParam('radio', 'Verre Couleur');
+        $matiere = $this->getRequest()->getParam('radio', 'VERRE');
         $ajax = $this->getRequest()->getParam('ajax', false);
         $creerPdf = $this->getRequest()->getParam('creerPdf', false);
 
@@ -30,19 +30,6 @@ class PalmaresController  extends Zend_Controller_Action
             // seulement si on vient en ajax, car sinon on a besoin des balises
             $layout = Zend_Layout::getMvcInstance();
             $layout->setLayout('vide'); 
-            if($matiere > 0 )
-            {
-                switch ($matiere) {
-                    case 1 : $matiere = 'Verre Couleur';
-                        break;
-                    case 2 : $matiere = 'Papier/Carton';
-                        break;
-                    case 3 : $matiere = 'Corps Creux';
-                        break;
-                    default : $matiere = 'Verre Couleur';
-                        break;
-                }
-            }
         }
 
         $tsite = new TSite;
@@ -56,7 +43,7 @@ class PalmaresController  extends Zend_Controller_Action
     public function infosperiodeAction()
     {
         $this->_helper->actionStack('header', 'index', 'default', array());
-        $matiere = $this->getRequest()->getParam('radioMatiere', 'Verre Couleur');
+        $matiere = $this->getRequest()->getParam('radioMatiere', 'VERRE');
         $creerPdf = $this->getRequest()->getParam('creerPdf', false);
         
         // instancie un nouveau formulaire de choix de matiere et l'envoi a la vue
@@ -86,19 +73,7 @@ class PalmaresController  extends Zend_Controller_Action
                 {
                     $layout = Zend_Layout::getMvcInstance();
                     $layout->setLayout('vide'); 
-                    if($matiere > 0 )
-                    {
-                        switch ($matiere) {
-                            case 1 : $matiere = 'Verre Couleur';
-                                break;
-                            case 2 : $matiere = 'Papier/Carton';
-                                break;
-                            case 3 : $matiere = 'Corps Creux';
-                                break;
-                            default : $matiere = 'Verre Couleur';
-                                break;
-                        }
-                    }
+                    
                     $dateDebut = $request->getParam('dd', null);
                     $dateFin = $request->getParam('df', null);
                     $dateDebut = str_replace('-', '/', $dateDebut);

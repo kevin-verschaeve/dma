@@ -26,9 +26,8 @@ class IndexController extends Zend_Controller_Action
      */
     public function tonnageajaxAction()
     {
-        try {
         // recupere les parametres par leur nom, et leur met une valeur par defaut si vide
-        $matiere = $this->getRequest()->getParam('sel_matiere', 'Verre Couleur');
+        $matiere = $this->getRequest()->getParam('sel_matiere', 'VERRE');
         $ajax = $this->getRequest()->getParam('ajax', false);
         
         if($ajax)
@@ -42,13 +41,15 @@ class IndexController extends Zend_Controller_Action
         }
         $tcollecte = new TCollecte;
         
-        // recupere les conteneurs et les matieres
-        $matieres = $tcollecte->getMatieres();
         $tabSite = $tcollecte->getSites($matiere);
-        
-        // copie les valeurs dans les clés (pour les select)            
-        $matieres = array_combine($matieres, $matieres);
+        // copie les valeurs dans les clés (pour les select)   
         $tabSite = array_combine($tabSite, $tabSite);
+        
+        $matieres = array(
+                'VERRE' => 'Verre',
+                'CORPS_PLATS' => 'Corps Plats',
+                'CORPS_CREUX' => 'Corps Creux'
+            );
         //Zend_Debug::dump($tabConteneur);exit;
 
         // cree le formulaire, on passe des parametres pour mettre des valeurs par defaut
@@ -88,10 +89,6 @@ class IndexController extends Zend_Controller_Action
         // envoi le formulaire a la vue
         $this->view->form = $form;
         $this->view->ajax = $ajax;
-        }catch(Exception $e)
-        {
-            echo $e->getMessage();exit;
-        }
     }
     /**
      * Creer et gere un formulaire contenant seulement un input type file
@@ -108,10 +105,12 @@ class IndexController extends Zend_Controller_Action
         
         $request = $this->getRequest();
         if($request->isPost())  // c'est une validation de formulaire
-        {
+        {   
             // le formulaire respecte les règles imposées
             if($form->isValid($_FILES))
             {
+                $matiere = $request->getParam('radioMatiere');
+                
                 // recupere les infos surle fichier uploadé
                 $fichier = $form->input_fichier->getFileName();
                 $infosFichier = pathinfo($fichier);                
@@ -122,7 +121,8 @@ class IndexController extends Zend_Controller_Action
                 //Zend_Debug::dump($infosFichier);exit;
                 
                 // verifie que le fichier est bien un csv
-                if($extension == 'csv' || $extension == 'CSV')
+                // strtolower au cas ou l'extension est  CSV
+                if(strtolower($extension) == 'csv')
                 {
                    $tempNom = $_FILES['input_fichier']['tmp_name'];
                    
@@ -139,14 +139,17 @@ class IndexController extends Zend_Controller_Action
                    if($moveToArchive)  // on a reussi la copie dans archive
                    {    
                        // set le nom du repertoire ou seront mis les fichiers en temporaire
+                        //$tempo = RESOURCE_PATH.'\\temp\\'.$nomFichier;
                         $tempo = $dirname.'\\'.$nomFichier;
                         // copie le fichier dans ce repertoire
                         $copyToTempo = copy($archiveDir, $tempo);
+                        chmod($tempo, 0777);
                         
                         if ($copyToTempo) // on a reussi a copier
-                        {   
+                        {  
+                            //echo $tempo;exit;
                              // on ouvre le fichier en lecture seule
-                             $handle = fopen($tempo, "r");
+                             $handle = fopen($archiveDir, "r");
                              if($handle)  // il est ouvert
                              {      
                                  $nbNouvellesLignes = 0;
@@ -162,24 +165,42 @@ class IndexController extends Zend_Controller_Action
                                         // en clé : le nom de la colonne dans la table
                                         // en valeur : la valeur a inserer pour cette colonne
                                         // $data recupere la ligne pointée par le curseur
-                                        $ligne = array(
-                                            'C_NOMGRPGRP' => $data[0],
-                                            'C_NOMGROUPEMENT' => $data[1],
-                                            'C_FILLER1' => $data[2],
-                                            'C_MATIERE' => $data[3],
-                                            'C_INSEE' => $data[4],
-                                            'C_COMMUNE' => $data[5],
-                                            'C_LOCALITE' => $data[6],
-                                            'C_EMPLACEMENT' => $data[7],
-                                            'C_CONTENEUR' => $data[8],
-                                            'C_PATE' => $data[9],
-                                            'C_VOLUME' => $data[10],
-                                            'C_COLLECTE' => $data[11],
-                                            'C_FILLER2' => $data[12],
-                                            'C_FILLER3' => $data[13],
-                                            'C_DATE' => $data[14],
-                                            'C_HEURE' => $data[15]
-                                        );
+                                        if($matiere == 'Verre')
+                                        {
+                                            $ligne = array(
+                                                'C_NOMGRPGRP' => $data[0],
+                                                'C_NOMGROUPEMENT' => $data[1],
+                                                'C_FILLER1' => $data[2],
+                                                'C_MATIERE' => $data[3],
+                                                'C_INSEE' => $data[4],
+                                                'C_COMMUNE' => $data[5],
+                                                'C_LOCALITE' => $data[6],
+                                                'C_EMPLACEMENT' => $data[7],
+                                                'C_CONTENEUR' => $data[8],
+                                                'C_PATE' => $data[9],
+                                                'C_VOLUME' => $data[10],
+                                                'C_COLLECTE' => $data[11],
+                                                'C_FILLER2' => $data[12],
+                                                'C_FILLER3' => $data[13],
+                                                'C_DATE' => $data[14],
+                                                'C_HEURE' => $data[15]
+                                            );
+                                        }
+                                        else
+                                        {
+                                            $ligne = array(
+                                                'C_DATE' => $data[0],
+                                                'C_HEURE' => '00:00',
+                                                'ID_SITE' => $data[1],
+                                                'C_LOCALITE' => $data[3],
+                                                'C_MATIERE' => $matiere,
+                                                'C_COLLECTE' => $data[4],
+                                                'C_NOMGROUPEMENT' => 'ST QUENTIN',
+                                                'C_PATE' => $data[1],
+                                                'C_VOLUME' => $data[5]
+                                            );
+                                            //Zend_Debug::dump($ligne);exit;                                            
+                                        }
                                         // on appelle la fonction qui réalise l'insert dans le modele
                                         $tdata->inserer($ligne);
 
@@ -190,14 +211,57 @@ class IndexController extends Zend_Controller_Action
                                  }
                                  catch(Exception $e)
                                  {
-                                     $erreur = 'Fichier incorrect !';
+                                     $erreur = 'Fichier incorrect ! Assurez vous
+                                         que vous importez le fichier correspondant à la matière sélectionnée
+                                         et que celui ci est conforme.';
                                  }
                                  // on ferme le fichier
-                                 fclose($handle);      
-                                 
+                                 fclose($handle);
                                  // supprime le fichier temporaire
                                  unlink($tempo);
                                  
+                                 // suivant la matiere, la requete n'est pas la même
+                                 if($matiere == 'Verre')
+                                 {
+                                     $sql = "insert into T_COLLECTE
+                                        select to_DATE (a.C_DATE || ' ' ||a.C_HEURE||':00', 'DD/MM/YYYY HH24:MI:SS'),
+                                               a.C_PATE,
+                                               a.C_NOMGROUPEMENT,
+                                               b.ID_COMMUNE,
+                                               a.C_LOCALITE,
+                                               b.ID_SITE,
+                                               a.C_MATIERE,
+                                               a.C_VOLUME,
+                                               to_number (a.C_COLLECTE)
+                                          from T_DATA_COLLECTE a, T_PRESTATAIRE b, T_SITE c
+                                         where a.C_PATE = b.NO_CONTENEUR
+                                            and b.ID_SITE = c.ID_SITE
+                                            and c.USED_SITE = 1";
+                                 }
+                                 else 
+                                 {
+                                     $sql = "insert into T_COLLECTE
+                                                select to_DATE (a.C_DATE || ' ' ||a.C_HEURE||':00', 'DD/MM/YYYY HH24:MI:SS'),
+                                                a.C_PATE,
+                                                a.C_NOMGROUPEMENT,
+                                                c.ID_COMMUNE,
+                                                a.C_LOCALITE,
+                                                c.ID_SITE,
+                                                a.C_MATIERE,
+                                                a.C_VOLUME,
+                                                to_number (a.C_COLLECTE)
+                                           from T_DATA_COLLECTE a, T_SITE c
+                                          where a.ID_SITE = c.ID_SITE
+                                             and c.USED_SITE = 1";
+                                 }
+                                 
+                                 // agrégation des données dans les autres tables 
+                                 $db = Zend_Registry::getInstance()->get("db");
+                                 $db->beginTransaction();
+                                 $statement = $db->prepare($sql);
+                                 $statement->execute();
+                                 $db->commit();   
+                                
                                  $this->view->nbLignesSupp = $nbLignesSupp;
                                  $this->view->nbNouvellesLignes = $nbNouvellesLignes;
                              } else { $erreur = 'Erreur lors de la lecture du fichier'; }
@@ -206,7 +270,6 @@ class IndexController extends Zend_Controller_Action
                 }
                 else
                 {   // mauvaise extension
-                    //$erreur = 'Les fichiers .'.$extension.' ne sont pas pris en compte.'
                     $erreur = $nomFichier.' invalide !'.'
                          Seuls les fichiers .csv sont acceptés';
                 }  
@@ -214,7 +277,7 @@ class IndexController extends Zend_Controller_Action
         }        
         $this->view->erreur = $erreur;
         $this->view->formFichier = $form;
-    }
+    }    
     /**
      * Affiche tous les conteneurs triés par communes
      * et permet de specifier si on souhaite ou non les inclures dans les statitisques
@@ -229,11 +292,9 @@ class IndexController extends Zend_Controller_Action
         
         if($ajax)
         {
-            // recupere tous les checkbox cochés
+            // recupere tous le checkbox, et son état
             $idSite = $this->getRequest()->getParam('site', false);
             $etat =  $this->getRequest()->getParam('etat', false);
-            
-            //Zend_Debug::dump($idSites);exit;
             
             // va changer l'etat dans la base
             $tsite->changeEtatStat($idSite, $etat);
@@ -254,7 +315,8 @@ class IndexController extends Zend_Controller_Action
     public function graphiqueAction()
     {
         $this->_helper->actionStack('header', 'index', 'default', array());
-        $id = $this->getRequest()->getParam('commune', false);
+        $id = $this->getRequest()->getParam('sel_communes', false);
+        $matiere = $this->getRequest()->getparam('matiere', 'VERRE');
 
         $filtreUneCommune = false;
         
@@ -277,7 +339,7 @@ class IndexController extends Zend_Controller_Action
             }
         }
         // créé le formulaire
-        $fcommunes = new FCommune($lesCommunes, $id);
+        $fcommunes = new FCommune($lesCommunes, $id, $matiere);
 
         $this->view->fcommunes = $fcommunes;
 
@@ -286,22 +348,20 @@ class IndexController extends Zend_Controller_Action
             if($id != false && (int)$id > 0)    // une ville est choisie
             {
                 // on va chercher tous ses conteneur avec leur tonnages
-                $TparConteneur = $tsite->getTonnageSite((int)$id);
+                $TparConteneur = $tsite->getTonnageSite((int)$id, $matiere);
+                
                 $this->view->nomCommune = $nomCommune;
                 $this->view->tonnage = $TparConteneur;
+                $filtreUneCommune = true;
             }
-            else 
-            {
-                $this->view->erreur = 'La ville choisie n\'existe pas !';
-            }
-            $filtreUneCommune = true;
         }
         else
         {
-            $tParCommune = $tsite->getTonnageCommunes();
+            $tParCommune = $tsite->getTonnageCommunes($matiere);
             //Zend_Debug::dump($tParCommune);exit;
             $this->view->tonnage = $tParCommune;
         }
+        $this->view->matiere = $matiere;
         $this->view->filtreUneCommune = $filtreUneCommune;
     }
     /**
@@ -326,7 +386,9 @@ class IndexController extends Zend_Controller_Action
                 $adresse = $request->getParam('adresse');
                 $complement = $request->getParam('complement');
                 $nsite = $request->getParam('nsite');
+                $matieres = $request->getParam('matieres');
                 
+                // tableau pour l'ajout dans T_PRESTATAIRE
                 $donneesPrestataire = array(
                     'ID_COMMUNE' => $commune,
                     'NO_CONTENEUR' => $nConteneur,
@@ -334,22 +396,34 @@ class IndexController extends Zend_Controller_Action
                     'ID_SITE' => $nsite
                 );
                 
+                // Ajout dans la table
                 $tprestataire = new TPrestataire;
                 $insertPrest = $tprestataire->ajouterConteneur($donneesPrestataire);
                 
+                // tableau pour l'ajout dans T_SITE
                 $donneesSite = array(
                     'ID_COMMUNE' => $commune,
                     'ID_SITE' => $nsite,
                     'NOM_SITE' => $adresse,
                     'LOC_SITE' => $complement,
                     'USED_SITE' => 1,
-                    'STAT_SITE' => 1
+                    'STAT_SITE' => 1,
+                    // initialise tous les champs à 0
+                    'VERRE' => 0,
+                    'CORPS_PLATS' => 0,
+                    'CORPS_CREUX' => 0
                 );
+                // mets les champs choisis par les checkbox a 1
+                foreach ($matieres as $matiere)
+                {
+                    $donneesSite[$matiere] = 1;
+                }
                 
+                // Ajout dans la table
                 $tsite = new TSite;
                 $insertSite = $tsite->ajouter($donneesSite);
                 
-                
+                // si l'ajout à réussi dans les deux tables
                 if($insertPrest && $insertSite)
                 {
                     $this->view->donnees = $donneesPrestataire;

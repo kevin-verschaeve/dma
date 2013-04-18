@@ -16,11 +16,11 @@ class TDataCollecte  extends Zend_Db_Table_Abstract
     }
     /**
      * Vide la table
+     * @return nombre de lignes supprimées
      */
     public function videTable()
     {
         // condition toujours vraie pour supprimer toutes les lignes de la table
-        // le return renvoi le nombre de lignes supprimées
-        return $this->delete('1=1');
+        return $this->delete('1 = 1');
     }
 }

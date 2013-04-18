@@ -13,23 +13,14 @@ class TCollecte extends Zend_Db_Table_Abstract
     public function getSites($matiere)
     {
         $req = $this->select()
+                    ->setIntegrityCheck(false)
                     ->distinct()
                     ->from($this->_name, 'ID_SITE')
-                    ->where('MATIERE = ?', $matiere)
-                    ->order('ID_SITE')
+                    ->join('T_SITE', 'T_SITE.ID_SITE=T_COLLECTE.ID_SITE', array())
+                    ->where('T_SITE.'.$matiere.' = ?', 1)
+                    ->order('T_COLLECTE.ID_SITE')
                 ;
         // fetchCol car on a qu'une seule colonne 'ID_SITE', les autres fetch sont inutiles
-        return $this->_db->fetchCol($req);
-    }
-    /**
-     * Retourne les differentes matieres que l'on retrouve en base
-     * @return array
-     */
-    public function getMatieres()
-    {
-        $req = $this->select()->distinct()
-                    ->from($this->_name, 'MATIERE')
-                ;
         return $this->_db->fetchCol($req);
     }
 }

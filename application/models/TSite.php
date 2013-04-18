@@ -4,7 +4,7 @@ class TSite extends Zend_Db_Table_Abstract
     // regle le nom de la table et la clé primaire
     protected $_name = 'T_SITE'; // obligatoire car le nom de la classe ne correspond pas au nom de la table en bdd
     protected $_primary = array('ID_COMMUNE','ID_SITE');
-    
+        
     /**
      * Regle le champ STAT_SITE du site $idSite a la valeur $etat
      * @param int $idSites  : le site a mofidier
@@ -28,18 +28,22 @@ class TSite extends Zend_Db_Table_Abstract
      * @param string $matiere : la matiere du conteneur que l'on cherche
      * @param date $dateDebut : date de debut de periode de recherche
      * @param date $dateFin : date de fin
+     * @param bool $stat : prendre en compte ou non l'etat du site
      * @return infos sur un ou plusieurs site
      */
-    public function getInfos($nSite =null, $matiere ='Verre Couleur', $dateDebut =null, $dateFin =null, $stat =true)
+    public function getInfos($nSite =null, $matiere ='VERRE', $dateDebut =null, $dateFin =null, $stat =true)
     {
         $req = $this->select()->setIntegrityCheck(false) // pour pouvoir faire une jointure
                     ->from(array('s'=>$this->_name),array('ID_SITE','NOM_SITE', 'LOC_SITE'))
                     ->join(array('c'=>'T_COLLECTE'),'c.ID_SITE=s.ID_SITE', array('SUM(QTE_COLLECTE) qte', 'COUNT(*) levees', 'NOM_LOCALITE'))
-                    ->where('c.MATIERE = ?', $matiere)
+                    ->where('s.'.$matiere.' = ?', 1)
                 ;
+        if($matiere == 'VERRE') {
+            $matiere = 'Verre Couleur';
+        }
+        $req->where('c.MATIERE =?', $matiere);
         
-        if($stat)
-        {
+        if($stat) {
             $req->where('s.STAT_SITE = ?', 1);
         }
         
@@ -74,43 +78,51 @@ class TSite extends Zend_Db_Table_Abstract
             //echo $req->assemble();exit;
             return $this->fetchAll($req)->toArray();
         }
-        
-        $res = $this->fetchAll($req)->toArray();
-        return $res;
     }
     /**
      * Retourne le nom et le tonnage de chaque site dans la commune $idCommune
      * @param int $idCommune : la commune recherchée
      */
-    public function getTonnageSite($idCommune)
+    public function getTonnageSite($idCommune, $matiere)
     {
         $req = $this->select()->setIntegrityCheck(false)    // pour pouvoir faire une jointure
-                    ->from(array('s'=>$this->_name),array())
-                    ->join(array('c'=>'T_COLLECTE'),'s.ID_SITE=c.ID_SITE',array('SUM(c.QTE_COLLECTE) qte'))
-                    ->join(array('p'=>'T_PRESTATAIRE'),'p.NO_CONTENEUR=c.NO_CONTENEUR',array('NOM_EMPLACEMENT'))
+                    ->from(array('s'=>$this->_name),array('s.NOM_SITE', 's.LOC_SITE'))
+                    ->join(array('c'=>'T_COLLECTE'),'s.ID_SITE=c.ID_SITE',array('SUM(c.QTE_COLLECTE) qte, count(*) as nb'))
                     ->where('s.ID_COMMUNE = ?', $idCommune)
                     ->where('s.STAT_SITE = ?', 1)
-                    ->group('p.NOM_EMPLACEMENT')
-                    ->order('qte DESC')
+                    ->where('s.'.$matiere.' = ?', 1)
                 ;
         
-        return $this->fetchAll($req)->toArray();
+        if($matiere == 'VERRE') {
+            $matiere = 'Verre Couleur';
+        }
+        $req->where('c.MATIERE = ?', $matiere)
+            ->group('s.NOM_SITE, s.LOC_SITE')
+            ->order('qte DESC');
+        
+        $res = $this->fetchAll($req)->toArray();
+        return $res;
     }
     /**
      * Le total du tonnage de tous les sites pour chaque commune
      */
-    public function getTonnageCommunes()
+    public function getTonnageCommunes($matiere)
     {
         $req = $this->select()->setIntegrityCheck(false)
                     ->from(array('s'=>$this->_name),array())
                     ->join(array('c'=>'T_COLLECTE'),'s.ID_SITE=c.ID_SITE',array('SUM(c.QTE_COLLECTE) qte'))
                     ->join(array('co'=>'T_COMMUNE'),'s.ID_COMMUNE=co.ID_COMMUNE',array('NOM_COMMUNE'))
                     ->where('STAT_SITE = ?', 1)
-                    ->group('s.ID_COMMUNE, co.NOM_COMMUNE')
-                    ->order('qte DESC')
+                    ->where('s.'.$matiere.' = ?', 1)
                 ;
-        return $this->fetchAll($req)->toArray();
-                    
+        if($matiere == 'VERRE') {
+            $matiere = 'Verre Couleur';
+        }
+        $req->where('c.MATIERE = ?', $matiere)
+            ->group('s.ID_COMMUNE, co.NOM_COMMUNE')
+            ->order('qte DESC');
+        
+        return $this->fetchAll($req)->toArray();                    
     }
     /**
      * Les informations de tous les sites de toutes les communes

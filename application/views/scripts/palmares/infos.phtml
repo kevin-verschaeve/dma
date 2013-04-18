@@ -81,20 +81,9 @@
     
     // on arrive sur la page de facon "normale"
     else : 
-        // "converti" la matiere en entier, pour eviter les espaces et donc pouvoir la passer dans l'url
-        $mat = 1;
-        switch($this->matiere)
-        {
-            case 'Verre Couleur' : $mat = 1; 
-                break;
-            case 'Papier/Carton' : $mat = 2;
-                break;
-            case 'Corps Creux' : $mat = 3;
-        }
 ?>
-    <div id="removeBouton"> <!-- vidé a chaque changement sur les radio, pour ne pas se retrouver avec plusieurs forms   -->
-       <!-- on met le bouton de generation de pdf -->
-       <form method="post" action="/palmares/infos/radio/<?php echo $mat; ?>" >
+    <div id="removeBouton"> <!-- on met le bouton de generation de pdf -->
+       <form method="post" action="/palmares/infos/radio/<?php echo $this->matiere; ?>" >
             <input type="hidden" name="creerPdf" value="ok">
             <input type="submit" value="PDF" >
         </form>
@@ -152,5 +141,10 @@
                sur <?php echo $total;?> T
            </p>
         </div>
+       <script type="text/javascript">
+           $(document).ready(function() {
+                doDatatables({ "sType": "numeric-comma" });
+           });
+       </script>
    <?php endif; ?>
 <?php  if($this->ajax) exit; ?>

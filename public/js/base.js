@@ -1,10 +1,30 @@
 $(document).ready(function() {
-    // ajoute un datepicker a tous les inputs ayant 'class="datepicker" '
-    $( ".datepicker" ).datepicker(  {
+    	
+    // regles les options du datepicker
+    $.datepicker.regional['fr'] = {
+        closeText: 'Fermer',
+        prevText: 'Précédent',
+        nextText: 'Suivant',
+        currentText: 'Aujourd\'hui',
+        monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+        monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
+        dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+        dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
+        dayNamesMin: ['D','L','M','M','J','V','S'],
+        weekHeader: 'Sem.',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: '',
         showButtonPanel : true,
         changeMonth : true,
-        changeYear : true 
-    });
+        changeYear : true
+    };
+    $.datepicker.setDefaults($.datepicker.regional['fr']);
+    
+    // ajoute un datepicker a tous les inputs ayant 'class="datepicker" '
+    $( ".datepicker" ).datepicker();
     
     // quand le bouton radio selectionné change
     $('.rad').change(function() {
@@ -16,72 +36,18 @@ $(document).ready(function() {
             // on le supprime donc pour faire place au nouveau, regenéré dans la vue infos.phtml
             $('.prems').remove();
             
-            $('#removeBouton').empty();
             // data contient ce qui est affiché par l'action
             // insert le contenu de la vue appelée par l'action, dans le div id="recup"
             $('#recup').empty();
             $('#recup').html(data);
-            doDatatables();
         });
     });
-    
+    /*
     $('#sel_communes').change(function() {
-        var commune = $('#sel_communes').val();
+        var commune = $(this).val();
         var url = commune == 0 ? '' : '/commune/'+commune;
         window.location = '/index/graphique'+url;
-    });
-   
-    $('#blocFormTonnage form > .divform:last-child').prepend('<button type="button" id="show" name="showDates">Entrer une periode</button>');
-    
-    attendAction();   
-    doDatatables();
-});
-function change() {
-    var matiere = $('#sel_matiere').val();
-    $.ajax({
-        method : 'get',
-        url: '/index/tonnageajax',
-        data : {sel_matiere:matiere, ajax:true},
-        success : function(data) {
-            $('#blocFormTonnage').empty();
-            $('#blocFormTonnage').html(data);
-            $('#blocFormTonnage form > .divform:last-child').prepend('<button type="button" id="show" name="showDates">Entrer une periode</button>');
-        }
-    });
-}
-function attendAction() {
-    // au click sur id=show
-    $('#show').on('click', function() {
-        $('.divdate').fadeIn(500);
-        // on verifie si on est sur IE, pour ajuster un effet, et l'affichage des dates
-        // qui n'allaient pas
-        if(checkIE()) {
-            $('#blocFormTonnage .divdate').css('display', 'inline');
-        }
-        
-        // supprime le bouton que l'on vient de cliqué
-        $('#show').remove();
-        // créé le nouveau bouton (celui qui servira a cacher ce qu'on vien de montrer)
-        $('#blocFormTonnage form > .divform:last-child').prepend('<button type="button" id="hide" name="hideDates">Annuler</button>');
-        // rappel de cette fonction pour attendre un nouveau click
-        attendAction();
-    });
-    
-    // au click sur id="hide"
-    $('#hide').on('click', function() {
-        // vide les champs de dates
-        $('#dateDebut').val('');
-        $('#dateFin').val('');
-        // cache les champs date avec un effet
-        $('.divdate').hide('drop', { direction: "up" }, 300);
-        
-        // supprime le bouton qui vient d'être cliqué
-        $('#hide').remove();
-        // créé le nouveau bouton, qui sert a faire apparaitre les dates
-        $('#blocFormTonnage form > .divform:last-child').prepend('<button type="button" id="show" name="showDates">Entrer une periode</button>');
-        // attend la prochaine action
-        attendAction();
-    });    
+    });*/
     
     $('.cbsite').click(function() {
         idSite = $(this).val();
@@ -98,6 +64,62 @@ function attendAction() {
            $('#tempo').remove();
         });
     });
+    
+    
+    $('#Fimport').on('submit', function() {
+        mat = $('#Fimport .mats:checked').val();
+        if(mat == null || mat == '')
+        {
+            alert('Veuillez sélectionner une matière');
+            return false;
+        }
+    });
+    $('#fnvsite').on('submit', function() {
+        mat = $('#fnvsite input[type="checkbox"]:checked').val();        
+        if(mat == null || mat == '')
+        {
+            alert('Veuillez sélectionner au moins une matière');
+            return false;
+        }
+    });
+    
+});
+function change() {
+    var matiere = $('#sel_matiere').val();
+    $.ajax({
+        method : 'get',
+        url: '/index/tonnageajax',
+        data : {sel_matiere:matiere, ajax:true},
+        success : function(data) {
+            $('#blocFormTonnage').empty();
+            $('#blocFormTonnage').html(data);
+            $( ".datepicker" ).datepicker();
+        }
+    });
+}
+function showdates() {
+    $('.divdate').fadeIn(500);
+    // on verifie si on est sur IE, pour ajuster l'affichage des dates qui n'allait pas
+    if(checkIE()) {
+        $('#blocFormTonnage .divdate').css('display', 'inline');
+    }
+
+    // supprime le bouton que l'on vient de cliqué
+    $('#show').remove();
+    // créé le nouveau bouton (celui qui servira a cacher ce qu'on vien de montrer)
+    $('#blocFormTonnage form > .divform:last-child').prepend('<button type="button" id="hide" name="hideDates" onclick="hidedates()">Annuler</button>');
+}
+function hidedates() {
+    // vide les champs de dates
+    $('#dateDebut').val('');
+    $('#dateFin').val('');
+    // cache les champs date avec un effet
+    $('.divdate').hide('drop', { direction: "up" }, 300);
+
+    // supprime le bouton qui vient d'être cliqué
+    $('#hide').remove();
+    // créé le nouveau bouton, qui sert a faire apparaitre les dates
+    $('#blocFormTonnage form > .divform:last-child').prepend('<button type="button" id="show" name="showDates" onclick="showdates()">Entrer une periode</button>');
 }
 /**
  * 
@@ -120,7 +142,8 @@ function checkIE() {
     }*/
 }
 
-function doDatatables() {
+function doDatatables(aoColumns) {
+    //alert(aoColumns);
     $('#datatable').dataTable({
         "bJQueryUI": true,  // ajoute le style par defaut (jqueryUI) sur la table
         // affiche une information de chargement de la table si trop longue a charger
@@ -132,27 +155,13 @@ function doDatatables() {
         // appelé a la création du footer de la table
         "fnFooterCallback": function ( nRow, aaData, iStart, iEnd, aiDisplay ) 
         {            
+            // recupere la ligne du footer
             var tr = nRow.getElementsByTagName('th');
+            // recupere le th qui concerne le tonnage
             var thtonnage = tr[4];
             
             if( thtonnage.textContent !== "Utiliser ?") 
             {
-                /*
-                // parcours Toutes les lignes du tableau
-                var TenCours = total = 0;
-                for ( var i=0 ; i<aaData.length ; i++ )
-                { 
-                    // recupere le tonnage de la ligne en cours
-                    TenCours = aaData[i][4];
-                    // remplace les "," par des "." pour la conversion en float
-                    TenCours = TenCours.replace(',','.');
-                    // converti en float
-                    TenCours = parseFloat(TenCours);
-
-                    // ajoute le tonnage en cours au tonnage total
-                    total += TenCours; 
-                }
-                 */
                 // parcours seulement les lignes affichées (a cause d'un filtre, tri...)
                 TenCours = 0;
                 var totalpage = 0;
@@ -170,14 +179,43 @@ function doDatatables() {
 
                 }
 
-                // modifi le td du footer, en y placant les 2 totaux recupérés
+                // modifie le td du footer, en y placant le total recupéré
                 /*
                 var nCells = nRow.getElementsByTagName('th');
                 nCells[4].innerHTML = totalpage.toFixed(3) + ' T <br>('+ total.toFixed(3) +' Total)';
                 */
                 
+                // insere le tonnage des lignes affichées dans l'élément d'id='ttotal'
+                // en l'arrondissant à 3 nombres apres la virgule
                 $('#ttotal').html(totalpage.toFixed(3)+' T');
             }
-        }                
+        },
+        // declarer le type des colonnes (null, laisse l'api décider)
+        "aoColumns": [
+            null,
+            null,
+            null,
+            null,
+            aoColumns,
+            null
+        ]
     });
+    
+    // permet de trier les nombres a virgules /*
+    jQuery.fn.dataTableExt.oSort['numeric-comma-asc']  = function(a,b) {
+	var x = (a == "-") ? 0 : a.replace( /,/, "." );
+	var y = (b == "-") ? 0 : b.replace( /,/, "." );
+	x = parseFloat( x );
+	y = parseFloat( y );
+	return ((x < y) ? -1 : ((x > y) ?  1 : 0));
+    };
+    
+    jQuery.fn.dataTableExt.oSort['numeric-comma-desc'] = function(a,b) {
+            var x = (a == "-") ? 0 : a.replace( /,/, "." );
+            var y = (b == "-") ? 0 : b.replace( /,/, "." );
+            x = parseFloat( x );
+            y = parseFloat( y );
+            return ((x < y) ?  1 : ((x > y) ? -1 : 0));
+    };
+    //  */
 }

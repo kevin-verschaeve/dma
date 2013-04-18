@@ -147,8 +147,3 @@ table td {
     margin-top : 20px;
     text-align: center;
 }
-#erreurGraph p {
-    padding : 0 10px 1px 30px;
-    background: url('/img/error2.png') no-repeat;
-    display : inline;
-}

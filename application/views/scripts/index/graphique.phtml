@@ -1,6 +1,22 @@
 
-<?php echo $this->fcommunes; ?>
-
+<?php 
+    echo $this->fcommunes; 
+            
+    if($this->filtreUneCommune)
+    {
+        $libelle = 'NOM_SITE';
+        if($this->nomCommune != '') {
+          $title = "'Conteneurs ".strtolower(str_replace('_',' ',$this->matiere))." pour ".$this->nomCommune."'";
+        }
+    }
+    else 
+    {
+        $libelle = 'NOM_COMMUNE';
+        $title = "'Conteneurs ".strtolower(str_replace('_',' ',$this->matiere))." pour toutes les communes'";
+    }
+    
+    if(!$this->tonnage) $this->erreur =  "Aucun résultat";
+?>
 <!-- si on a une erreur -->
 <?php if($this->erreur) : ?>
     <div id="erreurGraph"><p><?php echo $this->erreur; ?></p></div>
@@ -15,28 +31,7 @@
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawVisualization);
 
-      function drawVisualization() {
-      
-        <?php 
-            
-            if($this->filtreUneCommune)
-            {
-                $libelle = 'NOM_EMPLACEMENT';
-                if($this->nomCommune != '') {
-                  $title = "'Tonnage par commune ($this->nomCommune)'";
-                }
-                else {
-                  $title = "'Erreur! Commune introuvable'";
-                }
-            }
-            else 
-            {
-                $libelle = 'NOM_COMMUNE';
-                $title = "'Toutes les communes'";
-            }
-        ?>
-      
-      
+      function drawVisualization() {      
         var wrapper = new google.visualization.ChartWrapper({
           chartType: 'ColumnChart',
           dataTable: [
@@ -46,7 +41,15 @@
                 $i = 1;
                 foreach($this->tonnage as $site)
                 {
-                  $data .= "'".addslashes(utf8_encode($site[$libelle]))."'";
+                  $qte = str_replace(",", ".", $site['QTE']);
+                  $data .= "'".addslashes(utf8_encode(ucfirst(strtolower($site[$libelle]))));
+                  if( $this->filtreUneCommune)
+                  {
+                      if ($site['LOC_SITE'] !== null || $site['LOC_SITE'] != "") {
+                        $data .= ", ".ucfirst(strtolower($site['LOC_SITE']));
+                      }
+                  }
+                  $data .= " (".$qte.")'";
                   $data .= $i == $max ? "]," : ",";
                   $i++;
                 }
@@ -55,7 +58,7 @@
                 foreach($this->tonnage as $site)
                 {
                   $qte = str_replace(",", ".", $site['QTE']);
-                  $data .= round($qte);
+                  $data .= $qte;
                   $data .= $i == $max ? '' : ',';
                   $i++;
                 }
@@ -75,7 +78,4 @@
         
         wrapper.draw();
       }
-      
-      
-      
 </script>
