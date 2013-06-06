@@ -102,7 +102,7 @@ return array (
     "File '%value%' is not readable or does not exist" => "Le fichier '%value%' n'est pas lisible ou n'existe pas",
     "File '%value%' was illegally uploaded. This could be a possible attack" => "Fichier '%value%' mal envoyé. Ceci peut être possiblement une attaque",
     "File '%value%' was not found" => "Fichier '%value%' introuvable",
-    "File '%value%' was not uploaded" => "Le fichier n'a pas été envoyé",
+    "File '%value%' was not uploaded" => "Aucun fichier sélectionné",  // le fichier n'a pas été envoyé
     "File '%value%' was only partially uploaded" => "Le fichier '%value%' n'a été que partiellement envoyé",
     "Invalid type given. Numeric string, integer or float expected" => "Type invalide. Chaîne numérique, entier ou flottant attendu",
     "Invalid type given. String expected" => "Type invalide. Chaîne attendue",

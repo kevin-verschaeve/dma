@@ -17,8 +17,10 @@ class FSite extends Zend_Form
     }
     public function init()
     {
+        $view = Zend_Layout::getMvcInstance()->getView();
+        
         // met l'action du formulaire et sa methode
-        $this->setAction('/index/tonnage')
+        $this->setAction($view->baseUrl('/index/tonnage'))
                   ->setMethod('post');
         
         // configure les decorateurs

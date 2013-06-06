@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function() {    
     	
     // regles les options du datepicker
     $.datepicker.regional['fr'] = {
@@ -31,7 +31,7 @@ $(document).ready(function() {
         var radio = $('.rad:checked').val();
         // appelle l'action passée (premier parametre), en passant les arguments
         // (deuxieme parametre), et execute la fonction de callback, une fois l'action terminée        
-        $.get('/palmares/infos', {radio:radio, ajax:true}, function(data) { 
+        $.get(getBaseUrl()+'palmares/infos', {radio:radio, ajax:true}, function(data) { 
             // .prems est le premier tableau affiché a l'arrivée sur la page
             // on le supprime donc pour faire place au nouveau, regenéré dans la vue infos.phtml
             $('.prems').remove();
@@ -55,10 +55,10 @@ $(document).ready(function() {
         idCb = $(this).parent().attr('id');
         
         $.ajax({
-            url: '/index/changeconteneur',
+            url: getBaseUrl()+'index/changeconteneur',
             data : {site:idSite, etat:etat, ajax:true},
             beforeSend : function() {
-                $('#'+idCb).append('<img id="tempo" width="20px" height="20px" style="position:absolute; right:15px;" src="/img/load.gif"/>');
+                $('#'+idCb).append('<img id="tempo" width="20px" height="20px" style="position:absolute; right:15px;" src="../img/load.gif"/>');
             }
         }).done(function() {
            $('#tempo').remove();
@@ -82,13 +82,16 @@ $(document).ready(function() {
             return false;
         }
     });
-    
 });
+function getBaseUrl() {
+    var url = document.URL.substring(0, document.URL.indexOf('/public'));
+    return url+'/public/';
+}
 function change() {
     var matiere = $('#sel_matiere').val();
     $.ajax({
         method : 'get',
-        url: '/index/tonnageajax',
+        url: getBaseUrl()+'index/tonnageajax',
         data : {sel_matiere:matiere, ajax:true},
         success : function(data) {
             $('#blocFormTonnage').empty();
@@ -144,7 +147,7 @@ function checkIE() {
 
 function doDatatables(aoColumns) {
     //alert(aoColumns);
-    $('#datatable').dataTable({
+    oTable = $('#datatable').dataTable({
         "bJQueryUI": true,  // ajoute le style par defaut (jqueryUI) sur la table
         // affiche une information de chargement de la table si trop longue a charger
         "bProcessing" : true,

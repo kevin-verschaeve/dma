@@ -10,7 +10,7 @@
     ?>
     <div id="removeBouton">
        <!-- on met le bouton de generation de pdf -->
-       <form method="post" action="/palmares/infosperiode/radioMatiere/<?php echo $this->matiere;?>/dd/<?php echo $dd; ?>/df/<?php echo $df; ?>" >
+       <form method="post" action="<?php echo $this->baseUrl('/palmares/infosperiode/radioMatiere/'.$this->matiere);?>/dd/<?php echo $dd; ?>/df/<?php echo $df; ?>" >
             <input type="hidden" name="creerPdf" value="ok">
             <input type="submit" value="PDF" >
         </form>
@@ -151,7 +151,7 @@
     <?php 
         $content = ob_get_clean();
         ob_end_clean();
-        require_once($this->baseUrl('/html2pdf/html2pdf.class.php'));
+        require_once($_SERVER['DOCUMENT_ROOT'].'/dma/public/html2pdf/html2pdf.class.php');
         $html2pdf = new HTML2PDF('P', 'A4', 'fr');
         // ecris l'html dans un document pdf
         $html2pdf->writeHTML($content);

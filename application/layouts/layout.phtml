@@ -5,6 +5,7 @@
         <meta charset="utf-8" />
         <!--[if IE ]>
             <link rel="stylesheet" href="/css/specialIE.css" media="screen">
+            <script type="text/javascript" src="/js/html5.js"></script>
         <![endif]-->
         <link rel="icon" type="images/png" href="<?php echo $this->baseUrl();?>/img/favicon.ico" />
         
@@ -26,7 +27,7 @@
             $this->headScript()->appendFile($this->baseUrl('/js/jquery-ui-1.10.1.custom.min.js'));
             $this->headScript()->appendFile($this->baseUrl('/js/jquery.dataTables.js'));
             $this->headScript()->appendFile($this->baseUrl('/js/base.js'));
-            $this->headScript()->appendFile($this->baseUrl('/js/jquery.ui.datepicker-scr.js'));
+            //$this->headScript()->appendFile($this->baseUrl('/js/jquery.ui.datepicker-fr.js'));
             echo $this->headScript();
         ?>
     </head>

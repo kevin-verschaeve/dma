@@ -3,9 +3,11 @@
 class FImport extends Zend_Form 
 {
     public function init()
-    {
+    {        
+        $view = Zend_Layout::getMvcInstance()->getView();
+     
         // regle l'action, la metode et le nom du formulaire
-        $this->setAction('/index/importer')
+        $this->setAction($view->baseUrl('/index/importer'))
               ->setMethod('post')
               ->setName('Fimport');
         

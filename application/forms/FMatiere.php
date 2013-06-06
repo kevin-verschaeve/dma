@@ -10,18 +10,21 @@ class FMatiere extends Zend_Form
     // surcharge le constructeur pour y ajouter nos parametres
     // puis appelle le constructeur parent
     public function __construct($periode =false, $id =false) {
+        
         $this->periode = $periode;
 
         $this->id = $id ? 'FmatiereSeul' : 'Fmatiere';
         $this->classeRadio = $periode ? 'plustard' : 'rad';
         // si on a une periode, l'action ira vers infosperiode, sinon vers index
-        $this->action = $periode ? '/palmares/infosperiode' : '/palmares/index';        
+        $this->action = $periode ? 'palmares/infosperiode' : 'palmares/index';        
         parent::__construct();
     }
     public function init()
-    {
+    {        
+        $view = Zend_Layout::getMvcInstance()->getView();
+     
         // regle l'action (suivant que l'on ai une periode ou non), le methode et le nom
-        $this->setAction($this->action)
+        $this->setAction($view->baseUrl($this->action))
               ->setMethod('post')
               ->setName($this->id);
         

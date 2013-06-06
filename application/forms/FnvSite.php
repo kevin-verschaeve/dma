@@ -18,8 +18,11 @@ class FnvSite extends Zend_Form
         parent::__construct();
     }
 
-    public function init() {
-        $this->setAction('/index/nouveausite')
+    public function init() 
+    {
+        $view = Zend_Layout::getMvcInstance()->getView();
+        
+        $this->setAction($view->baseUrl('index/nouveausite'))
              ->setMethod('post')
              ->setName('fnvsite');
         

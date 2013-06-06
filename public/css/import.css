@@ -8,7 +8,7 @@
 .infos {
     padding-left : 20px;
     margin-top : 10px;
-    background : url('/img/infos.png') no-repeat;
+    background : url('../img/infos.png') no-repeat;
 }
 #input_fichier-label, #radioMatiere-label {
     color : #a8ddeb;
