@@ -3,11 +3,14 @@
     float : left;
 }
 #Fmatiere .divdate .divform {
-    margin : 10px 10px 10px 245px !important;
+    margin : 10px 10px 10px 400px !important;
 }
 #Fmatiere .divform p {
     display: inline;
     zoom : 1;
+}
+#radioMatiere-label {
+    display: block !important;
 }
 
 #geneIE {

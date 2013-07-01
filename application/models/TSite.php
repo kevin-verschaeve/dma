@@ -52,7 +52,7 @@ class TSite extends Zend_Db_Table_Abstract
         {
             // on ajoute la restriction sur la date
             $req->where('c.DATE_COLLECTE >= ? ', $dateDebut)
-                ->where('c.DATE_COLLECTE <= ? ', $dateFin);
+                ->where('c.DATE_COLLECTE <= TO_DATE(?, \'DD/MM/YYYY HH24:MI:SS\') ', $dateFin.' 23:59:59');
         }
         
         // on veut les infos sur un seul site

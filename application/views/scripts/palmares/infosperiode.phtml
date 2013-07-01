@@ -12,7 +12,7 @@
        <!-- on met le bouton de generation de pdf -->
        <form method="post" action="<?php echo $this->baseUrl('/palmares/infosperiode/radioMatiere/'.$this->matiere);?>/dd/<?php echo $dd; ?>/df/<?php echo $df; ?>" >
             <input type="hidden" name="creerPdf" value="ok">
-            <input type="submit" value="PDF" >
+            <input type="submit" value="PDF" onclick="creationpdf(this);" >
         </form>
     </div>
     <?php endif; ?>

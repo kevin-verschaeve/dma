@@ -42,14 +42,14 @@
                 foreach($this->tonnage as $site)
                 {
                   $qte = str_replace(",", ".", $site['QTE']);
-                  $data .= "'".addslashes(utf8_encode(ucfirst(strtolower($site[$libelle]))));
+                  $data .= "'".addslashes(ucfirst(strtolower($site[$libelle])));
                   if( $this->filtreUneCommune)
                   {
                       if ($site['LOC_SITE'] !== null || $site['LOC_SITE'] != "") {
                         $data .= ", ".ucfirst(strtolower($site['LOC_SITE']));
                       }
                   }
-                  $data .= " (".$qte.")'";
+                  $data .= " (".$qte." Tonnes)'";
                   $data .= $i == $max ? "]," : ",";
                   $i++;
                 }

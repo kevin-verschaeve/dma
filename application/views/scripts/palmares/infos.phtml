@@ -13,7 +13,8 @@
         </style>
         <page backtop="20mm" backbottom="10mm">
             <page_header>
-                <h1 style="text-align:center;">Statistiques <?php echo $this->matiere;?></h1>   <hr>
+                <h1 style="text-align:center;">Statistiques <?php echo $this->matiere;?></h1>
+                <hr>
             </page_header>
             <page_footer>
                 <hr>
@@ -85,7 +86,7 @@
     <div id="removeBouton"> <!-- on met le bouton de generation de pdf -->
        <form method="post" action="<?php echo $this->baseUrl('/palmares/infos/radio/'.$this->matiere); ?>" >
             <input type="hidden" name="creerPdf" value="ok">
-            <input type="submit" value="PDF" >
+            <input type="submit" value="PDF" onclick="creationpdf(this);" >
         </form>
     </div>
        <!-- on refait le code de la page sans le css spécifique au pdf    -->
