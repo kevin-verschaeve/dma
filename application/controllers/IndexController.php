@@ -355,7 +355,7 @@ class IndexController extends Zend_Controller_Action
                 $this->view->tonnage = $TparConteneur;
                 $filtreUneCommune = true;  
                 
-                $this->exportation($TparConteneur);
+                $this->exportation($TparConteneur, $nomCommune);
             }
         }
         else
@@ -370,9 +370,10 @@ class IndexController extends Zend_Controller_Action
         $this->view->filtreUneCommune = $filtreUneCommune;
     }
     
-    private function exportation($tonnage)
+    private function exportation($tonnage, $nomCommune = 'GLOBAL')
     {
-        $fichier = RESOURCE_PATH.'\export.csv';
+        $nomFichier = $nomCommune.'.csv';
+        $fichier = RESOURCE_PATH.'\export\\'.$nomFichier;
         $handle = fopen($fichier, 'w');
         if($handle)
         {
@@ -382,9 +383,10 @@ class IndexController extends Zend_Controller_Action
                 foreach($t as $champs) {
                     fwrite($handle, '"'.utf8_encode($champs).'";');
                 }
-                fwrite($handle, "\n");
+                fwrite($handle, "\r\n");
             }
             fclose($handle);
+            $this->view->fichier = $nomFichier;
             $this->view->export = true;
         }
         else
