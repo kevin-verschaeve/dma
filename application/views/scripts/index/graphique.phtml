@@ -1,7 +1,6 @@
-
 <?php 
     echo $this->fcommunes; 
-            
+    
     if($this->filtreUneCommune)
     {
         $libelle = 'NOM_SITE';
@@ -22,6 +21,11 @@
     <div id="erreurGraph"><p><?php echo $this->erreur; ?></p></div>
 <?php endif; ?>
     
+<?php if($this->export) : ?>
+    <p id="pcsv">
+        <a href="<?php echo $this->baseUrl('../resources/export.csv');?>" id="ficcsv" class="bt_submit">Fichier CSV</a>
+    </p>
+<?php endif;?>
     <!-- le div dans lequel sera mis le graphique une fois généré -->
     <div id="chart_div" ></div>
     

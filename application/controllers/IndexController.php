@@ -342,6 +342,7 @@ class IndexController extends Zend_Controller_Action
         $fcommunes = new FCommune($lesCommunes, $id, $matiere);
 
         $this->view->fcommunes = $fcommunes;
+        $this->view->export = false;
 
         if($id)
         {
@@ -352,7 +353,9 @@ class IndexController extends Zend_Controller_Action
                 
                 $this->view->nomCommune = $nomCommune;
                 $this->view->tonnage = $TparConteneur;
-                $filtreUneCommune = true;
+                $filtreUneCommune = true;  
+                
+                $this->exportation($TparConteneur);
             }
         }
         else
@@ -360,9 +363,34 @@ class IndexController extends Zend_Controller_Action
             $tParCommune = $tsite->getTonnageCommunes($matiere);
             //Zend_Debug::dump($tParCommune);exit;
             $this->view->tonnage = $tParCommune;
+            
+            $this->exportation($tParCommune);
         }
         $this->view->matiere = $matiere;
         $this->view->filtreUneCommune = $filtreUneCommune;
+    }
+    
+    private function exportation($tonnage)
+    {
+        $fichier = RESOURCE_PATH.'\export.csv';
+        $handle = fopen($fichier, 'w');
+        if($handle)
+        {
+            foreach($tonnage as $t)
+            {
+                //fputcsv($handle, $t, ';'); // si on fait comme ca : pb encodage
+                foreach($t as $champs) {
+                    fwrite($handle, '"'.utf8_encode($champs).'";');
+                }
+                fwrite($handle, "\n");
+            }
+            fclose($handle);
+            $this->view->export = true;
+        }
+        else
+        {
+            echo 'pas pu ouvrir fichier : '.$fichier;
+        }
     }
     /**
      * Ajouter un site en base

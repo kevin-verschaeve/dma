@@ -49,12 +49,14 @@ header a {
     color : black;
 }
 header, footer {
-    padding : 10px;
-    min-height : 50px;
+    min-height : 100px;
 }
 header p, footer p {
     text-align : center;
     color : #09223B !important;
+}
+#logo {
+    position : absolute;
 }
 #body {
     background-color: #DCEDfa;
@@ -155,7 +157,7 @@ table td {
 #chart_div {
    /* width : 500px;*/
     height: 400px;
-   margin-top : 20px; 
+   margin-top : 10px; 
 }
 
 /*****************   ERREUR GRAPHIQUE  ***************************/

@@ -129,18 +129,17 @@
                 foreach($this->infosSite as $unSite)
                 {
                      echo '<tr>
-                                <td style="width: 5%">'.$i.'</td>
-                                <td style="width: 10%">'.ucfirst(strtolower($unSite['ID_SITE'].'</td>
-                                <td style="text-align: left; width: 50%; padding-left : 5px;">'.$unSite['NOM_SITE']));
-                                if($unSite['LOC_SITE'] != '')
-                                {
-                                    echo ', '.utf8_encode(ucfirst(strtolower($unSite['LOC_SITE'])));
-                                }
-                          echo '</td>
-                                <td style="text-align: left; width: 15%">'.ucfirst(strtolower($unSite['NOM_LOCALITE'])).'</td>
-                                <td style="width: 10%">'.$unSite['QTE'].'</td>
-                                <td style="width: 10%">'.$unSite['LEVEES'].'</td>
-                            </tr>';
+                            <td style="width: 5%">'.$i.'</td>
+                            <td style="width: 10%">'.ucfirst(strtolower($unSite['ID_SITE'].'</td>
+                            <td style="text-align: left; width: 50%; padding-left : 5px;">'.$unSite['NOM_SITE']));
+                            if($unSite['LOC_SITE'] != '') {
+                                echo ', '.utf8_encode(ucfirst(strtolower($unSite['LOC_SITE'])));
+                            }
+                      echo '</td>
+                            <td style="text-align: left; width: 15%">'.ucfirst(strtolower($unSite['NOM_LOCALITE'])).'</td>
+                            <td style="width: 10%">'.$unSite['QTE'].'</td>
+                            <td style="width: 10%">'.$unSite['LEVEES'].'</td>
+                        </tr>';
                     $i++;
                 }
 
@@ -161,7 +160,7 @@
         
         else: 
     ?>
-    <p class="infos">Sélectionnez une matieèe et une période pour obtenir les statistiques</p>
+    <p class="infos">Sélectionnez une matière et une période pour obtenir les statistiques</p>
     <?php endif; ?>
     
 <?php endif; ?>

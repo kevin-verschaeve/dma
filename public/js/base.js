@@ -224,5 +224,6 @@ function doDatatables(aoColumns) {
 }
 
 function creationpdf(bt) {
-    $(bt).before('Création du fichier pdf en cours...<img alt="loading"  width="16" height="16" src="img/load.gif"/>');
+    $('#genpdf').remove();
+    $(bt).before('<span id="genpdf">Création du fichier pdf en cours...<img alt="loading"  width="16" height="16" src="img/load.gif"/></span>');
 }

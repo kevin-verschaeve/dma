@@ -154,3 +154,16 @@ input[type="text"], .selec {
     top : 75px;
     right : 20px;   
 }
+
+#pcsv {
+    text-align : center;
+    margin : 20px 0;
+}
+#ficcsv {    
+    color: black;
+    display: inline-block;
+    font-family: "twentytwelve";
+    font-weight: normal;
+    padding: 5px;
+    width: 8em;
+}

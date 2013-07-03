@@ -57,7 +57,7 @@ class FCommune extends Zend_Form
         $submit = new Zend_Form_Element_Submit('sub_graphique');
         $submit->setLabel('Envoyer');
         $submit->setAttrib('class', 'bt_submit');
-            
+        
         // ajoute l'element au formulaire
         $this->addElements(array($matiere,$communes, $submit));
         
@@ -67,7 +67,7 @@ class FCommune extends Zend_Form
             array('ViewHelper'),
             // les erreurs seront placées dans un div ayant la class errors
             array('Errors', array('tag' => 'div', 'class' => 'errors')),
-            // les labels sont placés dans des balses p ayant la classe spanform
+            // les labels sont placés dans des balises p ayant la classe spanform
             array('Label', array('tag' => 'p', 'class' => 'spanform')),
             // les balises par defaut sont remplacées par des div ayants la class divform
             array('HtmlTag', array('tag' => 'div', 'class' => 'divform'))
