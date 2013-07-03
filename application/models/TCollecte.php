@@ -18,6 +18,7 @@ class TCollecte extends Zend_Db_Table_Abstract
                     ->from($this->_name, 'ID_SITE')
                     ->join('T_SITE', 'T_SITE.ID_SITE=T_COLLECTE.ID_SITE', array())
                     ->where('T_SITE.'.$matiere.' = ?', 1)
+                    ->where('T_COLLECTE.MATIERE = ?', $matiere == 'VERRE' ? 'Verre Couleur' : $matiere)
                     ->order('T_COLLECTE.ID_SITE')
                 ;
         // fetchCol car on a qu'une seule colonne 'ID_SITE', les autres fetch sont inutiles

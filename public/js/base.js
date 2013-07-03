@@ -31,7 +31,14 @@ $(document).ready(function() {
         var radio = $('.rad:checked').val();
         // appelle l'action passée (premier parametre), en passant les arguments
         // (deuxieme parametre), et execute la fonction de callback, une fois l'action terminée        
-        $.get(getBaseUrl()+'palmares/infos', {radio:radio, ajax:true}, function(data) { 
+        $.get(getBaseUrl()+'palmares/infos',
+            {
+                radio:radio, 
+                ajax:true, 
+                beforeSend : function() {
+                    $('#recup').empty().html('<div style="text-align:center"><img src="img/loading.gif" alt="loading"/></div>');
+                }
+            }, function(data) { 
             // .prems est le premier tableau affiché a l'arrivée sur la page
             // on le supprime donc pour faire place au nouveau, regenéré dans la vue infos.phtml
             $('.prems').remove();
@@ -75,7 +82,7 @@ $(document).ready(function() {
         }
     });
     $('#fnvsite').on('submit', function() {
-        mat = $('#fnvsite input[type="checkbox"]:checked').val();        
+        mat = $('#fnvsite input[type="checkbox"]:checked').val();    
         if(mat == null || mat == '')
         {
             alert('Veuillez sélectionner au moins une matière');

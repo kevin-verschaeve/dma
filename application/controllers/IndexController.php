@@ -292,7 +292,7 @@ class IndexController extends Zend_Controller_Action
         
         if($ajax)
         {
-            // recupere tous le checkbox, et son état
+            // recupere le checkbox, et son état
             $idSite = $this->getRequest()->getParam('site', false);
             $etat =  $this->getRequest()->getParam('etat', false);
             
@@ -379,11 +379,11 @@ class IndexController extends Zend_Controller_Action
         {
             foreach($tonnage as $t)
             {
-                //fputcsv($handle, $t, ';'); // si on fait comme ca : pb encodage
-                foreach($t as $champs) {
+                fputcsv($handle, $t, ';');
+               /* foreach($t as $champs) {
                     fwrite($handle, '"'.utf8_encode($champs).'";');
                 }
-                fwrite($handle, "\r\n");
+                fwrite($handle, "\r\n");*/
             }
             fclose($handle);
             $this->view->fichier = $nomFichier;

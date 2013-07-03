@@ -164,6 +164,6 @@ input[type="text"], .selec {
     display: inline-block;
     font-family: "twentytwelve";
     font-weight: normal;
-    padding: 5px;
-    width: 8em;
+    padding: 5px 20px;
+    min-width: 8em;
 }

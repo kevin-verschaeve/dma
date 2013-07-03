@@ -10,6 +10,9 @@ class FSite extends Zend_Form
     // puis appelle le constructeur parent
     public function __construct($tabSite, $tabMatieres, $matChecked)
     {
+        if(empty($tabSite)) {
+            $tabSite = array(''=>'Aucun résultat');
+        }
         $this->tabSite = $tabSite;
         $this->tabMatieres = $tabMatieres;
         $this->matChecked = $matChecked;

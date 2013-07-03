@@ -23,7 +23,7 @@
     
 <?php if($this->export) : ?>
     <p id="pcsv">
-        <a href="<?php echo $this->baseUrl('../resources/export/'.$this->fichier);?>" id="ficcsv" class="bt_submit">Fichier CSV</a>
+        <a href="<?php echo $this->baseUrl('../resources/export/'.$this->fichier);?>" id="ficcsv" class="bt_submit">Export Excel (csv)</a>
     </p>
 <?php endif;?>
     <!-- le div dans lequel sera mis le graphique une fois généré -->
@@ -82,4 +82,9 @@
         
         wrapper.draw();
       }
+      
+  // Called
+  function usefulHandler() {
+    alert("Mouseover event!");
+  }
 </script>
