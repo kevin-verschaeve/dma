@@ -391,7 +391,7 @@ class IndexController extends Zend_Controller_Action
         }
         else
         {
-            echo 'pas pu ouvrir fichier : '.$fichier;
+            echo 'Erreur lors de l\'ouverture du ficher : '.$fichier;
         }
     }
     /**
