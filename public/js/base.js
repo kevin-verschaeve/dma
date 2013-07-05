@@ -89,6 +89,12 @@ $(document).ready(function() {
             return false;
         }
     });
+    
+    $('#input_fichier').on('change', function() {
+        $(this).css('color', '#000');
+    });
+    
+     precharger_image('img/load.gif');
 });
 function getBaseUrl() {
     var url = document.URL.substring(0, document.URL.indexOf('/public'));
@@ -232,5 +238,12 @@ function doDatatables(aoColumns) {
 
 function creationpdf(bt) {
     $('#genpdf').remove();
-    $(bt).before('<span id="genpdf">Création du fichier pdf en cours...<img alt="loading"  width="16" height="16" src="img/load.gif"/></span>');
+    $(bt).before('<span id="genpdf">Création du fichier pdf en cours...<img alt="loading"  width="16" height="16" src="img/load.gif" alt="chargement" title="Chargement en cours..."/></span>');
+}
+// precharge une image pour qu'elle soit affichée des le 1er affichage
+// autrement elle n'apparait qu'au 2e
+function precharger_image(url) {
+    var img = new Image();
+    img.src=url;
+    return img;
 }

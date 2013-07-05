@@ -107,6 +107,11 @@ input[type="text"], .selec {
 #Fimport {
     display: inline-block;
 }
+#input_fichier {
+    width : 27em;
+    color : #fff;
+    background-color: #fff;
+}
 #input_fichier-label {
     float: left;
     margin-top: 3px;

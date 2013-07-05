@@ -51,7 +51,6 @@ class FImport extends Zend_Form
             array('Label', array('tag' => 'p', 'class' => 'spanform')),
             array('HtmlTag', array('tag' => 'div', 'class' => 'divform'))
          ));
-        
         $this->getElement('input_fichier')->setDecorators(
          array(
                 'File',

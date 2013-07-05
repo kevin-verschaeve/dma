@@ -36,16 +36,23 @@
         }
         else
         {
-            echo '<p>Aucun enregistrement pour le site n°'.$this->nSite; 
-            if(!empty($this->dateDebut) && !empty($this->dateFin))
+            if(!empty($this->nSite))
             {
-                // converti les string en type date
-                $newDebut = new Zend_Date($this->dateDebut);
-                $newFin = new Zend_Date($this->dateFin);
-                echo ' pour la période du '.$newDebut->toString('dd MMM YYYY').' au
-                    '.$newFin->toString('dd MMM YYYY');
+                echo '<p>Aucun enregistrement pour le site n°'.$this->nSite; 
+                if(!empty($this->dateDebut) && !empty($this->dateFin))
+                {
+                    // converti les string en type date
+                    $newDebut = new Zend_Date($this->dateDebut);
+                    $newFin = new Zend_Date($this->dateFin);
+                    echo ' pour la période du '.$newDebut->toString('dd MMM YYYY').' au
+                        '.$newFin->toString('dd MMM YYYY');
+                }
+                echo '</p>';
             }
-            echo '</p>';
+            else
+            {
+                echo '<p>Aucun site trouvés, avec des conteneurs de cette matiere.</p>';
+            }
         }
         echo' </div>';
     }
