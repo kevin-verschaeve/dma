@@ -115,11 +115,6 @@ function change() {
 }
 function showdates() {
     $('.divdate').fadeIn(500);
-    // on verifie si on est sur IE, pour ajuster l'affichage des dates qui n'allait pas
-    if(checkIE()) {
-        $('#blocFormTonnage .divdate').css('display', 'inline');
-        $('#blocFormTonnage .divdate').css('zoom', '1');
-    }
     // supprime le bouton que l'on vient de cliquer
     $('#show').remove();
     // créé le nouveau bouton (celui qui servira a cacher ce qu'on vien de montrer)

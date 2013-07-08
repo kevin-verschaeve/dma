@@ -1,5 +1,5 @@
 
-.divdate p {
+.divdate p, .formConteneur .divdate {
     float : left;
 }
 #Fmatiere .divdate .divform {
@@ -9,6 +9,7 @@
     display: inline;
     zoom : 1;
 }
+/*
 #radioMatiere-label {
     display: block !important;
 }
@@ -17,7 +18,7 @@
     padding-left : 0;
     margin-top : 0;
     background: none;
-}
+}*/
 
 #menuGauche ul li, #divfnvsite {
     display: inline !important;
@@ -30,4 +31,7 @@
 
 #blocFormTonnage .divDate {
     zoom : -1;
+}
+.ui-datepicker .ui-datepicker-title {
+    line-height : 1 !important;
 }

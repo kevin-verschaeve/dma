@@ -3,7 +3,7 @@
     <head>
         <title>DMA</title>
         <meta charset="utf-8" />
-        <!--[if IE ]>
+        <!--[if lt IE 8]>
             <link rel="stylesheet" href="/dma/public/css/specialIE.css" media="screen">
             <script type="text/javascript" src="/dma/public/js/html5.js"></script>
         <![endif]-->
@@ -30,6 +30,17 @@
             //$this->headScript()->appendFile($this->baseUrl('/js/jquery.ui.datepicker-fr.js'));
             echo $this->headScript();
         ?>
+        <!-- ajoute les balises Html 5 aux navigateurs qui ne les ont pas -->
+        <script type="text/javascript">
+            document.createElement("header");
+            document.createElement("footer");
+            document.createElement("section");
+            document.createElement("aside");
+            document.createElement("nav");
+            document.createElement("article");
+            document.createElement("figure");
+        </script>
+
     </head>
     <body>
         <div id="body" class="white">

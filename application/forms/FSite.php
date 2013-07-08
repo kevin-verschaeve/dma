@@ -109,7 +109,7 @@ class FSite extends Zend_Form
                 'order' => 2,   // place le groupe en 3eme position (commence a 0)
                 'decorators' => array(  // ajoute un decorateur
                     'FormElements',
-                    array('HtmlTag', array('tag'=>'div', 'class' => 'divdate'))
+                    array('HtmlTag', array('tag'=>'div', 'class' => 'divdate left'))
                 )
             ));
         }

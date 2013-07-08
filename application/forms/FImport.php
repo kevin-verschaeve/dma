@@ -55,8 +55,8 @@ class FImport extends Zend_Form
          array(
                 'File',
                 'Errors',
-                array('HtmlTag' , array('tag' => 'div')),
                 array('Label', array('tag' => 'p')),
+                array('HtmlTag' , array('tag' => 'div', 'class' => 'divform')),
             )
         );
     }
