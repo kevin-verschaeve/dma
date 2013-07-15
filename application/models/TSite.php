@@ -134,6 +134,7 @@ class TSite extends Zend_Db_Table_Abstract
                     ->distinct()
                     ->from(array('s'=>$this->_name), array('NOM_SITE', 'LOC_SITE','ID_SITE','STAT_SITE'))
                     ->join(array('co'=>'T_COMMUNE'),'s.ID_COMMUNE=co.ID_COMMUNE', 'NOM_COMMUNE')
+                    ->where('s.USED_SITE = 1')
                     ->order('NOM_COMMUNE DESC, ID_SITE ASC')
                 ;
         return $this->fetchAll($req)->toArray();

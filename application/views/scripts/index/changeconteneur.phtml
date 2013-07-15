@@ -32,15 +32,16 @@
                             <td>'.$i.'</td>
                             <td>'.$unSite['ID_SITE'].'</td>
                             <td>'.ucfirst(strtolower($unSite['NOM_SITE']));
-                            if($unSite['LOC_SITE'] != '')
+                            if(!empty($unSite['LOC_SITE']))
                             {
                                 echo ', '.utf8_encode(ucfirst(strtolower($unSite['LOC_SITE'])));
                             }
                         echo '</td><td>'.ucfirst(strtolower($unSite['NOM_COMMUNE'])).'</td>';
 
                         $checked = $unSite['STAT_SITE'] == 1 ? 'checked="checked"' : '';
-                        echo '<td id="cont_'.$i.'" class="tdcb">
-                                <input class="cbsite" type="checkbox" name="cbsites[]" value="'.$unSite['ID_SITE'].'" '.$checked.' />
+                        echo '<td id="cont_'.$i.'" class="tdcb" >
+                                <label style="position: absolute; left: 0px; height: 6%; width: 100%;" for="cb'.$i.'"></label>
+                                <input class="cbsite" type="checkbox" id="cb'.$i.'" name="cbsites[]" value="'.$unSite['ID_SITE'].'" '.$checked.' />
                             </td><td style="display: none;"></td>';
                     echo '</tr>';
                     $i++;

@@ -5,6 +5,9 @@
 #Fmatiere .divdate .divform {
     margin : 10px 10px 10px 400px !important;
 }
+.errors {
+    float : none !important;
+}
 #Fmatiere .divform p {
     display: inline;
     zoom : 1;

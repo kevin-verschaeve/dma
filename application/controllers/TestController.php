@@ -5,9 +5,11 @@ class TestController extends Zend_Controller_Action
     public function indexAction()
     {
         $layout = Zend_Layout::getMvcInstance();
-        $layout->setLayout('vide');
+        $layout->setLayout('vide');  
         try 
         { 
+            $date = new Zend_Date();
+            echo $date->toString('d MMMM YYYY');
             /*
             $matiere = 'VERRE';
             $retour = '';

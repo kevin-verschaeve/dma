@@ -39,15 +39,16 @@ $(document).ready(function() {
                     $('#recup').empty().html('<div style="text-align:center"><img src="img/loading.gif" alt="loading"/></div>');
                 }
             }, function(data) { 
-            // .prems est le premier tableau affiché a l'arrivée sur la page
-            // on le supprime donc pour faire place au nouveau, regenéré dans la vue infos.phtml
-            $('.prems').remove();
-            
-            // data contient ce qui est affiché par l'action
-            // insert le contenu de la vue appelée par l'action, dans le div id="recup"
-            $('#recup').empty();
-            $('#recup').html(data);
-        });
+                // .prems est le premier tableau affiché a l'arrivée sur la page
+                // on le supprime donc pour faire place au nouveau, regenéré dans la vue infos.phtml
+                $('.prems').remove();
+
+                // data contient ce qui est affiché par l'action
+                // insert le contenu de la vue appelée par l'action, dans le div id="recup"
+                $('#recup').empty();
+                $('#recup').html(data);
+            }
+        );
     });
     /*
     $('#sel_communes').change(function() {
@@ -62,7 +63,9 @@ $(document).ready(function() {
         idCb = $(this).parent().attr('id');
         
         $.ajax({
-            url: getBaseUrl()+'index/changeconteneur',
+            // passer un nombre aléatoire force empeche l'utiisation du cache
+            // sinon le cache garde en mémoire l'etat initial des checkbox et ne les modifie pas
+            url: getBaseUrl()+'index/changeconteneur/gruge/'+Math.random(),
             data : {site:idSite, etat:etat, ajax:true},
             beforeSend : function() {
                 $('#'+idCb).append('<img id="tempo" width="20px" height="20px" style="position:absolute; right:15px;" src="../img/load.gif"/>');
@@ -94,7 +97,8 @@ $(document).ready(function() {
         $(this).css('color', '#000');
     });
     
-     precharger_image('img/load.gif');
+     precharger_image(getBaseUrl()+'img/load.gif');
+     precharger_image(getBaseUrl()+'img/loading.gif');     
 });
 function getBaseUrl() {
     var url = document.URL.substring(0, document.URL.indexOf('/public'));
@@ -106,6 +110,9 @@ function change() {
         method : 'get',
         url: getBaseUrl()+'index/tonnageajax',
         data : {sel_matiere:matiere, ajax:true},
+        beforeSend : function() {
+            $('#nSite').empty();
+        },
         success : function(data) {
             $('#blocFormTonnage').empty();
             $('#blocFormTonnage').html(data);
@@ -235,7 +242,7 @@ function creationpdf(bt) {
     $('#genpdf').remove();
     $(bt).before('<span id="genpdf">Création du fichier pdf en cours...<img alt="loading"  width="16" height="16" src="img/load.gif" alt="chargement" title="Chargement en cours..."/></span>');
 }
-// precharge une image pour qu'elle soit affichée des le 1er affichage
+// precharge une image pour qu'elle soit affichée des le 1er appel
 // autrement elle n'apparait qu'au 2e
 function precharger_image(url) {
     var img = new Image();
