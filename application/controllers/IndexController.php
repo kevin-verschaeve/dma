@@ -39,9 +39,9 @@ class IndexController extends Zend_Controller_Action
 
             // si !ajax : on arrive sur la page (on a pas encore effectué de requete ajax)
         }
-        $tcollecte = new TCollecte;
+        $tsite = new TSite();
         
-        $tabSite = $tcollecte->getSites($matiere);
+        $tabSite = $tsite->getSites($matiere);
         // copie les valeurs dans les clés (pour les select)   
         $tabSite = array_combine($tabSite, $tabSite);
         
@@ -73,7 +73,6 @@ class IndexController extends Zend_Controller_Action
                 // pour le site $nSite gerant la matiere $matiere
                 // pendant la periode >=$dateDebut <= $dateFin
                 // si les dates sont null, la recherche ne se limitera pas dans le temps
-                $tsite = new TSite;
                 $infosSite = $tsite->getInfos($nSite, $matiere, $dateDebut, $dateFin, false);
 
                 //Zend_Debug::dump($infosSite);exit;

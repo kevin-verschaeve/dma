@@ -26,7 +26,7 @@ class ErrorController extends Zend_Controller_Action
                 // application error
                 $this->getResponse()->setHttpResponseCode(500);
                 $priority = Zend_Log::CRIT;
-                $this->view->message = 'Application error';
+                $this->view->message = 'Une erreur est survenue';
                 break;
         }
         
@@ -40,6 +40,7 @@ class ErrorController extends Zend_Controller_Action
         if ($this->getInvokeArg('displayExceptions') == true) {
             $this->view->exception = $errors->exception;
         }
+            $this->view->exceptionMessage = $errors->exception->getMessage();
         
         $this->view->request   = $errors->request;
     }

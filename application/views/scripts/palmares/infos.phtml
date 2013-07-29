@@ -46,25 +46,26 @@
                 </tfoot>
                 <tbody>
                 <?php
-                    $i = 1;
-                    foreach($this->infosSite as $unSite)
-                    {
-                        echo '<tr>
-                                <td style="width: 5%">'.$i.'</td>
-                                <td style="width: 10%">'.ucfirst(strtolower($unSite['ID_SITE'].'</td>
-                                <td style="text-align: left; width: 50%; padding-left : 5px;">'.$unSite['NOM_SITE']));
-                                if($unSite['LOC_SITE'] != '')
-                                {
-                                    echo ', '.utf8_encode(ucfirst(strtolower($unSite['LOC_SITE'])));
-                                }
-                          echo '</td>
-                                <td style="text-align: left; width: 15%">'.ucfirst(strtolower($unSite['NOM_LOCALITE'])).'</td>
-                                <td style="width: 10%">'.$unSite['QTE'].'</td>
-                                <td style="width: 10%">'.$unSite['LEVEES'].'</td>
-                            </tr>';
-                        $i++;
-                    }
-                ?>
+                        $i = 1;
+                        $fin = '';
+                        $max = count($this->infosSite);
+                        foreach($this->infosSite as $unSite)
+                        {
+                            echo '<tr class="gradeA">
+                                    <td>'.$i++.'</td>
+                                    <td>'.$unSite['ID_SITE'].'</td>
+                                    <td>'.ucfirst(strtolower($unSite['NOM_SITE']));
+                                    if($unSite['LOC_SITE'] != '')
+                                    {
+                                        echo ', '.utf8_encode(ucfirst(strtolower($unSite['LOC_SITE'])));
+                                    }
+                            echo '</td>
+                                    <td>'.ucfirst(strtolower($unSite['NOM_LOCALITE'])).'</td>
+                                    <td>'.$unSite['QTE'].'</td>
+                                    <td>'.$unSite['LEVEES'].'</td>
+                                </tr>';
+                        }
+                    ?>
             </tbody>
         </table>
     </page>
@@ -115,22 +116,23 @@
                 <tbody>
                     <?php
                         $i = 1; $total = 0;
+                        $fin = '';
+                        $max = count($this->infosSite);
                         foreach($this->infosSite as $unSite)
                         {
                             echo '<tr class="gradeA">
-                                    <td>'.$i.'</td>
+                                <td>'.$i++.'</td>
                                     <td>'.$unSite['ID_SITE'].'</td>
                                     <td>'.ucfirst(strtolower($unSite['NOM_SITE']));
                                     if($unSite['LOC_SITE'] != '')
                                     {
                                         echo ', '.utf8_encode(ucfirst(strtolower($unSite['LOC_SITE'])));
                                     }
-                              echo '</td>
+                            echo '</td>
                                     <td>'.ucfirst(strtolower($unSite['NOM_LOCALITE'])).'</td>
                                     <td>'.$unSite['QTE'].'</td>
                                     <td>'.$unSite['LEVEES'].'</td>
                                 </tr>';
-                            $i++;
                             $qte = str_replace(',', '.', $unSite['QTE']);
                             $total += $qte;
                         }

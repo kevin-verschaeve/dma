@@ -35,13 +35,14 @@ class TSite extends Zend_Db_Table_Abstract
     {
         $req = $this->select()->setIntegrityCheck(false) // pour pouvoir faire une jointure
                     ->from(array('s'=>$this->_name),array('ID_SITE','NOM_SITE', 'LOC_SITE'))
-                    ->join(array('c'=>'T_COLLECTE'),'c.ID_SITE=s.ID_SITE', array('SUM(QTE_COLLECTE) qte', 'COUNT(*) levees', 'NOM_LOCALITE'))
+                    ->joinLeft(array('c'=>'T_COLLECTE'),'c.ID_SITE=s.ID_SITE', array('nvl(SUM(QTE_COLLECTE), 0) qte', 'COUNT(*) levees', 'NOM_LOCALITE'))
                     ->where('s.'.$matiere.' = ?', 1)
                 ;
         if($matiere == 'VERRE') {
             $matiere = 'Verre Couleur';
         }
-        $req->where('c.MATIERE =?', $matiere);
+        $req->where('(c.MATIERE =?', $matiere);
+        $req->orWhere('c.MATIERE IS NULL)');
         
         if($stat) {
             $req->where('s.STAT_SITE = ?', 1);
@@ -147,4 +148,23 @@ class TSite extends Zend_Db_Table_Abstract
      {
          return $this->insert($donnees);
      }
+     
+     /**
+     * Retourne les sites qui ont des conteneur de $matiere
+     * @param string $matiere : le nom de la matiere cherchée
+     * @return array
+     */
+    public function getSites($matiere)
+    {
+        $req = $this->select()
+                    ->setIntegrityCheck(false)
+                    ->distinct()
+                    ->from($this->_name, 'ID_SITE')
+                    ->where('T_SITE.'.$matiere.' = ?', 1)
+                    ->order('T_SITE.ID_SITE')
+                ;
+        //echo $req->assemble();
+        // fetchCol car on a qu'une seule colonne 'ID_SITE', les autres fetch sont inutiles
+        return $this->_db->fetchCol($req);
+    }
 }

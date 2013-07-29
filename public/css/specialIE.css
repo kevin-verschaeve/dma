@@ -38,3 +38,7 @@
 .ui-datepicker .ui-datepicker-title {
     line-height : 1 !important;
 }
+
+#menuGauche ul li:hover a {
+    text-decoration: underline;
+}

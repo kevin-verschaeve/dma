@@ -5,8 +5,8 @@
   <title>Zend Framework Default Application</title>
 </head>
 <body>
-  <h1>Une erreur est survenue</h1>
-  <h2><?php echo $this->message ?></h2>
+  <h2>Une erreur est survenue</h2>
+  <p><?php echo $this->exceptionMessage; ?></p>
 
   <?php if (isset($this->exception)): ?>
   

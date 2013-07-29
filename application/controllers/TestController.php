@@ -6,11 +6,13 @@ class TestController extends Zend_Controller_Action
     {
         $layout = Zend_Layout::getMvcInstance();
         $layout->setLayout('vide');  
-        try 
-        { 
-            $date = new Zend_Date();
-            echo $date->toString('d MMMM YYYY');
-            /*
+        try {
+           /* 
+            $s = new Zend_Session_Namespace('test');
+            $s->var1 =  'test1';
+            $s->var2 = 'test2';
+            
+            
             $matiere = 'VERRE';
             $retour = '';
             
