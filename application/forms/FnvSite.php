@@ -50,6 +50,7 @@ class FnvSite extends Zend_Form
         
         $adresse = new Zend_Form_Element_Text('adresse');
         $adresse->setLabel('Adresse : ');
+        $adresse->setRequired();
         
         $complement = new Zend_Form_Element_Text('complement');
         $complement->setLabel('Complement : ');
