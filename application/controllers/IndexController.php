@@ -344,6 +344,7 @@ class IndexController extends Zend_Controller_Action
                                      $mode = 'verif';
                                  }
                                  fclose($handle);
+                                 unlink($tempo);
                              }
                         } else {
                             $erreur = 'Erreur lors de la copie du fichier (dans temp)';
