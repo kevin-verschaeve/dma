@@ -63,9 +63,9 @@ $(document).ready(function() {
         idCb = $(this).parent().attr('id');
         
         $.ajax({
-            // passer un nombre aléatoire force empeche l'utiisation du cache
+            // passer un nombre aléatoire empeche l'utiisation du cache
             // sinon le cache garde en mémoire l'etat initial des checkbox et ne les modifie pas
-            url: getBaseUrl()+'index/changeconteneur/gruge/'+Math.random(),
+            url : getBaseUrl()+'index/changeconteneur/gruge/'+Math.random(),
             data : {site:idSite, etat:etat, ajax:true},
             beforeSend : function() {
                 $('#'+idCb).append('<img id="tempo" width="20px" height="20px" style="position:absolute; right:15px;" src="../img/load.gif"/>');
@@ -116,7 +116,7 @@ function change() {
         success : function(data) {
             $('#blocFormTonnage').empty();
             $('#blocFormTonnage').html(data);
-            $( ".datepicker" ).datepicker();
+            $(".datepicker").datepicker();
         }
     });
 }

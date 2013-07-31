@@ -99,17 +99,18 @@ class IndexController extends Zend_Controller_Action
     {
         $this->_helper->actionStack('header', 'index', 'default', array());
         
-        $form = new FImport;
         $erreur = null;
+        $mode = '';
+        $form = new FImport;
         
         $request = $this->getRequest();
         if($request->isPost())  // c'est une validation de formulaire
-        {   
+        {               
             // le formulaire respecte les règles imposées
             if($form->isValid($_FILES))
             {
                 $matiere = $request->getParam('radioMatiere');
-                
+
                 // recupere les infos surle fichier uploadé
                 $fichier = $form->input_fichier->getFileName();
                 $infosFichier = pathinfo($fichier);                
@@ -117,163 +118,246 @@ class IndexController extends Zend_Controller_Action
                 $nomFichier = $infosFichier['basename'];
                 $nomSansExt = $infosFichier['filename'];
                 $extension = $infosFichier['extension'];
+                $tempNom = $_FILES['input_fichier']['tmp_name'];
                 //Zend_Debug::dump($infosFichier);exit;
-                
+
                 // verifie que le fichier est bien un csv
                 // strtolower au cas ou l'extension est  CSV
                 if(strtolower($extension) == 'csv')
                 {
-                   $tempNom = $_FILES['input_fichier']['tmp_name'];
-                   
-                   // ajoute "_Annee"  au nom de fichier pour eviter les doublons
-                   $date = new Zend_Date(Zend_Date::now());
-                   $annee = $date->get('yyyy');
-                   $nomDate = $nomSansExt.'_'.$annee.'.'.$extension;                   
-                   
-                   // set le repertoire de sauvegarde des fichiers
-                   $archiveDir = RESOURCE_PATH."\\archives\\$nomDate";
-                   // copie le fichier sélectionné dans ce répertoire
-                   $moveToArchive = move_uploaded_file($tempNom, $archiveDir);
-                   
-                   if($moveToArchive)  // on a reussi la copie dans archive
-                   {    
-                       // set le nom du repertoire ou seront mis les fichiers en temporaire
-                        //$tempo = RESOURCE_PATH.'\\temp\\'.$nomFichier;
-                        $tempo = $dirname.'\\'.$nomFichier;
-                        // copie le fichier dans ce repertoire
-                        $copyToTempo = copy($archiveDir, $tempo);
-                        chmod($tempo, 0777);
-                        
-                        if ($copyToTempo) // on a reussi a copier
-                        {  
-                            //echo $tempo;exit;
-                             // on ouvre le fichier en lecture seule
-                             $handle = fopen($archiveDir, "r");
-                             if($handle)  // il est ouvert
-                             {      
-                                 $nbNouvellesLignes = 0;
-                                 $tdata = new TDataCollecte;
-                                 
-                                 // on vide la table de toutes ses lignes
-                                 $nbLignesSupp = $tdata->videTable();
-                                 
-                                 try {
-                                    // on parcourt le fichier ligne par ligne, avec ";" comme delimiteur
-                                    while (($data = fgetcsv($handle, 0, ";")) !== FALSE) {
-                                        // on créé un tableau avec 
-                                        // en clé : le nom de la colonne dans la table
-                                        // en valeur : la valeur a inserer pour cette colonne
-                                        // $data recupere la ligne pointée par le curseur
-                                        if($matiere == 'Verre')
-                                        {
-                                            $ligne = array(
-                                                'C_NOMGRPGRP' => $data[0],
-                                                'C_NOMGROUPEMENT' => $data[1],
-                                                'C_FILLER1' => $data[2],
-                                                'C_MATIERE' => $data[3],
-                                                'C_INSEE' => $data[4],
-                                                'C_COMMUNE' => $data[5],
-                                                'C_LOCALITE' => $data[6],
-                                                'C_EMPLACEMENT' => $data[7],
-                                                'C_CONTENEUR' => $data[8],
-                                                'C_PATE' => $data[9],
-                                                'C_VOLUME' => $data[10],
-                                                'C_COLLECTE' => $data[11],
-                                                'C_FILLER2' => $data[12],
-                                                'C_FILLER3' => $data[13],
-                                                'C_DATE' => $data[14],
-                                                'C_HEURE' => $data[15]
-                                            );
-                                        }
-                                        else
-                                        {
-                                            $ligne = array(
-                                                'C_DATE' => $data[0],
-                                                'C_HEURE' => '00:00',
-                                                'ID_SITE' => $data[1],
-                                                'C_LOCALITE' => $data[3],
-                                                'C_MATIERE' => $matiere,
-                                                'C_COLLECTE' => $data[4],
-                                                'C_NOMGROUPEMENT' => 'ST QUENTIN',
-                                                'C_PATE' => $data[1],
-                                                'C_VOLUME' => $data[5]
-                                            );
-                                            //Zend_Debug::dump($ligne);exit;                                            
-                                        }
-                                        // on appelle la fonction qui réalise l'insert dans le modele
-                                        $tdata->inserer($ligne);
+                    if(isset($_POST['sub_fichier'])) 
+                    {
+                       // ajoute "_Annee"  au nom de fichier pour eviter les doublons
+                       $date = new Zend_Date(Zend_Date::now());
+                       $annee = $date->get('yyyy');
+                       $nomDate = $nomSansExt.'_'.$annee.'.'.$extension;                   
 
-                                        // compte le nombre de lignes
-                                        $nbNouvellesLignes++;
-                                        $erreur = false;
-                                    }
+                       // set le repertoire de sauvegarde des fichiers
+                       $archiveDir = RESOURCE_PATH."\\archives\\$nomDate";
+                       // copie le fichier sélectionné dans ce répertoire
+                       $moveToArchive = move_uploaded_file($tempNom, $archiveDir);
+
+                       if($moveToArchive)  // on a reussi la copie dans archive
+                       {    
+                           // set le nom du repertoire ou seront mis les fichiers en temporaire
+                            //$tempo = RESOURCE_PATH.'\\temp\\'.$nomFichier;
+                            $tempo = $dirname.'\\'.$nomFichier;
+                            // copie le fichier dans ce repertoire
+                            $copyToTempo = copy($archiveDir, $tempo);
+                            chmod($tempo, 0777);
+
+                            if ($copyToTempo) // on a reussi a copier
+                            {  
+                                //echo $tempo;exit;
+                                 // on ouvre le fichier en lecture seule
+                                 $handle = fopen($tempo, "r");
+                                 if($handle)  // il est ouvert
+                                 {      
+                                     $nbNouvellesLignes = 0;
+                                     $tdata = new TDataCollecte;
+
+                                     // on vide la table de toutes ses lignes
+                                     $nbLignesSupp = $tdata->videTable();
+
+                                     try { 
+                                        // on parcourt le fichier ligne par ligne, avec ";" comme delimiteur
+                                        while (($data = fgetcsv($handle, 0, ";")) !== FALSE) {
+                                            // on créé un tableau avec 
+                                            // en clé : le nom de la colonne dans la table
+                                            // en valeur : la valeur a inserer pour cette colonne
+                                            // $data recupere la ligne pointée par le curseur
+                                            if($matiere == 'Verre')
+                                            {
+                                                $ligne = array(
+                                                    //'C_NOMGRPGRP' => $data[0],
+                                                    'C_NOMGRPGRP' => '',
+                                                    'C_NOMGROUPEMENT' => $data[0],
+                                                    'C_FILLER1' => $data[1],
+                                                    'C_MATIERE' => $data[2],
+                                                    'C_INSEE' => $data[3],
+                                                    'C_COMMUNE' => $data[4],
+                                                    'C_LOCALITE' => $data[5],
+                                                    'C_EMPLACEMENT' => $data[6],
+                                                    'C_CONTENEUR' => $data[7],
+                                                    'C_PATE' => $data[8],
+                                                    'C_VOLUME' => $data[9],
+                                                    'C_COLLECTE' => $data[10],
+                                                    'C_FILLER2' => $data[11],
+                                                    'C_FILLER3' => $data[12],
+                                                    'C_DATE' => $data[13],
+                                                    'C_HEURE' => $data[14]
+                                                );
+                                            }
+                                            else
+                                            {
+                                                $ligne = array(
+                                                    'C_DATE' => $data[0],
+                                                    'C_HEURE' => '00:00',
+                                                    'ID_SITE' => $data[1],
+                                                    'C_LOCALITE' => $data[3],
+                                                    'C_MATIERE' => $matiere,
+                                                    'C_COLLECTE' => $data[4],
+                                                    'C_NOMGROUPEMENT' => 'ST QUENTIN',
+                                                    'C_PATE' => $data[1],
+                                                    'C_VOLUME' => $data[5]
+                                                );
+                                                //Zend_Debug::dump($ligne);exit;                                            
+                                            }
+                                            // on appelle la fonction qui réalise l'insert dans le modele
+                                            $tdata->inserer($ligne);
+                                            // compte le nombre de lignes
+                                            $nbNouvellesLignes++;
+                                            $erreur = false;
+                                        }
+                                     }
+                                     catch(Exception $e)
+                                     {
+                                         $erreur = 'Fichier incorrect ! Assurez vous
+                                             que vous importez le fichier correspondant à la matière sélectionnée
+                                             et que celui ci est conforme.';
+                                     }
+                                     // on ferme le fichier
+                                     fclose($handle);
+                                     // supprime le fichier temporaire
+                                     unlink($tempo);
+
+                                     // suivant la matiere, la requete n'est pas la même
+                                     if($matiere == 'Verre')
+                                     {
+                                         $sql = "insert into T_COLLECTE
+                                            select to_DATE (a.C_DATE || ' ' ||a.C_HEURE||':00', 'DD/MM/YYYY HH24:MI:SS'),
+                                                   a.C_PATE,
+                                                   a.C_NOMGROUPEMENT,
+                                                   b.ID_COMMUNE,
+                                                   a.C_LOCALITE,
+                                                   b.ID_SITE,
+                                                   a.C_MATIERE,
+                                                   a.C_VOLUME,
+                                                   to_number (a.C_COLLECTE)
+                                              from T_DATA_COLLECTE a, T_PRESTATAIRE b, T_SITE c
+                                             where a.C_PATE = b.NO_CONTENEUR
+                                                and b.ID_SITE = c.ID_SITE
+                                                and c.USED_SITE = 1";
+                                     }
+                                     else 
+                                     {
+                                         $sql = "insert into T_COLLECTE
+                                                    select to_DATE (a.C_DATE || ' ' ||a.C_HEURE||':00', 'DD/MM/YYYY HH24:MI:SS'),
+                                                    a.C_PATE,
+                                                    a.C_NOMGROUPEMENT,
+                                                    c.ID_COMMUNE,
+                                                    a.C_LOCALITE,
+                                                    c.ID_SITE,
+                                                    a.C_MATIERE,
+                                                    a.C_VOLUME,
+                                                    to_number (a.C_COLLECTE)
+                                               from T_DATA_COLLECTE a, T_SITE c
+                                              where a.ID_SITE = c.ID_SITE
+                                                 and c.USED_SITE = 1";
+                                     }
+
+                                     // agrégation des données dans les autres tables 
+                                     $db = Zend_Registry::getInstance()->get("db");
+                                     $db->beginTransaction();
+                                     $statement = $db->prepare($sql);
+                                     $statement->execute();
+                                     $db->commit();   
+
+                                     $this->view->nbLignesSupp = $nbLignesSupp;
+                                     $this->view->nbNouvellesLignes = $nbNouvellesLignes;
+                                     
+                                     $mode = 'envoi';
+                                     
+                                 } else { $erreur = 'Erreur lors de la lecture du fichier'; }
+                             } else { $erreur = 'Erreur lors de la copie du fichier (dans temp)'; }
+                       } else { $erreur = 'Erreur lors de la copie du fichier (dans archives)'; }
+                    } 
+                    elseif(isset($_POST['bt_verif'])) 
+                    {
+                        $tempo = $dirname.'\\'.$nomFichier;
+                        $upToTempo = move_uploaded_file($tempNom, $tempo);
+
+                        if ($upToTempo) // on a reussi a copier
+                        {  
+                             // on ouvre le fichier en lecture seule
+                             $handle = fopen($tempo, "r");
+                             if($handle)  // il est ouvert
+                             {    
+                                 $tsite = new TSite;
+                                 $failure = false;
+                                 $err_fail = $sites_manquants = array();
+                                 $nbLignes = 0;
+                                 while (($ligne = fgetcsv($handle, 0, ";")) !== FALSE) {
+                                     $nbLignes++;
+                                     
+                                     if(!ctype_alpha(str_replace(' ', '', $ligne[0]))) {
+                                         $failure = true;
+                                         $err_fail[$nbLignes][] = 'La première colonne doit être du texte';
+                                     }
+                                     if(empty($ligne[0])) {
+                                         $failure = true;
+                                         $err_fail[$nbLignes][] = 'Il semble y avoir une colonne en trop en début de ligne. Vérifiez le fichier';
+                                     }
+                                     
+                                     /*if($ligne[2] != 'Verre Couleur' && $ligne[2] != 'CORPS_PLATS' && $ligne[2] != 'CORPS_CREUX') {
+                                         $failure = true;
+                                         $err_fail[$nbLignes][] = 'La matière '.$ligne[2].' n\'est pas valide. (Verre Couleur, CORPS_PLATS ou CORPS_CREUX)';
+                                     }*/
+                                     
+                                     if(strlen($ligne[3]) > 5 || !ctype_digit($ligne[3]) ) {
+                                         $failure= true;
+                                         $err_fail[$nbLignes][] = 'Le numéro INSEE doit contenir 5 chiffres au maximum : '.$ligne[3];
+                                     }
+                                     
+                                     if(!ctype_alpha(str_replace(' ', '', $ligne[4]))) {
+                                         $failure = true;
+                                         $err_fail[$nbLignes][] = 'Commune non valide (chiffres non acceptés) : '.$ligne[4];
+                                     }
+                                     if(!ctype_alpha(str_replace(' ', '', $ligne[5]))) {
+                                         $failure = true;
+                                         $err_fail[$nbLignes][] = 'Localité non valide (chiffres non acceptés)  : '.$ligne[5];
+                                     }
+                                     
+                                     /*if(!ctype_digit(str_replace(' ', '', $ligne[7]))) {
+                                         $failure = true;
+                                         $err_fail[$nbLignes][] = 'Le numéro de site n\'est pas valide : '.$ligne[7];
+                                     } else {
+                                         if(!$tsite->existe($ligne[7])) {
+                                            $sites_manquants[] = $ligne[7];
+                                        }
+                                     }*/
+                                     if(!is_numeric(str_replace(',', '.', $ligne[10])) && !is_int($ligne[10])) {
+                                         $failure = true;
+                                         $err_fail[$nbLignes][] = 'Le tonnage relevé est incorrect : '.$ligne[10];
+                                     }                                     
+                                     
+                                     // fichier verfié, et pas d'erreurs
+                                     if(!$failure) {                    
+                                        // créé le formulaire en indiquant qu'il a ete verifié
+                                        $form = new FImport(true);
+                                     }
+                                     
+                                     $this->view->failure = $failure;
+                                     $this->view->err_fail = $err_fail;
+                                     $this->view->sites_manquants = $sites_manquants;
+                                     
+                                     $mode = 'verif';
                                  }
-                                 catch(Exception $e)
-                                 {
-                                     $erreur = 'Fichier incorrect ! Assurez vous
-                                         que vous importez le fichier correspondant à la matière sélectionnée
-                                         et que celui ci est conforme.';
-                                 }
-                                 // on ferme le fichier
                                  fclose($handle);
-                                 // supprime le fichier temporaire
-                                 unlink($tempo);
-                                 
-                                 // suivant la matiere, la requete n'est pas la même
-                                 if($matiere == 'Verre')
-                                 {
-                                     $sql = "insert into T_COLLECTE
-                                        select to_DATE (a.C_DATE || ' ' ||a.C_HEURE||':00', 'DD/MM/YYYY HH24:MI:SS'),
-                                               a.C_PATE,
-                                               a.C_NOMGROUPEMENT,
-                                               b.ID_COMMUNE,
-                                               a.C_LOCALITE,
-                                               b.ID_SITE,
-                                               a.C_MATIERE,
-                                               a.C_VOLUME,
-                                               to_number (a.C_COLLECTE)
-                                          from T_DATA_COLLECTE a, T_PRESTATAIRE b, T_SITE c
-                                         where a.C_PATE = b.NO_CONTENEUR
-                                            and b.ID_SITE = c.ID_SITE
-                                            and c.USED_SITE = 1";
-                                 }
-                                 else 
-                                 {
-                                     $sql = "insert into T_COLLECTE
-                                                select to_DATE (a.C_DATE || ' ' ||a.C_HEURE||':00', 'DD/MM/YYYY HH24:MI:SS'),
-                                                a.C_PATE,
-                                                a.C_NOMGROUPEMENT,
-                                                c.ID_COMMUNE,
-                                                a.C_LOCALITE,
-                                                c.ID_SITE,
-                                                a.C_MATIERE,
-                                                a.C_VOLUME,
-                                                to_number (a.C_COLLECTE)
-                                           from T_DATA_COLLECTE a, T_SITE c
-                                          where a.ID_SITE = c.ID_SITE
-                                             and c.USED_SITE = 1";
-                                 }
-                                 
-                                 // agrégation des données dans les autres tables 
-                                 $db = Zend_Registry::getInstance()->get("db");
-                                 $db->beginTransaction();
-                                 $statement = $db->prepare($sql);
-                                 $statement->execute();
-                                 $db->commit();   
-                                
-                                 $this->view->nbLignesSupp = $nbLignesSupp;
-                                 $this->view->nbNouvellesLignes = $nbNouvellesLignes;
-                             } else { $erreur = 'Erreur lors de la lecture du fichier'; }
-                         } else { $erreur = 'Erreur lors de la copie du fichier (dans temp)'; }
-                   } else { $erreur = 'Erreur lors de la copie du fichier (dans archives)'; }
+                             }
+                        } else {
+                            $erreur = 'Erreur lors de la copie du fichier (dans temp)';
+                        }
+                    }
                 }
                 else
                 {   // mauvaise extension
-                    $erreur = $nomFichier.' invalide !'.'
+                    $erreur = $nomFichier.' invalide !
                          Seuls les fichiers .csv sont acceptés';
                 }  
             }
         }        
+        $this->view->mode = $mode;
         $this->view->erreur = $erreur;
         $this->view->formFichier = $form;
     }    
@@ -399,8 +483,9 @@ class IndexController extends Zend_Controller_Action
     public function nouveausiteAction()
     {
         $this->_helper->actionStack('header', 'index', 'default', array());
+        $idSite = $this->getRequest()->getParam('site', '');
         
-        $fnvsite = new FnvSite;
+        $fnvsite = new FnvSite($idSite);
         $request = $this->getRequest();
         
         $send = false;
@@ -412,29 +497,31 @@ class IndexController extends Zend_Controller_Action
             {
                 $commune = $request->getParam('commune');
                 $nConteneur = $request->getParam('nconteneur');
-                $adresse = $request->getParam('adresse');
-                $complement = $request->getParam('complement');
+                $adresse = $this->stripAccents($request->getParam('adresse'));
+                $complement = $this->stripAccents($request->getParam('complement'));
                 $nsite = $request->getParam('nsite');
                 $matieres = $request->getParam('matieres');
                 
+                $upAdresse = strtoupper($adresse);
                 // tableau pour l'ajout dans T_PRESTATAIRE
                 $donneesPrestataire = array(
                     'ID_COMMUNE' => $commune,
                     'NO_CONTENEUR' => $nConteneur,
-                    'NOM_EMPLACEMENT' => $adresse,
+                    'NOM_EMPLACEMENT' => $upAdresse,
                     'ID_SITE' => $nsite
                 );
                 
                 // Ajout dans la table
                 $tprestataire = new TPrestataire;
                 $insertPrest = $tprestataire->ajouterConteneur($donneesPrestataire);
+                $donneesPrestataire['NOM_EMPLACEMENT'] = $adresse;
                 
                 // tableau pour l'ajout dans T_SITE
                 $donneesSite = array(
                     'ID_COMMUNE' => $commune,
                     'ID_SITE' => $nsite,
-                    'NOM_SITE' => $adresse,
-                    'LOC_SITE' => $complement,
+                    'NOM_SITE' => $upAdresse,
+                    'LOC_SITE' => strtoupper($complement),
                     'USED_SITE' => 1,
                     'STAT_SITE' => 1,
                     // initialise tous les champs à 0
@@ -443,8 +530,7 @@ class IndexController extends Zend_Controller_Action
                     'CORPS_CREUX' => 0
                 );
                 // mets les champs choisis par les checkbox a 1
-                foreach ($matieres as $matiere)
-                {
+                foreach ($matieres as $matiere) {
                     $donneesSite[$matiere] = 1;
                 }
                 
@@ -453,14 +539,11 @@ class IndexController extends Zend_Controller_Action
                 $insertSite = $tsite->ajouter($donneesSite);
                 
                 // si l'ajout à réussi dans les deux tables
-                if($insertPrest && $insertSite)
-                {
+                if($insertPrest && $insertSite) {
                     $this->view->donnees = $donneesPrestataire;
                     $this->view->complement = $complement;
                     $msg = 'Insertion réussie';
-                }
-                else
-                {
+                } else {
                     $msg = 'Echec lors de la création';
                 }
                 $send = true;
@@ -469,6 +552,22 @@ class IndexController extends Zend_Controller_Action
         $this->view->send = $send;
         $this->view->fnvsite = $fnvsite;
         $this->view->message = $msg;
+    }
+    public function stripAccents($str, $encoding ='utf-8'){	
+         // transformer les caractères accentués en entités HTML
+        $str = htmlentities($str, ENT_NOQUOTES, $encoding);
+
+        // remplacer les entités HTML pour avoir juste le premier caractères non accentués
+        // Exemple : "&ecute;" => "e", "&Ecute;" => "E", "Ã " => "a" ...
+        $str = preg_replace('#&([A-za-z])(?:acute|grave|cedil|circ|orn|ring|slash|th|tilde|uml);#', '\1', $str);
+
+        // Remplacer les ligatures tel que : Œ, Æ ...
+        // Exemple "Å“" => "oe"
+        $str = preg_replace('#&([A-za-z]{2})(?:lig);#', '\1', $str);
+        // Supprimer tout le reste
+        $str = preg_replace('#&[^;]+;#', '', $str);
+
+        return $str;
     }
 }
 

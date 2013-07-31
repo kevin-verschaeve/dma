@@ -12,8 +12,8 @@
         <p>Conteneur n° <?php echo $this->donnees['NO_CONTENEUR'];?></p>
         <p>Site n° <?php echo $this->donnees['ID_SITE'];?></p>
         <p>
-            Adresse : <?php echo $this->donnees['NOM_EMPLACEMENT'];?>
-            (<?php echo $this->complement;?>)
+            Adresse : <?php echo utf8_encode($this->donnees['NOM_EMPLACEMENT']);?>
+            (<?php echo utf8_encode($this->complement);?>)
         </p>
     </div>
 <?php endif; ?>

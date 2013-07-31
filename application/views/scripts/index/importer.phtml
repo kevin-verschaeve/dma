@@ -1,24 +1,66 @@
 <h2>Importer un fichier csv</h2>
 <?php echo $this->formFichier; ?>
 <div class="both"></div>
-<?php
-    // si on a une erreur, on l'affiche
-    if($this->erreur) :
+
+<?php 
+    if($this->mode == 'verif') {
+        if($this->failure) {
+            echo '<h3 id="h3verif-e">Le fichier contient des erreurs !</h3>';
+            echo '<table class="tb_errFic">';
+            foreach ($this->err_fail as $nLig => $err) {
+                echo '<tr>
+                        <td class="td_err">
+                            <span class="e-icon"></span>
+                            Ligne n°'.$nLig.'</td>
+                        <td>';
+                foreach($err as  $e) {
+                    echo '<table class="soustb_errFic">
+                                <tr>
+                                    <td>'.$e.'</td>
+                                </tr>
+                            </table>';
+                }
+                echo '</td></tr>';
+            }
+            echo '</table>';
+        } else {
+            echo '<h3 id="h3verif-s">Fichier correct !</h3>';
+        }
+        
+        if(!empty($this->sites_manquants)) {
+            echo '<p id="pnvsite">Les sites suivants ont étés trouvés mais ne sont pas connus dans la base.</p>
+                  <span id="spnvsite"> Cliquez dessus pour les ajouter : </span>';
+            
+            echo '<ul class="left" id="ulnvsite">';
+            foreach ($this->sites_manquants as $unSite) {
+                echo '<li class="linvsite"><a href="'.$this->baseUrl('/index/nouveausite/site/'.$unSite).'">'.$unSite.'</a></li>';
+            }
+            echo '</ul>';
+        }
+    }
+    else {
 ?>
-    <div id="erreurFichier">
-        <p><?php echo $this->erreur; ?></p>
-    </div>
+    
 
-    <?php
-        // sinon, si erreur n'est pas null (a false), on affiche le resultat de la requete
-        elseif(!is_null($this->erreur)) : 
-    ?>
+        <?php
+            // si on a une erreur, on l'affiche
+            if($this->erreur) :
+        ?>
+            <div id="erreurFichier">
+                <p><?php echo $this->erreur; ?></p>
+            </div>
 
-    <div id="infosImport">
-        <h3>Importation terminée avec succès !</h3>
-        <p><?php echo $this->nbLignesSupp;?> ligne(s) supprimée(s)</p>
-        <p><?php echo $this->nbNouvellesLignes;?> ligne(s) ajoutée(s)</p>
-    </div>
-<?php else: ?>
-    <p class="infos" id="geneIE">L'importation d'un fichier csv entraine la suppression des anciennes données</p>
-<?php endif; ?>
+            <?php
+                // sinon, si erreur n'est pas null (a false), on affiche le resultat de la requete
+                elseif(!is_null($this->erreur)) : 
+            ?>
+
+            <div id="infosImport">
+                <h3>Importation terminée avec succès !</h3>
+                <p><?php echo $this->nbLignesSupp;?> ligne(s) supprimée(s)</p>
+                <p><?php echo $this->nbNouvellesLignes;?> ligne(s) ajoutée(s)</p>
+            </div>
+        <?php else: ?>
+            <p class="infos" id="geneIE">L'importation d'un fichier csv entraine la suppression des anciennes données</p>
+        <?php endif; ?>
+    <?php }?>

@@ -16,7 +16,8 @@ input[type="text"], .selec {
     color : #a8ddeb;
 }
 #sub-label, #sub_infosPeriode-label, #sub_nvsite-label, 
-#show-label, #sub_fichier-label, #sub_graphique-label {
+#show-label, #sub_fichier-label, #sub_graphique-label,
+#bt_verif-label {
     display : none !important;
 }
 .errors {
@@ -31,7 +32,7 @@ input[type="text"], .selec {
     font-size: 0.9em;
     font-family: "twentytwelve";
 }
-.bt_submit, #show, #hide, #removeBouton input, #sub_nvsite {
+.bt_submit, #show, #hide, #removeBouton input, #sub_nvsite, #bt_verif{
     background: white;
     padding : 2px;
     margin-top: -2px;
@@ -41,7 +42,7 @@ input[type="text"], .selec {
 #removeBouton input {
     margin-top : 10px;
 }
-.bt_submit:hover, #removeBouton input:hover, #sub_nvsite:hover {
+.bt_submit:hover, #removeBouton input:hover, #sub_nvsite:hover, #bt_verif:hover {
     cursor : pointer;
     box-shadow: 2px -2px 5px #a8ddeb;
 }   
@@ -103,6 +104,7 @@ input[type="text"], .selec {
 /********************    form import fichier csv    ************************/
 #Fimport div {
     margin: 10px 0;
+    position : relative;
 }
 #Fimport {
     display: inline-block;

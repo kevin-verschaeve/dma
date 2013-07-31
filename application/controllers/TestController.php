@@ -7,33 +7,20 @@ class TestController extends Zend_Controller_Action
         $layout = Zend_Layout::getMvcInstance();
         $layout->setLayout('vide');  
         try {
-           /* 
-            $s = new Zend_Session_Namespace('test');
-            $s->var1 =  'test1';
-            $s->var2 = 'test2';
-            
-            
-            $matiere = 'VERRE';
-            $retour = '';
-            
-            $sql = file_get_contents('dataCollecte.sql');
-            $db = Zend_Registry::getInstance()->get("db");
-            
-            $db->beginTransaction();
-            $statement = $db->prepare($sql);
-            
-            $params = array( 'matiere'=> $matiere, 'retour' => $retour );
-            
-            $statement->execute($params);
-            $db->commit();
-            
-            
-            echo $retour;exit;
-            
-            
-            
-            */
-            
+           $c = $i = 0;
+           $h = fopen('Avril2.csv', 'r');
+           if($h) {
+               while($l = fgetcsv($h, 0, ';')) {
+                   //var_dump($l);
+                   $i++;
+                   $c += str_replace(',', '.', $l[10]);
+                   echo $l[10].' + ';
+               }
+               echo '<br>'.$c;
+           }
+           else {
+               echo 'pas ouvert';
+           }
         }
         catch(Exception $e)
         {

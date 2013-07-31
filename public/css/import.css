@@ -3,7 +3,7 @@
 }
 #erreurFichier {
     margin-top : 20px;
-    color : red
+    color : #cd0a0a;
 }
 .infos {
     padding-left : 20px;
@@ -15,4 +15,52 @@
 }
 #divimport {
     text-align : center;
+}
+
+.tb_errFic > tbody > tr:last-child {
+    border: medium none;
+}
+.tb_errFic > tbody > tr {
+    border-bottom: 3px dotted #A10A0A;
+}
+.tb_errFic, .soustb_errFic {
+    color : #fff;
+    width : 100%;
+    font-family: Helvetica;
+    font-weight: bold;
+}
+.td_err {
+    border-right : 3px dotted #cd0a0a !important;
+}
+.tb_errFic td {
+    border : none;
+}
+.e-icon {
+    display : inline-block;
+    width : 16px;
+    height : 16px;
+    
+    background: url(../img/ui-icons_cd0a0a_256x240.png) no-repeat -32px -190px;
+}
+#h3verif-e, #h3verif-s{
+    text-align : center;
+}
+#h3verif-e {
+    color : #a10a0a;
+}
+#pnvsite {
+    margin : 20px 10px 10px
+}
+#spnvsite  {
+    float : left;
+    margin-top: 10px;
+}
+.linvsite {
+    padding : 10px;
+}
+.linvsite:hover {
+    background-color: #aaa;
+}
+.linvsite:hover a {
+    text-decoration: underline;
 }

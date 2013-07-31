@@ -1,4 +1,4 @@
-@font-face {
+/*@font-face {
     font-family: "averia";
     
     src: url("Averia.eot");
@@ -7,7 +7,7 @@
     
     font-weight: normal;
     font-style: normal;
-}
+}*/
 @font-face {
     font-family: "twentytwelve";
     
@@ -22,13 +22,14 @@ html, body {
     margin : 0;
     padding : 0;
     font-size : 18px;
+    font-family : Tahoma, Trebuchet, Arial, Helvetica;
 }
 a {
     color : white;  
     text-decoration: none;
 }
 h2, h3, h4 {
-    font-family: "averia";
+    font-family: Helvetica, Arial, Tahoma, Trebuchet;
     margin : 10px 0;    
 }
 h2 {
@@ -43,7 +44,7 @@ h4 {
 }
 header {
     font-size: 3em;
-    font-family: "twentytwelve";
+    font-family: "twentytwelve", Helvetica, Arial, Tahoma, Trebuchet;
 }
 header a {
     color : black;
@@ -114,7 +115,7 @@ table td {
 
 /***************    MENU HORIZONTAL   ****************************/
 #menuGauche {
-    font-family: "twentytwelve";
+    font-family: "twentytwelve", Helvetica, Arial, Tahoma, Trebuchet;
     font-size : 0.9em;
     min-height: 50px; 
 }

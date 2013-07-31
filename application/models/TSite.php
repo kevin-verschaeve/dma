@@ -61,11 +61,11 @@ class TSite extends Zend_Db_Table_Abstract
         {
             // on recupere que sur ce conteneur
             $req->where('s.ID_SITE = ?', $nSite);
-            //echo $req->assemble();exit;
         }
         // GROUP BY
         $req->group('s.ID_SITE, s.NOM_SITE,s.LOC_SITE, c.NOM_LOCALITE');
         
+        //echo $req->assemble();exit;
         if(!is_null($nSite))
         {
             // on a qu'une ligne, on utilise donc fetchRow (pas besoin de tri)
@@ -77,6 +77,7 @@ class TSite extends Zend_Db_Table_Abstract
         {   // on trie du plus grand tonnage au plus petit (sers pour le tableau, si on change ici le comptage dans le tableau affiché ne sera plus cohérent)
             $req->order('qte DESC');
             //echo $req->assemble();exit;
+            //Zend_Debug::dump($this->fetchAll($req)->toArray());exit;
             return $this->fetchAll($req)->toArray();
         }
     }
@@ -166,5 +167,13 @@ class TSite extends Zend_Db_Table_Abstract
         //echo $req->assemble();
         // fetchCol car on a qu'une seule colonne 'ID_SITE', les autres fetch sont inutiles
         return $this->_db->fetchCol($req);
+    }
+    public function existe($idSite) {
+        $req = $this->select()
+                    ->from($this->_name, 'ID_SITE')
+                    ->where('ID_SITE = ?', $idSite)
+                ;
+        $res = $this->_db->fetchOne($req);
+        return $res ? true : false;
     }
 }

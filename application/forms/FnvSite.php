@@ -3,8 +3,9 @@
 class FnvSite extends Zend_Form
 {
     private $communes;
+    private $idSite;
     
-    public function __construct() {
+    public function __construct($idSite) {
         
         $tcommune = new TCommune;
         $coms = $tcommune->getCommunes(false);
@@ -14,6 +15,7 @@ class FnvSite extends Zend_Form
             $lesCommunes[$uneCommune['ID_COMMUNE']] = $uneCommune['NOM_COMMUNE'];
         }
         $this->communes = $lesCommunes;
+        $this->idSite = $idSite;
         
         parent::__construct();
     }
@@ -37,6 +39,7 @@ class FnvSite extends Zend_Form
               ->addValidator('digits')
               ->addValidator('greaterThan',false, array('min'=>0))
               ->setRequired(true)
+              ->setValue($this->idSite)
                 ;
         
         $nConteneur = new Zend_Form_Element_Text('nconteneur');

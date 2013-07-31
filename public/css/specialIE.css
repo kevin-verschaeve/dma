@@ -42,3 +42,6 @@
 #menuGauche ul li:hover a {
     text-decoration: underline;
 }
+#bt_test {
+    right : 32em !important;
+}

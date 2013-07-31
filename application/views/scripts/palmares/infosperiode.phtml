@@ -87,12 +87,14 @@
         
             $dd = str_replace('/', '-', $this->dateDebut);
             $df = str_replace('/', '-', $this->dateFin);
-        
+            $total = $qte = 0;
+            
             ob_start();
     ?>
     <style type="text/css">
         th { border: 1px solid black; }
         td { border : .1px solid black; padding : 5px;}
+        #total { text-align:center; font-weight:bold; font-size:20px; }
     </style>
     <page backtop="20mm" backbottom="10mm">
         <page_header><h1 style="text-align:center;">Statistiques <?php echo $this->dateDebut.' : '.$this->dateFin; ?></h1><hr></page_header>
@@ -141,11 +143,13 @@
                             <td style="width: 10%">'.$unSite['LEVEES'].'</td>
                         </tr>';
                     $i++;
+                    $total += str_replace(',', '.', $unSite['QTE']);
                 }
 
             ?>
             </tbody>
         </table> 
+        <p id="total">Tonnage total : <?php echo $total;?></p>
     </page>
     <?php 
         $content = ob_get_clean();

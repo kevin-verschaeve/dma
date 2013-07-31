@@ -2,8 +2,15 @@
 
 class FImport extends Zend_Form 
 {
+    private $checked;   // savoir si le fichier a été vérifié
+    
+    public function __construct($checked =false) {
+        $this->checked = $checked;
+        parent::__construct();
+    }
+    
     public function init()
-    {        
+    {   
         $view = Zend_Layout::getMvcInstance()->getView();
      
         // regle l'action, la metode et le nom du formulaire
@@ -37,13 +44,21 @@ class FImport extends Zend_Form
         $fichier->setRequired(true); // ajoute une regle, obligeant a remplir le champ
         $fichier->setAttrib('size', '35');
         
-        // crée un bouton submit
-        $submit = new Zend_Form_Element_Submit('sub_fichier');
-        $submit->setLabel('Envoyer');
-        $submit->setAttrib('class', 'bt_submit');
+        // si le formulaire a été vérifié, on créé le bouton envoyer
+        if($this->checked) {
+            // crée un bouton submit
+            $submit = new Zend_Form_Element_Submit('sub_fichier');
+            $submit->setLabel('Envoyer');
+            $submit->setAttrib('class', 'bt_submit');            
+        } else {    // sinon, seulement le bouton verifier
+            $submit = null;
+        }
+        
+        $btTest = new Zend_Form_Element_Submit('bt_verif');
+        $btTest->setLabel('Vérifier le fichier');
         
         // ajoute les éléments créés au formulaire
-        $this->addElements(array($radio, $fichier, $submit));
+        $this->addElements(array($radio, $fichier, $submit, $btTest));
         
         $this->setElementDecorators(array(
             array('ViewHelper'),

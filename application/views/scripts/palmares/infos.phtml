@@ -5,11 +5,13 @@
     
     // si on a cliqué sur le bouton de generation de pdf
     if($this->creerPdf == 'ok') :
+        $total = $qte = 0;
         ob_start(); // on commence l'enregistrement de l'html qui suit
 ?>
         <style type="text/css">
             th { border: 1px solid black; }
             td { border : .1px solid black; padding : 5px;}
+            #total { text-align:center; font-weight:bold; font-size:20px; }
         </style>
         <page backtop="20mm" backbottom="10mm">
             <page_header>
@@ -64,10 +66,12 @@
                                     <td>'.$unSite['QTE'].'</td>
                                     <td>'.$unSite['LEVEES'].'</td>
                                 </tr>';
+                            $total += str_replace(',', '.', $unSite['QTE']);
                         }
                     ?>
             </tbody>
         </table>
+        <p id="total">Tonnage total : <?php echo $total;?></p>
     </page>
 <?php 
     // on termine le flux html et on l'enregistre
