@@ -56,7 +56,7 @@ class FImport extends Zend_Form
         
         $btTest = new Zend_Form_Element_Submit('bt_verif');
         $btTest->setLabel('Vérifier le fichier');
-        
+                
         // ajoute les éléments créés au formulaire
         $this->addElements(array($radio, $fichier, $submit, $btTest));
         

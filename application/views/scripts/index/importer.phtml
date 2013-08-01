@@ -1,5 +1,7 @@
 <h2>Importer un fichier csv</h2>
 <?php echo $this->formFichier; ?>
+
+<a id="sup_lignes" href="<?php echo $this->baseUrl('index/suplignes');?>" >Supprimer des enregistrements</a>
 <div class="both"></div>
 
 <?php 
@@ -27,13 +29,26 @@
             echo '<h3 id="h3verif-s">Fichier correct !</h3>';
         }
         
-        if(!empty($this->sites_manquants)) {
-            echo '<p id="pnvsite">Les sites suivants ont étés trouvés mais ne sont pas connus dans la base.</p>
-                  <span id="spnvsite"> Cliquez dessus pour les ajouter : </span>';
+        if(!empty($this->tot_par_insee)) {
             
-            echo '<ul class="left" id="ulnvsite">';
-            foreach ($this->sites_manquants as $unSite) {
-                echo '<li class="linvsite"><a href="'.$this->baseUrl('/index/nouveausite/site/'.$unSite).'">'.$unSite.'</a></li>';
+            echo '<table style="color:white;">
+                <tr><td>Groupement par insee</td></tr>';
+            foreach ($this->tot_par_insee as $insee => $tot_insee) {
+                echo '<tr>
+                        <td>'.$insee.'</td>
+                        <td>'.$tot_insee['nb'].'</td>
+                        <td>'.$tot_insee['tot'].'</td>
+                    </tr>';
+            }
+            echo '</table>';
+        }
+        if(!empty($this->conteneurs_manquants)) {
+            echo '<p id="pcont">Les conteneurs suivants ont étés trouvés mais ne sont pas connus dans la base.</p>
+                  <span id="spcont"> Cliquez dessus pour les ajouter avant d\'importer le fichier : </span>';
+            
+            echo '<ul class="left" id="ulcont">';
+            foreach ($this->conteneurs_manquants as $unCont) {
+                echo '<li class="licont"><a href="'.$this->baseUrl('/index/nouveausite/cont/'.$unCont).'">'.$unCont.'</a></li>';
             }
             echo '</ul>';
         }
@@ -59,6 +74,7 @@
                 <h3>Importation terminée avec succès !</h3>
                 <p><?php echo $this->nbLignesSupp;?> ligne(s) supprimée(s)</p>
                 <p><?php echo $this->nbNouvellesLignes;?> ligne(s) ajoutée(s)</p>
+                <p>Tonnage total : <?php echo $this->total;?></p>
             </div>
         <?php else: ?>
             <p class="infos" id="geneIE">L'importation d'un fichier csv entraine la suppression des anciennes données</p>

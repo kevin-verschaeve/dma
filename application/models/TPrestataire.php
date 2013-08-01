@@ -12,4 +12,12 @@ class TPrestataire  extends Zend_Db_Table_Abstract
     {
         return $this->insert($donnees);
     }
+    public function existe($nCont) {
+        $req = $this->select()
+                    ->from($this->_name, 'NO_CONTENEUR')
+                    ->where('NO_CONTENEUR = ?', $nCont)
+                ;
+        $res = $this->_db->fetchOne($req);
+        return $res ? true : false;
+    }
 }

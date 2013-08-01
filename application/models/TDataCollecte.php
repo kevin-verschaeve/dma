@@ -23,4 +23,15 @@ class TDataCollecte  extends Zend_Db_Table_Abstract
         // condition toujours vraie pour supprimer toutes les lignes de la table
         return $this->delete('1 = 1');
     }
+    public function supprime($mois, $annee) {
+        $debut = '01/0'.$mois.'/'.$annee;
+        $nbjour = date('t', mktime(0, 0, 0, $mois, 1, $annee));
+        $fin = $nbjour.'/'.$mois.'/'.$annee;
+        //echo $debut;exit;
+        
+        $where[] = $this->getAdapter()->quoteInto('C_DATE >= ?', $debut);
+        $where[] = $this->getAdapter()->quoteInto('C_DATE <= TO_DATE(?, \'DD/MM/YYYY\')', $fin);
+        $this->delete($where);
+    }
+    
 }

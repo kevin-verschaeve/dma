@@ -4,8 +4,9 @@ class FnvSite extends Zend_Form
 {
     private $communes;
     private $idSite;
+    private $nCont;
     
-    public function __construct($idSite) {
+    public function __construct($idSite, $nCont) {
         
         $tcommune = new TCommune;
         $coms = $tcommune->getCommunes(false);
@@ -16,6 +17,7 @@ class FnvSite extends Zend_Form
         }
         $this->communes = $lesCommunes;
         $this->idSite = $idSite;
+        $this->nCont = $nCont;
         
         parent::__construct();
     }
@@ -45,6 +47,7 @@ class FnvSite extends Zend_Form
         $nConteneur = new Zend_Form_Element_Text('nconteneur');
         $nConteneur->setLabel('N° du conteneur (prestataire) : ')
                    ->setRequired(true)
+                   ->setValue($this->nCont)
                 ;
         
         $commune = new Zend_Form_Element_Select('commune');

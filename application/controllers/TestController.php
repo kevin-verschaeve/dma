@@ -7,20 +7,9 @@ class TestController extends Zend_Controller_Action
         $layout = Zend_Layout::getMvcInstance();
         $layout->setLayout('vide');  
         try {
-           $c = $i = 0;
-           $h = fopen('Avril2.csv', 'r');
-           if($h) {
-               while($l = fgetcsv($h, 0, ';')) {
-                   //var_dump($l);
-                   $i++;
-                   $c += str_replace(',', '.', $l[10]);
-                   echo $l[10].' + ';
-               }
-               echo '<br>'.$c;
-           }
-           else {
-               echo 'pas ouvert';
-           }
+           $tdata = new TCollecte;
+           
+           echo $tdata->getLignes(1, 2013);
         }
         catch(Exception $e)
         {

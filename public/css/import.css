@@ -48,19 +48,20 @@
 #h3verif-e {
     color : #a10a0a;
 }
-#pnvsite {
+#pnvsite, #pcont {
     margin : 20px 10px 10px
 }
-#spnvsite  {
+#spnvsite, #spcont  {
     float : left;
     margin-top: 10px;
 }
-.linvsite {
+.linvsite , .licont {
+    margin : 10px 0 0 10px;
+}
+.linvsite a, .licont a {
     padding : 10px;
 }
-.linvsite:hover {
+.linvsite a:hover, .licont a:hover {
     background-color: #aaa;
-}
-.linvsite:hover a {
     text-decoration: underline;
 }

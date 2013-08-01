@@ -153,7 +153,7 @@ class IndexController extends Zend_Controller_Action
                                  $handle = fopen($tempo, "r");
                                  if($handle)  // il est ouvert
                                  {      
-                                     $nbNouvellesLignes = 0;
+                                     $nbNouvellesLignes = $total = 0;
                                      $tdata = new TDataCollecte;
 
                                      // on vide la table de toutes ses lignes
@@ -187,6 +187,7 @@ class IndexController extends Zend_Controller_Action
                                                     'C_DATE' => $data[13],
                                                     'C_HEURE' => $data[14]
                                                 );
+                                                $total += str_replace(',', '.', $data[10]);
                                             }
                                             else
                                             {
@@ -201,6 +202,7 @@ class IndexController extends Zend_Controller_Action
                                                     'C_PATE' => $data[1],
                                                     'C_VOLUME' => $data[5]
                                                 );
+                                                $total += $data[5];
                                                 //Zend_Debug::dump($ligne);exit;                                            
                                             }
                                             // on appelle la fonction qui réalise l'insert dans le modele
@@ -233,7 +235,8 @@ class IndexController extends Zend_Controller_Action
                                                    b.ID_SITE,
                                                    a.C_MATIERE,
                                                    a.C_VOLUME,
-                                                   to_number (a.C_COLLECTE)
+                                                   to_number (a.C_COLLECTE),
+                                                   to_date(sysdate, 'DD/MM/YY')
                                               from T_DATA_COLLECTE a, T_PRESTATAIRE b, T_SITE c
                                              where a.C_PATE = b.NO_CONTENEUR
                                                 and b.ID_SITE = c.ID_SITE
@@ -250,7 +253,8 @@ class IndexController extends Zend_Controller_Action
                                                     c.ID_SITE,
                                                     a.C_MATIERE,
                                                     a.C_VOLUME,
-                                                    to_number (a.C_COLLECTE)
+                                                    to_number (a.C_COLLECTE),
+                                                    to_date(sysdate, 'DD/MM/YY')
                                                from T_DATA_COLLECTE a, T_SITE c
                                               where a.ID_SITE = c.ID_SITE
                                                  and c.USED_SITE = 1";
@@ -265,6 +269,7 @@ class IndexController extends Zend_Controller_Action
 
                                      $this->view->nbLignesSupp = $nbLignesSupp;
                                      $this->view->nbNouvellesLignes = $nbNouvellesLignes;
+                                     $this->view->total = $total;
                                      
                                      $mode = 'envoi';
                                      
@@ -283,10 +288,11 @@ class IndexController extends Zend_Controller_Action
                              $handle = fopen($tempo, "r");
                              if($handle)  // il est ouvert
                              {    
-                                 $tsite = new TSite;
+                                 $tprest = new TPrestataire;
                                  $failure = false;
-                                 $err_fail = $sites_manquants = array();
+                                 $err_fail = $conteneurs_manquants = $tot_par_insee =  array();
                                  $nbLignes = 0;
+                                 $anc_insee = '';
                                  while (($ligne = fgetcsv($handle, 0, ";")) !== FALSE) {
                                      $nbLignes++;
                                      
@@ -299,14 +305,18 @@ class IndexController extends Zend_Controller_Action
                                          $err_fail[$nbLignes][] = 'Il semble y avoir une colonne en trop en début de ligne. Vérifiez le fichier';
                                      }
                                      
-                                     /*if($ligne[2] != 'Verre Couleur' && $ligne[2] != 'CORPS_PLATS' && $ligne[2] != 'CORPS_CREUX') {
-                                         $failure = true;
-                                         $err_fail[$nbLignes][] = 'La matière '.$ligne[2].' n\'est pas valide. (Verre Couleur, CORPS_PLATS ou CORPS_CREUX)';
-                                     }*/
-                                     
                                      if(strlen($ligne[3]) > 5 || !ctype_digit($ligne[3]) ) {
                                          $failure= true;
                                          $err_fail[$nbLignes][] = 'Le numéro INSEE doit contenir 5 chiffres au maximum : '.$ligne[3];
+                                     }
+                                     
+                                     if($ligne[3] == $anc_insee || in_array($ligne[3], $tot_par_insee)) {
+                                         $tot_par_insee[$anc_insee]['tot'] += str_replace(',', '.', $ligne[10]);
+                                         $tot_par_insee[$anc_insee]['nb']++;
+                                     } else {
+                                         $tot_par_insee[$ligne[3]]['tot'] = str_replace(',', '.', $ligne[10]);
+                                         $tot_par_insee[$ligne[3]]['nb'] = 1;
+                                         $anc_insee = $ligne[3];
                                      }
                                      
                                      if(!ctype_alpha(str_replace(' ', '', $ligne[4]))) {
@@ -317,15 +327,11 @@ class IndexController extends Zend_Controller_Action
                                          $failure = true;
                                          $err_fail[$nbLignes][] = 'Localité non valide (chiffres non acceptés)  : '.$ligne[5];
                                      }
-                                     
-                                     /*if(!ctype_digit(str_replace(' ', '', $ligne[7]))) {
+                                                                          
+                                     if(!$tprest->existe($ligne[8])) {
                                          $failure = true;
-                                         $err_fail[$nbLignes][] = 'Le numéro de site n\'est pas valide : '.$ligne[7];
-                                     } else {
-                                         if(!$tsite->existe($ligne[7])) {
-                                            $sites_manquants[] = $ligne[7];
-                                        }
-                                     }*/
+                                         $conteneurs_manquants[] = $ligne[8];
+                                     }
                                      if(!is_numeric(str_replace(',', '.', $ligne[10])) && !is_int($ligne[10])) {
                                          $failure = true;
                                          $err_fail[$nbLignes][] = 'Le tonnage relevé est incorrect : '.$ligne[10];
@@ -337,9 +343,10 @@ class IndexController extends Zend_Controller_Action
                                         $form = new FImport(true);
                                      }
                                      
+                                     $this->view->tot_par_insee = $tot_par_insee;
                                      $this->view->failure = $failure;
                                      $this->view->err_fail = $err_fail;
-                                     $this->view->sites_manquants = $sites_manquants;
+                                     $this->view->conteneurs_manquants = $conteneurs_manquants;
                                      
                                      $mode = 'verif';
                                  }
@@ -485,8 +492,9 @@ class IndexController extends Zend_Controller_Action
     {
         $this->_helper->actionStack('header', 'index', 'default', array());
         $idSite = $this->getRequest()->getParam('site', '');
+        $nCont = $this->getRequest()->getParam('cont', '');
         
-        $fnvsite = new FnvSite($idSite);
+        $fnvsite = new FnvSite($idSite, $nCont);
         $request = $this->getRequest();
         
         $send = false;
@@ -554,6 +562,41 @@ class IndexController extends Zend_Controller_Action
         $this->view->fnvsite = $fnvsite;
         $this->view->message = $msg;
     }
+    public function suplignesAction() {
+        $this->_helper->actionStack('header', 'index', 'default', array());
+        
+        $request = $this->getRequest();
+        $mois = $request->getParam('mois', date('n'));
+        $annee = $request->getParam('annee', date('Y'));
+        
+        $send = $sup = false;
+        $form = new FSupLignes($mois, $annee);
+        
+        
+        if($request->isPost())
+        {
+            if($form->isValid($_POST))
+            {
+                $tcollecte = new TCollecte;
+                if(isset($_POST['sub_voir'])) {
+                    $voir_lignes = $tcollecte->getLignes($mois, $annee);
+                    
+                    $this->view->lignes = $voir_lignes;
+                    $form = new FSupLignes($mois, $annee, true);
+                } elseif(isset($_POST['sub_sup'])) {
+                    $nbLignesSupp = $tcollecte->supprime($mois, $annee);
+                    $sup = true;
+                    $this->view->nbLignesSupp = $nbLignesSupp;
+                }
+            }
+            $send = true;
+        }
+        
+        $this->view->send = $send;
+        $this->view->sup = $sup;
+        $this->view->form = $form;
+    }
+    
     public function stripAccents($str, $encoding ='utf-8'){	
          // transformer les caractères accentués en entités HTML
         $str = htmlentities($str, ENT_NOQUOTES, $encoding);
@@ -571,4 +614,3 @@ class IndexController extends Zend_Controller_Action
         return $str;
     }
 }
-

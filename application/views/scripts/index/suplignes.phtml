@@ -1,0 +1,68 @@
+<div id="suplignes">
+    <?php echo $this->form;?>
+    
+    <?php
+        if($this->send) {            
+            if(!$this->sup) {     
+                $total = 0;
+                echo '<p class="infos margin10">Si ces lignes correspondent à celle que vous souhaitez supprimer, cliquez sur le bouton prévu à cet effet</p>';
+                echo '<table id="datatable" class="display">
+                    <thead>
+                        <tr>
+                            <th>Date Collecte</th>
+                            <th>N° conteneur</th>
+                            <th>Groupement</th>
+                            <th>Localité</th>
+                            <th>N° site</th>
+                            <th>Matière</th>
+                            <th>Tonnage</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Date Collecte</th>
+                            <th>N° conteneur</th>
+                            <th>Groupement</th>
+                            <th>Localité</th>
+                            <th>N° site</th>
+                            <th>Matière</th>
+                            <th>Tonnage</th>
+                        </tr>
+                    </tfoot>';
+                foreach($this->lignes as $ligne) {
+                    echo '<tr>
+                            <td>'.$ligne['DATE_COLLECTE'].'</td>
+                            <td>'.$ligne['NO_CONTENEUR'].'</td>
+                            <td>'.ucfirst(strtolower($ligne['NOM_GROUPEMENT'])).'</td>
+                            <td>'.ucfirst(strtolower($ligne['NOM_LOCALITE'])).'</td>
+                            <td>'.$ligne['ID_SITE'].'</td>
+                            <td>'.$ligne['MATIERE'].'</td>
+                            <td>'.$ligne['QTE_COLLECTE'].'</td>
+                        </tr>';
+                    $total += str_replace(',', '.', $ligne['QTE_COLLECTE']);
+                }
+                echo '</table>';
+                echo '<p class="margin10 tright">Total : '.$total.'</p>';
+            } else {
+                echo '<p>'.$this->nbLignesSupp.' lignes supprimées</p>';
+            }
+        } else {
+            echo '<p class="infos margin10">Saisissez un mois et une année pour voir les lignes que vous voulez supprimer.</p>';
+        }
+    ?>
+    
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+         $('#datatable').dataTable({
+            "bJQueryUI": true,  // ajoute le style par defaut (jqueryUI) sur la table
+            // affiche une information de chargement de la table si trop longue a charger
+            "bProcessing" : true,
+            "sPaginationType": "full_numbers",  // le mode de navigation dans les pages du tableau
+            // le nombre de résultat que l'utilisateur peut choisir
+            "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Tous"]],
+            "iDisplayLength" : 15
+         });
+    });
+</script>

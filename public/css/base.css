@@ -112,7 +112,12 @@ table td {
 .both {
     clear : both;
 }
-
+.margin10 {
+    margin : 10px 0;
+}
+.tright {
+    text-align : right;
+}
 /***************    MENU HORIZONTAL   ****************************/
 #menuGauche {
     font-family: "twentytwelve", Helvetica, Arial, Tahoma, Trebuchet;

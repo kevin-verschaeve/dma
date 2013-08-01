@@ -240,7 +240,7 @@ function doDatatables(aoColumns) {
 
 function creationpdf(bt) {
     $('#genpdf').remove();
-    $(bt).before('<span id="genpdf">Création du fichier pdf en cours...<img alt="loading"  width="16" height="16" src="img/load.gif" alt="chargement" title="Chargement en cours..."/></span>');
+    $(bt).before('<span id="genpdf">Création du fichier pdf en cours...<img alt="loading"  width="16" height="16" src="../img/load.gif" alt="chargement" title="Chargement en cours..."/></span>');
 }
 // precharge une image pour qu'elle soit affichée des le 1er appel
 // autrement elle n'apparait qu'au 2e

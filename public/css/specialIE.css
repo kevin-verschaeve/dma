@@ -45,3 +45,10 @@
 #bt_test {
     right : 32em !important;
 }
+
+#suplignes .divform {
+    margin-right: 1em !important;
+}
+#suplignes .divform input[type="submit"] {
+    margin-top : 2px;
+}
