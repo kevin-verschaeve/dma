@@ -2,10 +2,12 @@
 class FSupLignes extends Zend_Form 
 {
     private $sup;
+    private  $matiere;
     private $mois;
     private $annee;
     
-    public function __construct($mois =false, $annee = false, $sup =false) {    
+    public function __construct($matiere, $mois, $annee, $sup =false) {    
+        $this->matiere = $matiere;
         $this->mois = $mois;
         $this->annee = $annee;
         $this->sup = $sup;
@@ -20,6 +22,22 @@ class FSupLignes extends Zend_Form
         $this->setAction($view->baseUrl('/index/suplignes'))
               ->setMethod('post')
               ->setName('FsupLignes');
+        
+        // créé un input type="radio"
+        $radio = new Zend_Form_Element_Radio('matiere');
+        $radio->setLabel('Type de matière : ')
+            // clé du tableau : value du bouton radio
+            // valeur : affichée à lécran
+            // pour d'autres options, rajouter une ligne dans le tableau
+              ->setMultiOptions(array(
+                    'VERRE' => 'Verre',
+                    'CORPS_PLATS' => 'Corps Plats',
+                    'CORPS_CREUX' => 'Corps Creux'
+             ))
+            // coche par defaut le radio Verre Couleur
+            ->setValue($this->matiere)
+            // met les boutons a la suite (le separateur par defaut etant \n )
+            ->setSeparator('&nbsp;&nbsp;');
         
         $mois = new Zend_Form_Element_Select('mois');
         $mois->setLabel('Voir les enregistrements pour le mois :');
@@ -43,9 +61,10 @@ class FSupLignes extends Zend_Form
             $sub_sup = new Zend_Form_Element_Submit('sub_sup');
             $sub_sup->setLabel('Supprimer');
             $sub_sup->setAttrib('class', 'bt_submit');
+            $sub_sup->setAttrib('onclick', 'return confirmer();');
         }
         
-        $this->addElements(array($mois, $annee, $sub_voir, $sub_sup));
+        $this->addElements(array($radio, $mois, $annee, $sub_voir, $sub_sup));
         
         $this->setElementDecorators(array(
             array('ViewHelper'),

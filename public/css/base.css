@@ -100,8 +100,6 @@ table td {
     float : left;
 }
 .reste {
-    /*display : inline-block;
-    width : 77%;*/
     padding: 10px;
 }
 .resteTonnage {
@@ -117,6 +115,9 @@ table td {
 }
 .tright {
     text-align : right;
+}
+.center {
+    text-align: center;
 }
 /***************    MENU HORIZONTAL   ****************************/
 #menuGauche {

@@ -99,6 +99,9 @@ $(document).ready(function() {
     
      precharger_image(getBaseUrl()+'img/load.gif');
      precharger_image(getBaseUrl()+'img/loading.gif');     
+     
+     
+     $('#suplignes #annee, #suplignes #mois').parents('.divform').css('display', 'inline');
 });
 function getBaseUrl() {
     var url = document.URL.substring(0, document.URL.indexOf('/public'));
@@ -248,4 +251,11 @@ function precharger_image(url) {
     var img = new Image();
     img.src=url;
     return img;
+}
+function confirmer() {
+    var mois = $('#mois option:selected').text();
+    var annee = $('#annee').val();
+    if(!confirm('Vous allez supprimer les lignes pour '+mois+' '+annee+'.\r\nEtes vous sûr(e) ?')) {
+        return false;
+    }
 }

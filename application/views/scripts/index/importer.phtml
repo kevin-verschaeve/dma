@@ -30,9 +30,17 @@
         }
         
         if(!empty($this->tot_par_insee)) {
-            
-            echo '<table style="color:white;">
-                <tr><td>Groupement par insee</td></tr>';
+            echo '<p class="infos margin10">Récapitulatif des tonages et nombre de lignes insérées par numéro INSEE</p>';
+            echo '<table class="datatable" id="tb_insee">
+                <thead>
+                    <tr>
+                        <td>Numero INSEE</td>
+                        <td>Nombre de lignes</td>
+                        <td>Tonnage</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    ';
             foreach ($this->tot_par_insee as $insee => $tot_insee) {
                 echo '<tr>
                         <td>'.$insee.'</td>
@@ -40,7 +48,7 @@
                         <td>'.$tot_insee['tot'].'</td>
                     </tr>';
             }
-            echo '</table>';
+            echo '</tbody></table>';
         }
         if(!empty($this->conteneurs_manquants)) {
             echo '<p id="pcont">Les conteneurs suivants ont étés trouvés mais ne sont pas connus dans la base.</p>
@@ -80,3 +88,21 @@
             <p class="infos" id="geneIE">L'importation d'un fichier csv entraine la suppression des anciennes données</p>
         <?php endif; ?>
     <?php }?>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+         $('.datatable').dataTable({
+            "bJQueryUI": true,  // ajoute le style par defaut (jqueryUI) sur la table
+            // affiche une information de chargement de la table si trop longue a charger
+            "bProcessing" : true,
+            "iDisplayLength" : -1,
+            "bLengthChange": false, // empeche de changer le nombre de lignes a afficher
+            "bPaginate" : false,    // retire les boutons de navigation des pages (on en a plus qu'une)
+            "bFilter" : false,  // retire le champ de recherche
+            "bSort" : false,
+            "bInfo" : false    // retire les infos inutiles ici
+         });
+         $('.fg-toolbar').remove();
+         $('#tb_insee_wrapper').css('width', '100%');
+    });
+</script>

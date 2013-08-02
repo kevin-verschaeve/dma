@@ -65,3 +65,7 @@
     background-color: #aaa;
     text-decoration: underline;
 }
+#tb_insee {
+    margin: 0 auto;
+    width: 50% !important;
+}

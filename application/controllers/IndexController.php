@@ -566,11 +566,12 @@ class IndexController extends Zend_Controller_Action
         $this->_helper->actionStack('header', 'index', 'default', array());
         
         $request = $this->getRequest();
+        $matiere = $request->getParam('matiere', 'VERRE');
         $mois = $request->getParam('mois', date('n'));
         $annee = $request->getParam('annee', date('Y'));
         
         $send = $sup = false;
-        $form = new FSupLignes($mois, $annee);
+        $form = new FSupLignes($matiere, $mois, $annee);
         
         
         if($request->isPost())
@@ -579,12 +580,12 @@ class IndexController extends Zend_Controller_Action
             {
                 $tcollecte = new TCollecte;
                 if(isset($_POST['sub_voir'])) {
-                    $voir_lignes = $tcollecte->getLignes($mois, $annee);
+                    $voir_lignes = $tcollecte->getLignes($matiere, $mois, $annee);
                     
                     $this->view->lignes = $voir_lignes;
-                    $form = new FSupLignes($mois, $annee, true);
+                    $form = new FSupLignes($matiere, $mois, $annee, true);
                 } elseif(isset($_POST['sub_sup'])) {
-                    $nbLignesSupp = $tcollecte->supprime($mois, $annee);
+                    $nbLignesSupp = $tcollecte->supprime($matiere, $mois, $annee);
                     $sup = true;
                     $this->view->nbLignesSupp = $nbLignesSupp;
                 }
