@@ -70,7 +70,7 @@ class FSupLignes extends Zend_Form
             array('ViewHelper'),
             array('Errors', array('tag' => 'div', 'class' => 'error')),
             array('Label', array('tag' => 'p', 'class' => 'spanform')),
-            array('HtmlTag', array('tag' => 'div', 'class' => 'divform'))
+            array('HtmlTag', array('tag' => 'div', 'class' => 'divform margin10'))
          ));
     }
 }

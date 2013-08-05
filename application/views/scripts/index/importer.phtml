@@ -27,36 +27,42 @@
             echo '</table>';
         } else {
             echo '<h3 id="h3verif-s">Fichier correct !</h3>';
+            if(!empty($this->tot_par_insee)) {
+                echo '<p class="infos margin10">Récapitulatif des tonages et nombre de lignes insérées par numéro INSEE</p>';
+                echo '<table class="datatable" id="tb_insee">
+                    <thead>
+                        <tr>
+                            <td>Numero INSEE</td>
+                            <td>Nombre de lignes</td>
+                            <td>Tonnage</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ';
+                foreach ($this->tot_par_insee as $insee => $tot_insee) {
+                    echo '<tr>
+                            <td>'.$insee.'</td>
+                            <td>'.$tot_insee['nb'].'</td>
+                            <td>'.$tot_insee['tot'].'</td>
+                        </tr>';
+                }
+                echo '</tbody></table>';
+            }
         }
         
-        if(!empty($this->tot_par_insee)) {
-            echo '<p class="infos margin10">Récapitulatif des tonages et nombre de lignes insérées par numéro INSEE</p>';
-            echo '<table class="datatable" id="tb_insee">
-                <thead>
-                    <tr>
-                        <td>Numero INSEE</td>
-                        <td>Nombre de lignes</td>
-                        <td>Tonnage</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    ';
-            foreach ($this->tot_par_insee as $insee => $tot_insee) {
-                echo '<tr>
-                        <td>'.$insee.'</td>
-                        <td>'.$tot_insee['nb'].'</td>
-                        <td>'.$tot_insee['tot'].'</td>
-                    </tr>';
+        
+        if(!empty($this->absents)) {
+            if($this->matiere == 'Verre') {
+                $type = 'cont';
+            } else {
+                $type = 'site';
             }
-            echo '</tbody></table>';
-        }
-        if(!empty($this->conteneurs_manquants)) {
-            echo '<p id="pcont">Les conteneurs suivants ont étés trouvés mais ne sont pas connus dans la base.</p>
+            echo '<p id="pcont">Les informations suivantes ont étés trouvées mais ne sont pas connues dans la base.</p>
                   <span id="spcont"> Cliquez dessus pour les ajouter avant d\'importer le fichier : </span>';
             
             echo '<ul class="left" id="ulcont">';
-            foreach ($this->conteneurs_manquants as $unCont) {
-                echo '<li class="licont"><a href="'.$this->baseUrl('/index/nouveausite/cont/'.$unCont).'">'.$unCont.'</a></li>';
+            foreach ($this->absents as $absent) {
+                echo '<li class="licont"><a href="'.$this->baseUrl('/index/nouveausite/'.$type.'/'.$absent).'">'.$absent.'</a></li>';
             }
             echo '</ul>';
         }

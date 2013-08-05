@@ -236,7 +236,7 @@ class IndexController extends Zend_Controller_Action
                                                    a.C_MATIERE,
                                                    a.C_VOLUME,
                                                    to_number (a.C_COLLECTE),
-                                                   to_date(sysdate, 'DD/MM/YY')
+                                                   to_date('".date('d/m/Y H:i:s')."', 'DD/MM/YY HH24:MI:SS')
                                               from T_DATA_COLLECTE a, T_PRESTATAIRE b, T_SITE c
                                              where a.C_PATE = b.NO_CONTENEUR
                                                 and b.ID_SITE = c.ID_SITE
@@ -254,7 +254,7 @@ class IndexController extends Zend_Controller_Action
                                                     a.C_MATIERE,
                                                     a.C_VOLUME,
                                                     to_number (a.C_COLLECTE),
-                                                    to_date(sysdate, 'DD/MM/YY')
+                                                    to_date('".date('d/m/Y H:i:s')."', 'DD/MM/YY HH24:MI:SS')
                                                from T_DATA_COLLECTE a, T_SITE c
                                               where a.ID_SITE = c.ID_SITE
                                                  and c.USED_SITE = 1";
@@ -290,68 +290,97 @@ class IndexController extends Zend_Controller_Action
                              {    
                                  $tprest = new TPrestataire;
                                  $failure = false;
-                                 $err_fail = $conteneurs_manquants = $tot_par_insee =  array();
+                                 $err_fail = $absents = $tot_par_insee =  array();
                                  $nbLignes = 0;
                                  $anc_insee = '';
-                                 while (($ligne = fgetcsv($handle, 0, ";")) !== FALSE) {
-                                     $nbLignes++;
-                                     
-                                     if(!ctype_alpha(str_replace(' ', '', $ligne[0]))) {
-                                         $failure = true;
-                                         $err_fail[$nbLignes][] = 'La première colonne doit être du texte';
-                                     }
-                                     if(empty($ligne[0])) {
-                                         $failure = true;
-                                         $err_fail[$nbLignes][] = 'Il semble y avoir une colonne en trop en début de ligne. Vérifiez le fichier';
-                                     }
-                                     
-                                     if(strlen($ligne[3]) > 5 || !ctype_digit($ligne[3]) ) {
-                                         $failure= true;
-                                         $err_fail[$nbLignes][] = 'Le numéro INSEE doit contenir 5 chiffres au maximum : '.$ligne[3];
-                                     }
-                                     
-                                     if($ligne[3] == $anc_insee || in_array($ligne[3], $tot_par_insee)) {
-                                         $tot_par_insee[$anc_insee]['tot'] += str_replace(',', '.', $ligne[10]);
-                                         $tot_par_insee[$anc_insee]['nb']++;
-                                     } else {
-                                         $tot_par_insee[$ligne[3]]['tot'] = str_replace(',', '.', $ligne[10]);
-                                         $tot_par_insee[$ligne[3]]['nb'] = 1;
-                                         $anc_insee = $ligne[3];
-                                     }
-                                     
-                                     if(!ctype_alpha(str_replace(' ', '', $ligne[4]))) {
-                                         $failure = true;
-                                         $err_fail[$nbLignes][] = 'Commune non valide (chiffres non acceptés) : '.$ligne[4];
-                                     }
-                                     if(!ctype_alpha(str_replace(' ', '', $ligne[5]))) {
-                                         $failure = true;
-                                         $err_fail[$nbLignes][] = 'Localité non valide (chiffres non acceptés)  : '.$ligne[5];
-                                     }
-                                                                          
-                                     if(!$tprest->existe($ligne[8])) {
-                                         $failure = true;
-                                         $conteneurs_manquants[] = $ligne[8];
-                                     }
-                                     if(!is_numeric(str_replace(',', '.', $ligne[10])) && !is_int($ligne[10])) {
-                                         $failure = true;
-                                         $err_fail[$nbLignes][] = 'Le tonnage relevé est incorrect : '.$ligne[10];
-                                     }                                     
-                                     
-                                     // fichier verfié, et pas d'erreurs
-                                     if(!$failure) {                    
-                                        // créé le formulaire en indiquant qu'il a ete verifié
-                                        $form = new FImport(true);
-                                     }
-                                     
-                                     $this->view->tot_par_insee = $tot_par_insee;
-                                     $this->view->failure = $failure;
-                                     $this->view->err_fail = $err_fail;
-                                     $this->view->conteneurs_manquants = $conteneurs_manquants;
-                                     
-                                     $mode = 'verif';
-                                 }
-                                 fclose($handle);
-                                 unlink($tempo);
+                                 
+                                 if($matiere == 'Verre')
+                                 {
+                                    while (($ligne = fgetcsv($handle, 0, ";")) !== FALSE) {
+                                        $nbLignes++;
+
+                                        if(!ctype_alpha(str_replace(' ', '', $ligne[0]))) {
+                                            $failure = true;
+                                            $err_fail[$nbLignes][] = 'La première colonne doit être du texte';
+                                        }
+                                        if(empty($ligne[0])) {
+                                            $failure = true;
+                                            $err_fail[$nbLignes][] = 'Il semble y avoir une colonne en trop en début de ligne. Vérifiez le fichier';
+                                        }
+
+                                        if(strlen($ligne[3]) > 5 || !ctype_digit($ligne[3]) ) {
+                                            $failure= true;
+                                            $err_fail[$nbLignes][] = 'Le numéro INSEE doit contenir 5 chiffres au maximum : '.$ligne[3];
+                                        }
+
+                                        if($ligne[3] == $anc_insee || in_array($ligne[3], $tot_par_insee)) {
+                                            $tot_par_insee[$anc_insee]['tot'] += str_replace(',', '.', $ligne[10]);
+                                            $tot_par_insee[$anc_insee]['nb']++;
+                                        } else {
+                                            $tot_par_insee[$ligne[3]]['tot'] = str_replace(',', '.', $ligne[10]);
+                                            $tot_par_insee[$ligne[3]]['nb'] = 1;
+                                            $anc_insee = $ligne[3];
+                                        }
+
+                                        if(!ctype_alpha(str_replace(' ', '', $ligne[4]))) {
+                                            $failure = true;
+                                            $err_fail[$nbLignes][] = 'Commune non valide (chiffres non acceptés) : '.$ligne[4];
+                                        }
+                                        if(!ctype_alpha(str_replace(' ', '', $ligne[5]))) {
+                                            $failure = true;
+                                            $err_fail[$nbLignes][] = 'Localité non valide (chiffres non acceptés)  : '.$ligne[5];
+                                        }
+
+                                        if(!$tprest->existe($ligne[8])) {
+                                            $failure = true;
+                                            $absents[] = $ligne[8];
+                                        }
+                                        if(!is_numeric(str_replace(',', '.', $ligne[10])) && !is_int($ligne[10])) {
+                                            $failure = true;
+                                            $err_fail[$nbLignes][] = 'Le tonnage relevé est incorrect : '.$ligne[10];
+                                        }                                     
+
+
+                                        $this->view->tot_par_insee = $tot_par_insee;
+                                    }
+                                } else {
+                                    $tsite = new TSite;
+                                    while (($ligne = fgetcsv($handle, 0, ";")) !== FALSE) {
+                                        $nbLignes++;
+                                        
+                                        if(empty($ligne[0])) {
+                                            $failure = true;
+                                            $err_fail[$nbLignes][] = 'Il semble y avoir une colonne en trop en début de ligne. Vérifiez le fichier';
+                                        }
+                                        if(!ctype_digit($ligne[1])) {
+                                            $failure = true;
+                                            $err_fail[$nbLignes][] = 'ID site incorrect : '.$ligne[1];
+                                        } else {
+                                            if(!$tsite->existe($ligne[1])) {
+                                                $failure = true;
+                                                $absents[] = $ligne[1];
+                                            }
+                                        }
+                                        if(!ctype_alpha(str_replace(' ', '', $ligne[3]))) {
+                                            $failure = true;
+                                            $err_fail[$nbLignes][] = 'Localité non valide (chiffres non acceptés)  : '.$ligne[3];
+                                        }
+                                    }
+                                    
+                                }
+                                // fichier verfié, et pas d'erreurs
+                                if(!$failure) {                    
+                                   // créé le formulaire en indiquant qu'il a ete verifié
+                                   $form = new FImport(true);
+                                }
+                                
+                                $this->view->failure = $failure;
+                                $this->view->err_fail = $err_fail;
+                                $this->view->absents = $absents;
+
+                                $mode = 'verif';
+                                fclose($handle);
+                                unlink($tempo);
                              }
                         } else {
                             $erreur = 'Erreur lors de la copie du fichier (dans temp)';
@@ -364,7 +393,8 @@ class IndexController extends Zend_Controller_Action
                          Seuls les fichiers .csv sont acceptés';
                 }  
             }
-        }        
+            $this->view->matiere = $matiere;
+        }
         $this->view->mode = $mode;
         $this->view->erreur = $erreur;
         $this->view->formFichier = $form;

@@ -12,16 +12,17 @@ class TCollecte extends Zend_Db_Table_Abstract
         $req = $this->select()
                     ->setIntegrityCheck(false)
                     ->from($this->_name, array('*'))
-                    ->where('DATE_IMPORT = ? ', $date_import)
+                    ->where('DATE_IMPORT = to_date(?, \'DD/MM/YYYY HH24:MI:SS\') ', $date_import)
                     ->where('MATIERE = ?', $matiere == 'VERRE' ? 'Verre Couleur' : $matiere)
                     ->order('DATE_COLLECTE ASC')
                 ;
+        //echo $req->assemble();exit;
         return $this->fetchAll($req)->toArray();        
     }
     public function supprime($matiere, $mois, $annee) {
         $date_import = $this->getDateImport($matiere, $mois, $annee);
         
-        $where[] = $this->getAdapter()->quoteInto('DATE_IMPORT = ? ', $date_import);
+        $where[] = $this->getAdapter()->quoteInto('DATE_IMPORT = to_date(?, \'DD/MM/YYYY HH24:MI:SS\') ', $date_import);
         $where[] = $this->getAdapter()->quoteInto('MATIERE = ? ', $matiere == 'VERRE' ? 'Verre Couleur' : $matiere);
         return $this->delete($where);
     }
@@ -33,7 +34,7 @@ class TCollecte extends Zend_Db_Table_Abstract
         
         $req = $this->select()
                     ->distinct()
-                    ->from($this->_name, 'DATE_IMPORT')
+                    ->from($this->_name, 'to_char(DATE_IMPORT, \'DD/MM/YYYY HH24:MI:SS\') date_import')
                     ->where('DATE_COLLECTE BETWEEN \''.$debut.'\' AND \''.$fin.'\' ')
                     ->where('MATIERE = ?', $matiere == 'VERRE' ? 'Verre Couleur' : $matiere)
                 ;

@@ -126,6 +126,10 @@ input[type="text"], .selec {
     float : none !important;
 }
 
+#FsupLignes .bt_submit {
+    min-width : 9em;
+}
+
 /***********************    form Nouveau site       ************************/
 #fnvsite {
     text-align: center;
